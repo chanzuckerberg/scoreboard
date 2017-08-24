@@ -1,0 +1,26 @@
+body {
+	font-family: 'Muli', sans-serif !important;
+	background-color: black !important;
+	color: white !important;
+}
+
+#login-section {
+	margin-top: 20px;
+	font-weight: 200;
+}
+
+.tab.tab-selected {
+	font-weight: 700;
+}
+.tab-content {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.dataset-img {
+	margin-top: 10px;
+	margin-right: 15px;
+}
+.challenge {
+	margin-top: 25px;
+}
