@@ -1,24 +1,86 @@
+/* General */
 body {
 	font-family: 'Muli', sans-serif !important;
 }
 
+.content {
+	min-height: 700px;
+}
+
+.center-text {
+	line-height: 50px;
+}
+
+/* Login */
 #login-section {
 	margin-top: 20px;
 	font-weight: 200;
 }
 
+/* Header */
+.title > a, .title > a:hover, .title > a:focus {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* Footer */
+.footer {
+	width: 100%;
+	height: 100px;
+	margin: 0px;
+	margin-top: 15px;
+	background-color: #000;
+	color: #ffffff;
+	padding: 30px 50px 0px 50px;
+}
+
+.logo-link {
+	height: 50px;
+	padding-right: 10px;
+}
+
+/* Tabs */
 .tab.tab-selected {
 	font-weight: 700;
 }
+
 .tab-content {
 	margin-top: 20px;
 	margin-bottom: 20px;
+	padding: 10px;
+	background-color: #eeeeee;
 }
 
-.dataset-img {
-	margin-top: 10px;
-	margin-right: 15px;
+.clickable:hover {
+	color: #00CCFF !important;
 }
+
+/* Tabs Content */
+
+/* Challenges */
+.dataset-img {
+	margin: 10px 15px;
+}
+
 .challenge {
 	margin-top: 25px;
+}
+
+.challenge > a, .challenge > a:hover, .challenge > a:focus {
+	color: inherit;
+	text-decoration: none;
+}
+
+.challenge:hover {
+	background-color: #eeeeee!important;
+}
+
+/* FAQ */
+
+.question {
+	font-weight: 700;
+}
+
+.answer {
+	padding-left: 10px;
 }
