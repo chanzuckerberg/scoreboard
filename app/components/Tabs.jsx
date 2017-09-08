@@ -93,44 +93,44 @@ const SubmitChallenge = (props) => {
 
 			<form role="form" className="form-horizontal">
 				<div className="form-group ">
-					<label className="col-sm-3 control-label" htmlFor="submission">Submission Name *</label>
-					<div className="col-sm-9">
+					<label className="col-sm-4 control-label" htmlFor="submission">submission name *</label>
+					<div className="col-sm-6">
 						<input id="submission" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
-					<label className="col-sm-3 control-label" htmlFor="repo">Github Repo *</label>
-					<div className="col-sm-9">
+					<label className="col-sm-4 control-label" htmlFor="repo">github repo *</label>
+					<div className="col-sm-6">
 						<input id="repo" className="form-control"/>
 					</div>
 				</div>
-					<div className="form-group">
-					<label className="col-sm-3 control-label" htmlFor="results">Results File *</label>
-					<div className="col-sm-9">
+				<div className="form-group">
+					<label className="col-sm-4 control-label" htmlFor="results">results file *</label>
+					<div className="col-sm-6">
 						<input id="results" type="file" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
-					<label className="col-sm-3 control-label" htmlFor="publications">Link(s) to publications</label>
-					<div className="col-sm-9">
+					<label className="col-sm-4 control-label" htmlFor="publications">link(s) to publications</label>
+					<div className="col-sm-6">
 						<input id="publications" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
-					<label className="col-sm-3 control-label" htmlFor="institution">Institution</label>
-					<div className="col-sm-9">
+					<label className="col-sm-4 control-label" htmlFor="institution">institution</label>
+					<div className="col-sm-6">
 						<input id="institution" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
-					<label className="col-sm-3 control-label" htmlFor="private">Keep Private</label>
-					<div className="col-sm-9">
+					<label className="col-sm-4 control-label" htmlFor="private">keep private</label>
+					<div className="col-sm-6">
 						{/* TODO Align this checkbox vertically */}
 						<input id="private" type="checkbox" value=""/>
 					</div>
 				</div>
 				<div className="form-group">
-					<div className="col-sm-offset-3 col-sm-10">
+					<div className="col-sm-offset-4 col-sm-6">
 						<button type="submit" className="btn btn-info">Submit</button>
 					</div>
 				</div>

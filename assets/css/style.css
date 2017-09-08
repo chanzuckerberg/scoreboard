@@ -53,6 +53,7 @@ body {
 
 .clickable:hover {
 	color: #00CCFF !important;
+	cursor: pointer;
 }
 
 /* Tabs Content */
@@ -83,4 +84,13 @@ body {
 
 .answer {
 	padding-left: 10px;
+}
+
+/* Forms */
+.form-group {
+	margin-bottom: 20px !important;
+}
+
+#private {
+	margin-top: 12px;
 }

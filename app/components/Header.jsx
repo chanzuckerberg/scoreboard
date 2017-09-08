@@ -7,7 +7,7 @@ export const Header = (props) => {
 		<header>
 			<div className="pull-left title">
 				<Link to="/">
-				<h1>{props.title}</h1>
+				<h1 className="clickable">{props.title}</h1>
 				</Link>
 				<h3>{props.subtitle}</h3>
 			</div>

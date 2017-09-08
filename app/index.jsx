@@ -7,6 +7,8 @@ import {Header} from "./components/Header.jsx"
 import { HomeTabs, ChallengeTabs} from "./components/Tabs.jsx"
 import {Footer} from "./components/Footer.jsx"
 
+import {unslugify} from './utils/utils'
+
 class Home extends Component {
 	render() {
 		return (
@@ -24,10 +26,11 @@ class Home extends Component {
 
 class Challenge extends Component {
 	render() {
+		const challenge = unslugify(this.props.match.params.id)
 		return (
 			<div>
 				<div className="container content">
-					<Header title="analysis scoreboard" subtitle="Human Cell Atlas"/>
+					<Header title="analysis scoreboard" subtitle={challenge}/>
 					<hr/>
 					<ChallengeTabs active="about"/>
 				</div>
@@ -36,7 +39,7 @@ class Challenge extends Component {
 		)
 	}
 }
-const App = (Props) => {
+const App = (props) => {
 	return (
 		<Switch>
 			<Route exact path="/" component={Home}/>
