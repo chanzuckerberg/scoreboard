@@ -125,7 +125,6 @@ const SubmitChallenge = (props) => {
 				<div className="form-group">
 					<label className="col-sm-4 control-label" htmlFor="private">keep private</label>
 					<div className="col-sm-6">
-						{/* TODO Align this checkbox vertically */}
 						<input id="private" type="checkbox" value=""/>
 					</div>
 				</div>
@@ -138,14 +137,89 @@ const SubmitChallenge = (props) => {
 		</div>
 	)
 }
+const Algorithms = (props) => {
+
+	let algorithms = props.data.map((item, idx) => {
+		return <AlgorithmElement key={idx} title={item.algorithm} ghName={item.ghname} scores={item.data} detailedScores={item.additionalData} />
+	})
+	return (
+		<div>
+				<div className="algorithms col-sm-10 col-sm-offset-1">
+					<div className="row">
+						<div className="col-sm-3 bold-text">
+						   Info
+						</div>
+						<div className="col-sm-9 bold-text ">
+						  Scores
+						</div>
+					</div>
+				</div>
+			{algorithms}
+		</div>
+	)
+}
+
+class AlgorithmElement extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			'active': false,
+		}
+	}
+
+	onClick(e, data) {
+		this.setState({'active': !this.state.active})
+	}
+
+
+	render() {
+		let scores = this.props.scores.map((item, idx) => {
+			return <div key={"score_" + idx} className='single-score col-sm-2'><span className="score-span">{item.toFixed(2)}</span></div>
+		})
+		let activeClass = (this.state.active)? "algorithm-selected":""
+		let detailedScores =  ""
+		if (this.state.active) {
+			console.log(this.props);
+			detailedScores = this.props.detailedScores.map((item, idx) => {
+			    let eachDetailedScore = item.map((item2, idx2) => {
+			    	return (<div key={"score_" + idx + "_" + idx2} className='single-score col-sm-2'><span className="score-span">{item2.toFixed(2)}</span></div>)
+				})
+				return (
+					<div className="row">
+						{eachDetailedScore}
+					</div>
+				)
+			})
+		}
+		return (
+			<div className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass} onClick={this.onClick.bind(this)} >
+				<div className="row">
+					<div className="col-sm-3">
+						<h5 className="algo-name">{this.props.title}</h5>
+						<h6 className="gh-name">{this.props.ghName}</h6>
+					</div>
+					<div className="col-sm-9 scores">
+						<div className="row">
+						{scores}
+						</div>
+						<div className="detailed-scores">
+						{detailedScores}
+						</div>
+					</div>
+				</div>
+			</div>
+		 )
+	}
+}
+
 
 
 const Tabs = (props) => {
-	let tablinks = props.tabs.map((tabname) => {
+	let tablinks = props.tabs.map((tabname, idx) => {
 		let tabclass = "col-md-2 tab clickable "
 		if (tabname === props.activetab) tabclass += "tab-selected"
 		return (
-			<div key={tabname} className={tabclass} data-tabname={tabname}
+			<div key={"tabs_" + idx} className={tabclass} data-tabname={tabname}
 				 onClick={props.onclick}>{tabname} //
 			</div>
 		)
@@ -210,9 +284,40 @@ export class ChallengeTabs extends React.Component {
 		const activetab = e.target.getAttribute('data-tabname')
 		this.setState({'active': activetab})
 	}
+	
 
 	render() {
 		let content = ""
+		const data = [
+			{
+				algorithm: "Algorithm #1",
+				ghname: "czi",
+				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+				additionalData: [
+					[1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1],
+				]
+			},
+			{
+				algorithm: "Algorithm #2",
+				ghname: "hca",
+				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+				additionalData: [
+					[1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1],
+				]
+			},
+			{
+				algorithm: "Algorithm #3",
+				ghname: "much longer name",
+				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+				additionalData: [
+					[1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1],
+				]
+			}
+		]
+		
 		if (this.state.active === 'about') {
 			content = <About/>
 		}
@@ -222,6 +327,8 @@ export class ChallengeTabs extends React.Component {
 		else if (this.state.active === 'submit') {
 			content = <SubmitChallenge/>
 		}
+		content = [ content, <Algorithms data={data} />]
+
 
 		return (
 			<Tabs tabs={['about', 'datasets', 'submit']} onclick={this.clickLink.bind(this)}

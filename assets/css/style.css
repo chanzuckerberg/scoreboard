@@ -11,6 +11,10 @@ body {
 	line-height: 50px;
 }
 
+.bold-text {
+	font-weight: 700;
+}
+
 /* Login */
 #login-section {
 	margin-top: 20px;
@@ -93,4 +97,29 @@ body {
 
 #private {
 	margin-top: 12px;
+}
+
+/* Challenge Data */
+
+.algorithms {
+	margin-top: 50px;
+}
+.algorithm {
+	margin: 5px 0;
+	border-left: 5px solid #00ccff;
+}
+.algorithm-selected {
+	border-color: chartreuse;
+}
+
+.single-score {
+	margin-top: 19px;
+}
+.score-span {
+	background-color: #eee;
+	padding: 10px;
+}
+
+.detailed-scores {
+	margin-top: 10px;
 }
