@@ -26,8 +26,8 @@ class Home extends Component {
 
 class Challenge extends Component {
 	render() {
-		// const challenge = unslugify(this.props.match.params.id)
-		const challenge = "fake challenge"
+		const challenge = unslugify(this.props.match.params.id)
+		// const challenge = "fake challenge"
 		return (
 			<div>
 				<div className="container content">
@@ -43,8 +43,8 @@ class Challenge extends Component {
 const App = (props) => {
 	return (
 		<Switch>
-			{/*<Route exact path="/" component={Home}/>*/}
-			<Route exact path="/" component={Challenge}/>
+			<Route exact path="/" component={Home}/>
+			{/*<Route exact path="/" component={Challenge}/>*/}
 			<Route exact path="/challenge/:id" component={Challenge}/>
 		</Switch>
 	)
