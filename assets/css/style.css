@@ -107,7 +107,9 @@ body {
 .algorithm {
 	margin: 5px 0;
 	border-left: 5px solid #00ccff;
+	cursor: pointer;
 }
+
 .algorithm-selected {
 	border-color: chartreuse;
 }
@@ -122,4 +124,11 @@ body {
 
 .detailed-scores {
 	margin-top: 10px;
+}
+
+.dataset-text {
+	font-size: 0.75em;
+}
+.sort-icon {
+	padding-left: 10px;
 }
