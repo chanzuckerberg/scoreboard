@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { slugify } from "../utils/utils";
+import {Link} from "react-router-dom";
+import {slugify} from "../utils/utils";
 
 const About = props => {
 	return (
@@ -17,11 +17,11 @@ const About = props => {
 const Challenges = props => {
 	return (
 		<div>
-			<Challenge name="doublet detection" id={1} datasetcount={1} submissions={50} />
-			<Challenge name="batch effect correction" id={2} datasetcount={2} submissions={11} />
-			<Challenge name="cell identification" id={3} datasetcount={5} submissions={5} />
-			<Challenge name="experimental design" id={4} datasetcount={2} submissions={201} />
-			<Challenge name="cell type clustering" id={5} datasetcount={9} submissions={3} />
+			<Challenge name="doublet detection" id={1} datasetcount={1} submissions={50}/>
+			<Challenge name="batch effect correction" id={2} datasetcount={2} submissions={11}/>
+			<Challenge name="cell identification" id={3} datasetcount={5} submissions={5}/>
+			<Challenge name="experimental design" id={4} datasetcount={2} submissions={201}/>
+			<Challenge name="cell type clustering" id={5} datasetcount={9} submissions={3}/>
 		</div>
 	);
 };
@@ -30,7 +30,7 @@ const Challenge = props => {
 	return (
 		<div className="col-md-4 challenge">
 			<Link to={`/challenge/${route_id}`}>
-				<img className="pull-left dataset-img" src="http://via.placeholder.com/100/00ccff" alt="placeholder" />
+				<img className="pull-left dataset-img" src="http://via.placeholder.com/100/00ccff" alt="placeholder"/>
 				<div>
 					<h4>{props.name}</h4>
 					<div>short description of the challenge</div>
@@ -102,7 +102,7 @@ const SubmitChallenge = props => {
 						submission name *
 					</label>
 					<div className="col-sm-6">
-						<input id="submission" className="form-control" />
+						<input id="submission" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -110,7 +110,7 @@ const SubmitChallenge = props => {
 						github repo *
 					</label>
 					<div className="col-sm-6">
-						<input id="repo" className="form-control" />
+						<input id="repo" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -118,7 +118,7 @@ const SubmitChallenge = props => {
 						results file *
 					</label>
 					<div className="col-sm-6">
-						<input id="results" type="file" className="form-control" />
+						<input id="results" type="file" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -126,7 +126,7 @@ const SubmitChallenge = props => {
 						link(s) to publications
 					</label>
 					<div className="col-sm-6">
-						<input id="publications" className="form-control" />
+						<input id="publications" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -134,7 +134,7 @@ const SubmitChallenge = props => {
 						institution
 					</label>
 					<div className="col-sm-6">
-						<input id="institution" className="form-control" />
+						<input id="institution" className="form-control"/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -142,7 +142,7 @@ const SubmitChallenge = props => {
 						keep private
 					</label>
 					<div className="col-sm-6">
-						<input id="private" type="checkbox" value="" />
+						<input id="private" type="checkbox" value=""/>
 					</div>
 				</div>
 				<div className="form-group">
@@ -156,27 +156,41 @@ const SubmitChallenge = props => {
 		</div>
 	);
 };
+
 class Algorithms extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			data: [],
 			sortedBy: -1,
+			sortDirection: 0,
 		};
 	}
-	
+
 	onclick(e, data) {
 		const sortIdx = parseInt(e.target.getAttribute("data-idx"))
 		let sortedData = this.state.data.slice()
-		sortedData.sort(function(x, y){
-			return y.data[sortIdx] - x.data[sortIdx]
-		})
-		this.setState({data: sortedData, sortedBy: sortIdx})
+		let sortDirection = 0
+		if (this.state.sortDirection >= 0) {
+			sortedData.sort(function (x, y) {
+				return y.data[sortIdx] - x.data[sortIdx]
+			})
+			sortDirection = -1
+		}
+		else {
+			sortedData.sort(function (x, y) {
+				return x.data[sortIdx] - y.data[sortIdx]
+			})
+			sortDirection = 1
+		}
+
+		this.setState({data: sortedData, sortedBy: sortIdx, sortDirection: sortDirection })
 	}
+
 	componentWillMount() {
 		this.setState({data: this.props.data})
 	}
-	
+
 	render() {
 		let algorithms = this.state.data.map((item, idx) => {
 			return (
@@ -191,9 +205,13 @@ class Algorithms extends React.Component {
 			);
 		});
 		const sortCategories = this.props.categories.map((item, idx) => {
-			const sorted = (this.state.sortedBy === idx)? <i className="sort-icon glyphicon glyphicon-arrow-down"></i>:"";
+			let sorted = ""
+			if (this.state.sortedBy === idx){
+				sorted = (this.state.sortDirection > 0)? <i className="sort-icon glyphicon glyphicon-arrow-up"></i>:<i className="sort-icon glyphicon glyphicon-arrow-down"></i>
+			}
 			return (
-				<div className="col-sm-2 clickable" data-idx={idx} onClick={this.onclick.bind(this)}>{item}{sorted}</div>
+				<div className="col-sm-2 clickable" data-idx={idx}
+					 onClick={this.onclick.bind(this)}>{item}{sorted}</div>
 			)
 		})
 		return (
@@ -226,7 +244,7 @@ class AlgorithmElement extends React.Component {
 	}
 
 	onClick(e, data) {
-		this.setState({ active: !this.state.active });
+		this.setState({active: !this.state.active});
 	}
 
 	render() {
@@ -255,7 +273,7 @@ class AlgorithmElement extends React.Component {
 			<div className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass} onClick={this.onClick.bind(this)}>
 				<div className="row">
 					<div className="col-sm-3">
-						<h5 className="algo-name" ><a href={this.props.ghLink}>{this.props.title}</a></h5>
+						<h5 className="algo-name"><a href={this.props.ghLink}>{this.props.title}</a></h5>
 						<h6 className="gh-name">by {this.props.ghName}</h6>
 					</div>
 					<div className="col-sm-9 scores">
@@ -296,7 +314,7 @@ export class HomeTabs extends React.Component {
 
 	clickLink(e, data) {
 		const activetab = e.target.getAttribute("data-tabname");
-		this.setState({ active: activetab });
+		this.setState({active: activetab});
 	}
 
 	render() {
@@ -305,18 +323,18 @@ export class HomeTabs extends React.Component {
 			content = (
 				<div>
 					<div className="row">
-						<About />
+						<About/>
 					</div>
 					<div className="row">
-						<Challenges />
+						<Challenges/>
 					</div>
 				</div>
 			);
 		} else if (this.state.active === "help") {
 			content = (
 				<div>
-					<SlackHelp />
-					<FAQ />
+					<SlackHelp/>
+					<FAQ/>
 				</div>
 			);
 		}
@@ -341,7 +359,7 @@ export class ChallengeTabs extends React.Component {
 
 	clickLink(e, data) {
 		const activetab = e.target.getAttribute("data-tabname");
-		this.setState({ active: activetab });
+		this.setState({active: activetab});
 	}
 
 	render() {
@@ -372,13 +390,13 @@ export class ChallengeTabs extends React.Component {
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"]
 
 		if (this.state.active === "about") {
-			content = <About />;
+			content = <About/>;
 		} else if (this.state.active === "datasets") {
 			content = "Datasets";
 		} else if (this.state.active === "submit") {
-			content = <SubmitChallenge />;
+			content = <SubmitChallenge/>;
 		}
-		content = [content, <Algorithms data={data} categories={scoreCategories} />];
+		content = [content, <Algorithms data={data} categories={scoreCategories}/>];
 
 		return (
 			<Tabs
