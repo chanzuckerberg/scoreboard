@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import {Modal, Button} from 'react-bootstrap';
 import {slugify} from "../utils/utils";
+import {Algorithms} from "./Algorithms.jsx";
 
 const About = props => {
 	return (
@@ -82,216 +84,126 @@ const FAQ = props => {
 		</div>
 	);
 };
-
-const SubmitChallenge = props => {
-	return (
-		<div>
-			<div className="col-md-12 tab-content">
-				<p>
-					<strong>Instructions:</strong> Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat
-					velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida
-					sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum
-					malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum
-					vestibulum dolor mattis non.
-				</p>
-			</div>
-
-			<form role="form" className="form-horizontal">
-				<div className="form-group ">
-					<label className="col-sm-4 control-label" htmlFor="submission">
-						submission name *
-					</label>
-					<div className="col-sm-6">
-						<input id="submission" className="form-control"/>
-					</div>
-				</div>
-				<div className="form-group">
-					<label className="col-sm-4 control-label" htmlFor="repo">
-						github repo *
-					</label>
-					<div className="col-sm-6">
-						<input id="repo" className="form-control"/>
-					</div>
-				</div>
-				<div className="form-group">
-					<label className="col-sm-4 control-label" htmlFor="results">
-						results file *
-					</label>
-					<div className="col-sm-6">
-						<input id="results" type="file" className="form-control"/>
-					</div>
-				</div>
-				<div className="form-group">
-					<label className="col-sm-4 control-label" htmlFor="publications">
-						link(s) to publications
-					</label>
-					<div className="col-sm-6">
-						<input id="publications" className="form-control"/>
-					</div>
-				</div>
-				<div className="form-group">
-					<label className="col-sm-4 control-label" htmlFor="institution">
-						institution
-					</label>
-					<div className="col-sm-6">
-						<input id="institution" className="form-control"/>
-					</div>
-				</div>
-				<div className="form-group">
-					<label className="col-sm-4 control-label" htmlFor="private">
-						keep private
-					</label>
-					<div className="col-sm-6">
-						<input id="private" type="checkbox" value=""/>
-					</div>
-				</div>
-				<div className="form-group">
-					<div className="col-sm-offset-4 col-sm-6">
-						<button type="submit" className="btn btn-info">
-							Submit
-						</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	);
-};
-
-class Algorithms extends React.Component {
+class SubmitChallenge extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: [],
-			sortedBy: -1,
-			sortDirection: 0,
+			modalOpen: false
 		};
 	}
 
-	onclick(e, data) {
-		const sortIdx = parseInt(e.target.getAttribute("data-idx"))
-		let sortedData = this.state.data.slice()
-		let sortDirection = 0
-		if (this.state.sortDirection >= 0) {
-			sortedData.sort(function (x, y) {
-				return y.data[sortIdx] - x.data[sortIdx]
-			})
-			sortDirection = -1
-		}
-		else {
-			sortedData.sort(function (x, y) {
-				return x.data[sortIdx] - y.data[sortIdx]
-			})
-			sortDirection = 1
-		}
-
-		this.setState({data: sortedData, sortedBy: sortIdx, sortDirection: sortDirection })
+	submitForm () {
+		this.setState({modalOpen: true})
 	}
 
-	componentWillMount() {
-		this.setState({data: this.props.data})
+	closeModal() {
+		this.setState({modalOpen: false})
 	}
 
 	render() {
-		let algorithms = this.state.data.map((item, idx) => {
-			return (
-				<AlgorithmElement
-					key={idx}
-					title={item.algorithm}
-					ghLink={item.ghlink}
-					ghName={item.ghname}
-					scores={item.data}
-					detailedScores={item.additionalData}
-				/>
-			);
-		});
-		const sortCategories = this.props.categories.map((item, idx) => {
-			let sorted = ""
-			if (this.state.sortedBy === idx){
-				sorted = (this.state.sortDirection > 0)? <i className="sort-icon glyphicon glyphicon-arrow-up"></i>:<i className="sort-icon glyphicon glyphicon-arrow-down"></i>
-			}
-			return (
-				<div className="col-sm-2 clickable" data-idx={idx}
-					 onClick={this.onclick.bind(this)}>{item}{sorted}</div>
-			)
-		})
+		const modalId = "submitModal"
 		return (
 			<div>
-				<div className="algorithms col-sm-10 col-sm-offset-1">
-					<div className="row">
-						<div className="col-sm-3 bold-text">Info</div>
-						<div className="col-sm-9 bold-text ">Scores</div>
-					</div>
-					<div className="row">
-						<div className="col-sm-offset-3 col-sm-9">
-							<div className="row dataset-text">
-								{sortCategories}
-							</div>
+				<div className="col-md-12 tab-content">
+					<p>
+						<strong>Instructions:</strong> Etiam a diam nec orci porta mattis sit amet in leo. Proin
+						placerat
+						velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida
+						sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum
+						malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio,
+						interdum
+						vestibulum dolor mattis non.
+					</p>
+				</div>
+
+				<form role="form" className="form-horizontal">
+					<div className="form-group ">
+						<label className="col-sm-4 control-label" htmlFor="submission">
+							submission name *
+						</label>
+						<div className="col-sm-6">
+							<input id="submission" className="form-control"/>
 						</div>
 					</div>
-				</div>
-				{algorithms}
+					<div className="form-group">
+						<label className="col-sm-4 control-label" htmlFor="repo">
+							github repo *
+						</label>
+						<div className="col-sm-6">
+							<input id="repo" className="form-control"/>
+						</div>
+					</div>
+					<div className="form-group">
+						<label className="col-sm-4 control-label" htmlFor="results">
+							results file *
+						</label>
+						<div className="col-sm-6">
+							<input id="results" type="file" className="form-control"/>
+						</div>
+					</div>
+					<div className="form-group">
+						<label className="col-sm-4 control-label" htmlFor="publications">
+							link(s) to publications
+						</label>
+						<div className="col-sm-6">
+							<input id="publications" className="form-control"/>
+						</div>
+					</div>
+					<div className="form-group">
+						<label className="col-sm-4 control-label" htmlFor="institution">
+							institution
+						</label>
+						<div className="col-sm-6">
+							<input id="institution" className="form-control"/>
+						</div>
+					</div>
+					<div className="form-group">
+						<label className="col-sm-4 control-label" htmlFor="private">
+							keep private
+						</label>
+						<div className="col-sm-6">
+							<input id="private" type="checkbox" value=""/>
+						</div>
+					</div>
+					<div className="form-group">
+						<div className="col-sm-offset-4 col-sm-6">
+							<button onClick={this.submitForm.bind(this)} type="button" className="btn btn-info">
+								Submit
+							</button>
+						</div>
+					</div>
+				</form>
+				<SubmitModal isOpen={this.state.modalOpen} close={this.closeModal.bind(this)} id={modalId}/>
 			</div>
 		);
 	}
 };
 
-class AlgorithmElement extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			active: false,
-		};
-	}
+const SubmitModal = props => {
+	return (
+		<Modal show={props.isOpen} onHide={props.close}>
+			<Modal.Header closeButton>
+				<Modal.Title>Successful Submission</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				Thank you! Your submission is now in review. You will receive and e-mail when your entry is availble to view on the bakeoff site.
+		        <br/>
+				<Button bsStyle="info" onClick={props.close}>OK</Button>
+			</Modal.Body>
 
-	onClick(e, data) {
-		this.setState({active: !this.state.active});
-	}
-
-	render() {
-		let scores = this.props.scores.map((item, idx) => {
-			return (
-				<div key={"score_" + idx} className="single-score col-sm-2">
-					<span className="score-span">{item.toFixed(2)}</span>
-				</div>
-			);
-		});
-		let activeClass = this.state.active ? "algorithm-selected" : "";
-		let detailedScores = "";
-		if (this.state.active) {
-			detailedScores = this.props.detailedScores.map((item, idx) => {
-				let eachDetailedScore = item.map((item2, idx2) => {
-					return (
-						<div key={"score_" + idx + "_" + idx2} className="single-score col-sm-2">
-							<span className="score-span">{item2.toFixed(2)}</span>
-						</div>
-					);
-				});
-				return <div className="row">{eachDetailedScore}</div>;
-			});
-		}
-		return (
-			<div className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass} onClick={this.onClick.bind(this)}>
-				<div className="row">
-					<div className="col-sm-3">
-						<h5 className="algo-name"><a href={this.props.ghLink}>{this.props.title}</a></h5>
-						<h6 className="gh-name">by {this.props.ghName}</h6>
-					</div>
-					<div className="col-sm-9 scores">
-						<div className="row">{scores}</div>
-						<div className="detailed-scores">{detailedScores}</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+		</Modal>
+	)
 }
+
+
+
 
 const Tabs = props => {
 	let tablinks = props.tabs.map((tabname, idx) => {
 		let tabclass = "col-md-2 tab clickable ";
 		if (tabname === props.activetab) tabclass += "tab-selected";
 		return (
-			<div key={"tab_link_" + idx} className={tabclass} data-tabname={tabname} onClick={props.onclick}>
+			<div key={"my_tab_link_" + idx} className={tabclass} data-tabname={tabname} onClick={props.onclick}>
 				{tabname} //
 			</div>
 		);
@@ -367,17 +279,21 @@ export class ChallengeTabs extends React.Component {
 		const data = [
 			{
 				algorithm: "Algorithm #1",
-				ghname: "czi",
+				ghname: "hca",
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+				dateSubmitted:  new Date(2017, 8, 1),
+				publications: ["https://chanzuckerberg.com/"]
 			},
 			{
-				algorithm: "Algorithm #2",
-				ghname: "hca",
+				algorithm: "B-Algorithm #2",
+				ghname: "czi",
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+				dateSubmitted:  new Date(2017, 9, 1),
+				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/", ]
 			},
 			{
 				algorithm: "Algorithm #3",
@@ -385,6 +301,7 @@ export class ChallengeTabs extends React.Component {
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+				dateSubmitted:  new Date(2017, 7, 1),
 			},
 		];
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"]

@@ -33,7 +33,7 @@ class Challenge extends Component {
 				<div className="container content">
 					<Header title="analysis scoreboard" subtitle={challenge}/>
 					<hr/>
-					<ChallengeTabs active="about"/>
+					<ChallengeTabs active="submit"/>
 				</div>
 				<Footer/>
 			</div>
