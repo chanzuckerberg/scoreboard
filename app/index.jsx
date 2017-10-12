@@ -33,13 +33,14 @@ class Challenge extends Component {
 				<div className="container content">
 					<Header title="analysis scoreboard" subtitle={challenge}/>
 					<hr/>
-					<ChallengeTabs active="submit"/>
+					<ChallengeTabs active="about"/>
 				</div>
 				<Footer/>
 			</div>
 		)
 	}
 }
+
 const App = (props) => {
 	return (
 		<Switch>

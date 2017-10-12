@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {Modal, Button} from 'react-bootstrap';
 import {slugify} from "../utils/utils";
 import {Algorithms} from "./Algorithms.jsx";
+import {Tree} from './Tree.jsx';
 
 const About = props => {
 	return (
@@ -84,6 +85,7 @@ const FAQ = props => {
 		</div>
 	);
 };
+
 class SubmitChallenge extends React.Component {
 	constructor(props) {
 		super(props);
@@ -92,7 +94,7 @@ class SubmitChallenge extends React.Component {
 		};
 	}
 
-	submitForm () {
+	submitForm() {
 		this.setState({modalOpen: true})
 	}
 
@@ -186,16 +188,15 @@ const SubmitModal = props => {
 				<Modal.Title>Successful Submission</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				Thank you! Your submission is now in review. You will receive and e-mail when your entry is availble to view on the bakeoff site.
-		        <br/>
+				Thank you! Your submission is now in review. You will receive and e-mail when your entry is availble to
+				view on the bakeoff site.
+				<br/>
 				<Button bsStyle="info" onClick={props.close}>OK</Button>
 			</Modal.Body>
 
 		</Modal>
 	)
 }
-
-
 
 
 const Tabs = props => {
@@ -215,6 +216,17 @@ const Tabs = props => {
 		</div>
 	);
 };
+
+const Datasets = props => {
+	return (
+		<div className="col-md-12 tab-content">
+			<h4>Datasets</h4>
+			<Tree tree={props.tree}/>
+			<br />
+			<Button bsStyle="success">Download ({props.downloadsize})</Button>
+		</div>
+	)
+}
 
 export class HomeTabs extends React.Component {
 	constructor(props) {
@@ -283,7 +295,7 @@ export class ChallengeTabs extends React.Component {
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted:  new Date(2017, 8, 1),
+				dateSubmitted: new Date(2017, 8, 1),
 				publications: ["https://chanzuckerberg.com/"]
 			},
 			{
@@ -292,8 +304,8 @@ export class ChallengeTabs extends React.Component {
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted:  new Date(2017, 9, 1),
-				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/", ]
+				dateSubmitted: new Date(2017, 9, 1),
+				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/",]
 			},
 			{
 				algorithm: "Algorithm #3",
@@ -301,15 +313,41 @@ export class ChallengeTabs extends React.Component {
 				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
 				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted:  new Date(2017, 7, 1),
+				dateSubmitted: new Date(2017, 7, 1),
 			},
 		];
+		const treeData = [
+			 { "id": "doublet-datasets/dataset1", "parent": "#", "text": "dataset1", },
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_001.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001.bam (8G)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_test.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_test.bam (4G)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_test_labels_predict_me.txt", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_test_labels_predict_me.txt (183K)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_train.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_train.bam (4G)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_train_labels.txt", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_train_labels.txt (271K)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_I1_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_I1_001.fastq.gz (637M)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_R1_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_R1_001.fastq.gz (2G)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_L001_R2_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_R2_001.fastq.gz (8G)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_barcode_id.csv", "parent": "doublet-datasets/dataset1", "text": "Ye2_barcode_id.csv (8M)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_gene_id.csv", "parent": "doublet-datasets/dataset1", "text": "Ye2_gene_id.csv (409K)"},
+			 { "id": "doublet-datasets/dataset1/Ye2_sparse_molecule_counts.mtx", "parent": "doublet-datasets/dataset1", "text": "Ye2_sparse_molecule_counts.mtx (278M)"},
+			 { "id": "doublet-datasets/dataset2", "parent": "#", "text": "dataset2", },
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001.bam (16G)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_test.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_test.bam (8G)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_train.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_train.bam (8G)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_train_labels.txt", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_train_labels.txt (119K)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_I1_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_I1_001.fastq.gz (1G)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_R1_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_R1_001.fastq.gz (5G)"},
+			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_R2_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_R2_001.fastq.gz (17G)"},
+			 { "id": "doublet-datasets/dataset2/Ye3_barcode_id.csv", "parent": "doublet-datasets/dataset2", "text": "Ye3_barcode_id.csv (5M)"},
+			 { "id": "doublet-datasets/dataset2/Ye3_gene_id.csv", "parent": "doublet-datasets/dataset2", "text": "Ye3_gene_id.csv (405K)"},
+			 { "id": "doublet-datasets/dataset2/Ye3_sparse_molecule_counts.mtx", "parent": "doublet-datasets/dataset2", "text": "Ye3_sparse_molecule_counts.mtx (156M)"}
+		]
+		const dlSize = "83 GB"
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"]
 
 		if (this.state.active === "about") {
 			content = <About/>;
 		} else if (this.state.active === "datasets") {
-			content = "Datasets";
+			content = <Datasets tree={treeData} downloadsize={dlSize} />;
 		} else if (this.state.active === "submit") {
 			content = <SubmitChallenge/>;
 		}
