@@ -58,6 +58,5 @@ typings/
 .env
 
 .idea
-.babelrc
 
 dist/
