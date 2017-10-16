@@ -136,3 +136,7 @@ body {
 .dropdown-sort {
 	width: 135px;
 }
+
+.unapproved {
+	border: 2px dashed orange !important;
+}

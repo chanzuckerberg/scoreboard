@@ -1,5 +1,5 @@
 import React from 'react';
-import {DropdownButton, MenuItem} from 'react-bootstrap';
+import {DropdownButton, MenuItem, Button} from 'react-bootstrap';
 import {slugify} from "../utils/utils";
 
 export class Algorithms extends React.Component {
@@ -7,7 +7,7 @@ export class Algorithms extends React.Component {
 	constructor(props) {
 		super(props);
 		let activeIndicies = {}
-		props.data.forEach( (item) => {
+		props.data.forEach((item) => {
 			activeIndicies[item.algorithm] = false
 		})
 		this.ALGO_SORT_OPTIONS = ["Date Submitted", "Name", "Submitter"]
@@ -66,21 +66,24 @@ export class Algorithms extends React.Component {
 
 	render() {
 		const algorithms = this.state.data.map((item, idx) => {
-			return (
-				<AlgorithmElement
-					active={this.state.activeIndicies[item.algorithm]}
-					key={idx}
-					linkOnClick={this.linkOnClick}
-					title={item.algorithm}
-					ghLink={item.ghlink}
-					ghName={item.ghname}
-					scores={item.data}
-					detailedScores={item.additionalData}
-					dateSubmitted={item.dateSubmitted}
-					publications={item.publications}
-					activate={this.activateIndex.bind(this, item.algorithm)}
-				/>
-			);
+			if (item.approved || this.props.role === "admin") {
+				return (
+					<AlgorithmElement
+						active={this.state.activeIndicies[item.algorithm]}
+						key={idx}
+						linkOnClick={this.linkOnClick}
+						title={item.algorithm}
+						ghLink={item.ghlink}
+						ghName={item.ghname}
+						scores={item.data}
+						detailedScores={item.additionalData}
+						dateSubmitted={item.dateSubmitted}
+						publications={item.publications}
+						approved={item.approved}
+						activate={this.activateIndex.bind(this, item.algorithm)}
+					/>
+				);
+			}
 		});
 		const sortables = [...this.ALGO_SORT_OPTIONS, ...this.props.categories]
 		let sortCategories = sortables.map((item, idx) => {
@@ -89,8 +92,9 @@ export class Algorithms extends React.Component {
 			return <MenuItem key={"sort_item_" + idx} onClick={this.onclick.bind(this)} data-idx={idx}
 							 data-sortby={item} eventKey={item} active={active}>{item}</MenuItem>
 		})
-		sortCategories = <DropdownButton bsSize="small" className="dropdown-sort" bsStyle="success" id="AlgoSortDropdown"
-										 title={this.state.sortedBy}>{sortCategories}</DropdownButton>
+		sortCategories =
+			<DropdownButton bsSize="small" className="dropdown-sort" bsStyle="success" id="AlgoSortDropdown"
+							title={this.state.sortedBy}>{sortCategories}</DropdownButton>
 		const dataCategories = this.props.categories.map((item) => {
 			return <div className="col-sm-2 dataset-text" key={"algo_data_" + slugify(item)}>{item}</div>
 		})
@@ -118,7 +122,6 @@ export class Algorithms extends React.Component {
 		);
 	}
 };
-
 
 
 const AlgorithmElement = props => {
@@ -159,21 +162,29 @@ const AlgorithmElement = props => {
 			publications
 		]
 	}
+	const unapprovedClass = (props.approved)? "":" unapproved"
+	const approveButton =  (props.approved)? "": (<div className="col-sm-1" >
+				<Button bsStyle="info">Approve</Button><Button bsStyle="warning">Reject</Button>
+			</div>)
 	return (
-		<div data-idx={props.index} className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass}
-			 onClick={props.activate}>
-			<div className="row">
-				<div className="col-sm-3">
-					<h5 className="algo-name">{props.title}<a onClick={props.linkOnClick} target="_blank"  href={props.ghLink}> <i
-						className="glyphicon glyphicon-link"></i></a></h5>
-					<h6 className="gh-name">by {props.ghName}</h6>
-					{detailedInfo}
-				</div>
-				<div className="col-sm-9 scores">
-					<div className="row">{scores}</div>
-					<div className="detailed-scores">{detailedScores}</div>
+		<div>
+			<div data-idx={props.index} className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass + unapprovedClass}
+				 onClick={props.activate}>
+				<div className="row">
+					<div className="col-sm-3">
+						<h5 className="algo-name">{props.title}<a onClick={props.linkOnClick} target="_blank"
+																  href={props.ghLink}> <i
+							className="glyphicon glyphicon-link"/></a></h5>
+						<h6 className="gh-name">by {props.ghName}</h6>
+						{detailedInfo}
+					</div>
+					<div className="col-sm-9 scores">
+						<div className="row">{scores}</div>
+						<div className="detailed-scores">{detailedScores}</div>
+					</div>
 				</div>
 			</div>
+			{approveButton}
 		</div>
 	);
 

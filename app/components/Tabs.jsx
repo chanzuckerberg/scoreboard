@@ -296,7 +296,8 @@ export class ChallengeTabs extends React.Component {
 				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
 				dateSubmitted: new Date(2017, 8, 1),
-				publications: ["https://chanzuckerberg.com/"]
+				publications: ["https://chanzuckerberg.com/"],
+				approved: true,
 			},
 			{
 				algorithm: "B-Algorithm #2",
@@ -305,7 +306,8 @@ export class ChallengeTabs extends React.Component {
 				data: [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
 				dateSubmitted: new Date(2017, 9, 1),
-				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/",]
+				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/",],
+				approved: true,
 			},
 			{
 				algorithm: "Algorithm #3",
@@ -314,6 +316,16 @@ export class ChallengeTabs extends React.Component {
 				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
 				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
 				dateSubmitted: new Date(2017, 7, 1),
+				approved: true,
+			},
+			{
+				algorithm: "Unapproved Algorithm",
+				ghname: "much longer name",
+				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
+				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
+				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+				dateSubmitted: new Date(2017, 7, 1),
+				approved: false,
 			},
 		];
 		const treeData = [
@@ -351,7 +363,7 @@ export class ChallengeTabs extends React.Component {
 		} else if (this.state.active === "submit") {
 			content = <SubmitChallenge/>;
 		}
-		content = [content, <Algorithms data={data} categories={scoreCategories}/>];
+		content = [content, <Algorithms role={this.props.role} data={data} categories={scoreCategories}/>];
 
 		return (
 			<Tabs
