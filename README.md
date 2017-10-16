@@ -1,6 +1,6 @@
 # Scoreboard
 
-## This is a work in progress##
+## This is a work in progress
 
 Scoreboard is a web application to view and submit ML algorithms solutions to challenges. 
 
