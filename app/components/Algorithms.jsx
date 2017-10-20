@@ -93,7 +93,7 @@ export class Algorithms extends React.Component {
 							 data-sortby={item} eventKey={item} active={active}>{item}</MenuItem>
 		})
 		sortCategories =
-			<DropdownButton bsSize="small" className="dropdown-sort" bsStyle="success" id="AlgoSortDropdown"
+			<DropdownButton  bsSize="small" className="dropdown-sort" bsStyle="success" id="AlgoSortDropdown"
 							title={this.state.sortedBy}>{sortCategories}</DropdownButton>
 		const dataCategories = this.props.categories.map((item) => {
 			return <div className="col-sm-2 dataset-text" key={"algo_data_" + slugify(item)}>{item}</div>
@@ -121,7 +121,7 @@ export class Algorithms extends React.Component {
 			</div>
 		);
 	}
-};
+}
 
 
 const AlgorithmElement = props => {
@@ -144,7 +144,7 @@ const AlgorithmElement = props => {
 					</div>
 				);
 			});
-			return <div key={"detailed_score_" + idx} className="row">{eachDetailedScore}</div>;
+			return <div key={"detailed_score_" + idx} className="row">{eachDetailedScore}</div>
 		});
 		let publications = ""
 		if (props.publications) {
@@ -162,13 +162,14 @@ const AlgorithmElement = props => {
 			publications
 		]
 	}
-	const unapprovedClass = (props.approved)? "":" unapproved"
-	const approveButton =  (props.approved)? "": (<div className="col-sm-1" >
-				<Button bsStyle="info">Approve</Button><Button bsStyle="warning">Reject</Button>
-			</div>)
+	const unapprovedClass = (props.approved) ? "" : " unapproved"
+	const approveButton = (props.approved) ? "" : (<div className="col-sm-1">
+		<Button className="admin-approve" bsSize="xsmall" bsStyle="info">Approve</Button><Button className="admin-approve" bsSize="xsmall" bsStyle="warning">Reject</Button>
+	</div>)
 	return (
 		<div>
-			<div data-idx={props.index} className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass + unapprovedClass}
+			<div data-idx={props.index}
+				 className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass + unapprovedClass}
 				 onClick={props.activate}>
 				<div className="row">
 					<div className="col-sm-3">

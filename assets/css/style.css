@@ -69,6 +69,7 @@ body {
 
 .challenge {
 	margin-top: 25px;
+	min-height: 150px !important;
 }
 
 .challenge > a, .challenge > a:hover, .challenge > a:focus {
@@ -115,11 +116,13 @@ body {
 }
 
 .single-score {
-	margin-top: 19px;
+	margin-top: 3px;
+	margin-bottom: 3px;
 }
 .score-span {
 	background-color: #eee;
 	padding: 10px;
+	display: inline-block;
 }
 
 .detailed-scores {
@@ -139,4 +142,7 @@ body {
 
 .unapproved {
 	border: 2px dashed orange !important;
+}
+admin-approve {
+	margin: 2px;
 }

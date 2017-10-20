@@ -221,6 +221,8 @@ const Datasets = props => {
 	return (
 		<div className="col-md-12 tab-content">
 			<h4>Datasets</h4>
+			<p>Dataset1: Mauris ut ex orci. Nunc tincidunt nisl vitae augue dapibus faucibus. Donec quis lacus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
+			<p>Dataset2: Mauris ut ex orci. Nunc tincidunt nisl vitae augue dapibus faucibus. Donec quis lacus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
 			<Tree tree={props.tree}/>
 			<br />
 			<Button bsStyle="success">Download ({props.downloadsize})</Button>
