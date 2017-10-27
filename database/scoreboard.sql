@@ -1,0 +1,11 @@
+DROP TABLE challenges;
+CREATE TABLE challenges (id INTEGER DEFAULT nextval('challenge_id_seq'::regclass) NOT NULL, name TEXT NOT NULL, description TEXT, dataset JSONB, start_date TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, image_path TEXT, open BOOLEAN DEFAULT true, CONSTRAINT challenge_pkey PRIMARY KEY (id));
+DROP TABLE datasets;
+CREATE TABLE datasets (id SERIAL NOT NULL, name TEXT NOT NULL, description TEXT, metadata JSONB, challenge_id INTEGER NOT NULL, PRIMARY KEY (name));
+DROP TABLE submissions;
+CREATE TABLE submissions (id SERIAL NOT NULL, user_id INTEGER NOT NULL, challenge_id INTEGER NOT NULL, name TEXT NOT NULL, repository TEXT, results_path TEXT, score_data TEXT, is_private BOOLEAN DEFAULT false NOT NULL, institution TEXT, publication TEXT, submission_date TIME(6) WITH TIME ZONE DEFAULT CURRENT_TIME NOT NULL, accepted BOOLEAN DEFAULT false NOT NULL, PRIMARY KEY (id));
+DROP TABLE users;
+CREATE TABLE users (id INTEGER DEFAULT nextval('user_id_seq'::regclass) NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, is_admin BOOLEAN DEFAULT false NOT NULL, CONSTRAINT user_pkey PRIMARY KEY (id));
+ALTER TABLE "datasets" ADD CONSTRAINT datasets_fk1 FOREIGN KEY ("id") REFERENCES "challenges" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "submissions" ADD CONSTRAINT submissions_fk1 FOREIGN KEY ("challenge_id") REFERENCES "challenges" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "submissions" ADD CONSTRAINT submissions_fk2 FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
