@@ -21,8 +21,12 @@
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "webpack": "^3.5.5"
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.4.0"
   }
 }
