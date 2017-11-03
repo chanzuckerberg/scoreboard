@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {Modal, Button} from 'react-bootstrap';
-import {slugify} from "../utils/utils";
+import {slugify} from "../../src-redux/utils/utils";
 import {Algorithms} from "./Algorithms.jsx";
 import {Tree} from './Tree.jsx';
 

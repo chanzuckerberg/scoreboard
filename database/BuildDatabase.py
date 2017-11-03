@@ -10,7 +10,7 @@ pg_pass = os.environ['PG_PASSWORD']
 
 # Build database
 engine = create_engine(
-    "postgresql://{}:{}@localhost:5555/scoreboard".format(pg_user, pg_pass))
+    "postgresql://{}:{}@localhost:5432/scoreboard".format(pg_user, pg_pass))
 Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'

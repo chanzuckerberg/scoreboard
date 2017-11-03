@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import {render} from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-
-
 import {Header} from "./components/Header.jsx"
 import { HomeTabs, ChallengeTabs} from "./components/Tabs.jsx"
 import {Footer} from "./components/Footer.jsx"
-import {unslugify} from "./utils/utils";
+import {unslugify} from "../src-redux/utils/utils";
 
 
 class Home extends Component {

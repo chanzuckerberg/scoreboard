@@ -1,7 +1,7 @@
 const pgp = require('pg-promise')()
 const connection = {
 	host: 'localhost',
-	port: 5555,
+	port: 5432,
 	database: 'scoreboard',
 	user: process.env.PG_USERNAME,
 	password: process.env.PG_PASSWORD,

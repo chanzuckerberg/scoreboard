@@ -1,6 +1,6 @@
 import React from 'react';
 import {DropdownButton, MenuItem, Button} from 'react-bootstrap';
-import {slugify} from "../utils/utils";
+import {slugify} from "../../src-redux/utils/utils";
 
 export class Algorithms extends React.Component {
 
