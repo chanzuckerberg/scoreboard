@@ -18,46 +18,46 @@ export class ChallengeTabs extends React.Component {
 
 	render() {
 		let content = "";
-		const data = [
-			{
-				algorithm: "Algorithm #1",
-				ghname: "hca",
-				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
-				data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
-				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted: new Date(2017, 8, 1),
-				publications: ["https://chanzuckerberg.com/"],
-				approved: true,
-			},
-			{
-				algorithm: "B-Algorithm #2",
-				ghname: "czi",
-				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
-				data: [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
-				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted: new Date(2017, 9, 1),
-				publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/"],
-				approved: true,
-			},
-			{
-				algorithm: "Algorithm #3",
-				ghname: "much longer name",
-				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
-				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
-				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted: new Date(2017, 7, 1),
-				approved: true,
-			},
-			{
-				algorithm: "Unapproved Algorithm",
-				ghname: "much longer name",
-				ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
-				data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
-				additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-				dateSubmitted: new Date(2017, 7, 1),
-				approved: false,
-			},
-		];
+		// const data = [
+		// 	{
+		// 		algorithm: "Algorithm #1",
+		// 		ghname: "hca",
+		// 		ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
+		// 		data: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+		// 		additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+		// 		dateSubmitted: new Date(2017, 8, 1),
+		// 		publications: ["https://chanzuckerberg.com/"],
+		// 		approved: true,
+		// 	},
+		// 	{
+		// 		algorithm: "B-Algorithm #2",
+		// 		ghname: "czi",
+		// 		ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
+		// 		data: [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
+		// 		additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+		// 		dateSubmitted: new Date(2017, 9, 1),
+		// 		publications: ["https://chanzuckerberg.com/", "https://chanzuckerberg.com/"],
+		// 		approved: true,
+		// 	},
+		// 	{
+		// 		algorithm: "Algorithm #3",
+		// 		ghname: "much longer name",
+		// 		ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
+		// 		data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
+		// 		additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+		// 		dateSubmitted: new Date(2017, 7, 1),
+		// 		approved: true,
+		// 	},
+		// 	{
+		// 		algorithm: "Unapproved Algorithm",
+		// 		ghname: "much longer name",
+		// 		ghlink: "https://github.com/chanzuckerberg/hca-bakeoff-site",
+		// 		data: [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
+		// 		additionalData: [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+		// 		dateSubmitted: new Date(2017, 7, 1),
+		// 		approved: false,
+		// 	},
+		// ];
 		const treeData = [
 			{ id: "doublet-datasets/dataset1", parent: "#", text: "dataset1" },
 			{
@@ -169,7 +169,6 @@ export class ChallengeTabs extends React.Component {
 		];
 		const dlSize = "83 GB";
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
-
 		if (this.state.active === "about") {
 			content = <About key="about" />;
 		} else if (this.state.active === "datasets") {
@@ -182,7 +181,7 @@ export class ChallengeTabs extends React.Component {
 			<Algorithms
 				key="algorithms"
 				isAdmin={this.props.isAdmin}
-				data={data}
+				data={this.props.submissions}
 				categories={scoreCategories}
 			/>,
 		];

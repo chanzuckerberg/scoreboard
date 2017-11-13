@@ -14,8 +14,8 @@ app.use("/assets", express.static(path.resolve(__dirname, '..', 'assets')));
 app.use("/dist", express.static(path.resolve(__dirname, '..', 'dist-redux')));
 
 app.get("/api/challenges", db.getChallenges)
-app.get("/api/datasets/:id", db.getDatasets)
-app.get("/api/submissions/:id", db.getSubmissions)
+app.get("/api/datasets/:challegeid", db.getDatasets)
+app.get("/api/submissions/:challegeid", db.getSubmissions)
 
 // Always return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {

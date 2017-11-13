@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
 import { HomeTabs } from "./Home.jsx";
-import { fetchChallenges, login, logout } from "../actions/index";
+import { fetchChallenges, login, logout, fetchSubmissions } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
 
 class HomeApp extends Component {
-	componentDidMount() {
+	componentWillMount() {
 		const { dispatch } = this.props;
 		dispatch(fetchChallenges());
 	}
@@ -42,14 +42,13 @@ class HomeApp extends Component {
 }
 
 class ChallengeApp extends Component {
-	componentDidMount() {
-		// const { dispatch } = this.props;
-		// dispatch(fetchChallenges());
+	componentWillMount() {
+		const { dispatch } = this.props;
+		dispatch(fetchSubmissions(this.props.match.params.id));
 	}
 	login(e) {
 		const { dispatch } = this.props;
 		const role = e.target.getAttribute("data-role");
-		console.log(role);
 		if (role === "admin") dispatch(login(role, true));
 		else if (role === "user") dispatch(login(role, false));
 		else dispatch(logout());
@@ -72,6 +71,7 @@ class ChallengeApp extends Component {
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						active="about"
+						submissions={this.props.submissions}
 					/>
 				</div>
 				<Footer />
@@ -81,12 +81,14 @@ class ChallengeApp extends Component {
 }
 
 const mapStateToProps = function(state) {
-	const { user, challengeData } = state;
+	const { user, challengeData, submissionData } = state;
 	return {
 		challenges: challengeData.challenges,
-		isFetching: challengeData.isFetching,
+		isFetchingChallenges: challengeData.isFetching,
 		userName: user.name,
 		isAdmin: user.isAdmin,
+		isFetchingSubmissions: submissionData.isFetching,
+		submissions: submissionData.submissions,
 	};
 };
 

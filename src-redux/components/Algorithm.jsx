@@ -3,7 +3,7 @@ import { linkOnClick } from "../utils/utils";
 import { Button } from "react-bootstrap";
 
 export const Algorithm = props => {
-	let scores = props.scores.map((item, idx) => {
+	let scores = props.data.score_data.data.map((item, idx) => {
 		return (
 			<div key={"score_" + idx} className="single-score col-sm-2">
 				<span className="score-span">{item.toFixed(2)}</span>
@@ -14,7 +14,7 @@ export const Algorithm = props => {
 	let detailedScores = "";
 	let detailedInfo = "";
 	if (props.active) {
-		detailedScores = props.detailedScores.map((item, idx) => {
+		detailedScores = props.data.score_data.additionalData.map((item, idx) => {
 			let eachDetailedScore = item.map((item2, idx2) => {
 				return (
 					<div key={"score_" + idx + "_" + idx2} className="single-score col-sm-2">
@@ -29,8 +29,9 @@ export const Algorithm = props => {
 			);
 		});
 		let publications = "";
-		if (props.publications) {
-			publications = props.publications.map((item, idx) => {
+		if (props.data.publication) {
+			const publications_split = props.data.publication.split(",");
+			publications = publications_split.map((item, idx) => {
 				return (
 					<a onClick={linkOnClick} target="_blank" href={item} key={"publication_" + idx}>
 						{" "}
@@ -39,22 +40,18 @@ export const Algorithm = props => {
 				);
 			});
 			publications = (
-				<h6 key={`publication_${props.ghName}`}>Publications: {publications}</h6>
+				<h6 key={`publication_${props.data.name}`}>Publications: {publications}</h6>
 			);
 		}
 		detailedInfo = [
-			<h6 key={`submit_date_${props.ghName}`}>
-				{props.dateSubmitted.toLocaleDateString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-				})}
+			<h6 key={`submit_date_${props.data.name}`}>
+				{props.data.submission_date.slice(0, 10)}
 			</h6>,
 			publications,
 		];
 	}
-	const unapprovedClass = props.approved ? "" : " unapproved";
-	const approveButton = props.approved ? (
+	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
+	const approveButton = props.data.is_accepted ? (
 		""
 	) : (
 		<div className="col-sm-1">
@@ -76,13 +73,13 @@ export const Algorithm = props => {
 				<div className="row">
 					<div className="col-sm-3">
 						<h5 className="algo-name">
-							{props.title}
-							<a onClick={linkOnClick} target="_blank" href={props.ghLink}>
+							{props.data.name}
+							<a onClick={linkOnClick} target="_blank" href={props.data.repository}>
 								{" "}
 								<i className="glyphicon glyphicon-link" />
 							</a>
 						</h5>
-						<h6 className="gh-name">by {props.ghName}</h6>
+						<h6 className="gh-name">by {props.data.user_name}</h6>
 						{detailedInfo}
 					</div>
 					<div className="col-sm-9 scores">

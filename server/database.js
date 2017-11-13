@@ -31,7 +31,7 @@ function getChallenges(req, res, next) {
 }
 
 function getDatasets(req, res, next) {
-	const challengeID = parseInt(req.params.id)
+	const challengeID = parseInt(req.params.challegeid)
 	db.any("select * from datasets where challenge_id = $1", challengeID)
 	.then(function (data) {
 		res.status(200).json({
@@ -46,7 +46,7 @@ function getDatasets(req, res, next) {
 }
 
 function getSubmissions(req, res, next) {
-	const challengeID = parseInt(req.params.id)
+	const challengeID = parseInt(req.params.challegeid)
 	db.any("select u.name as user_name, s.*  " +
 		"from submissions s " +
 		"join users u on u.id = s.user_id " +

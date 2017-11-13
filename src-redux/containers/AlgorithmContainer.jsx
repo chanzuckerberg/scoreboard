@@ -58,21 +58,22 @@ export class Algorithms extends React.Component {
 	}
 
 	render() {
-		const algorithms = this.state.data.map((item, idx) => {
-			if (item.approved || this.props.isAdmin) {
+		const algorithms = this.props.data.map(item => {
+			if (item.is_accepted || this.props.isAdmin) {
 				return (
 					<Algorithm
 						active={this.state.activeIndicies[item.algorithm]}
-						key={idx}
+						key={"submission_" + item.id}
 						linkOnClick={Algorithms.linkOnClick}
-						title={item.algorithm}
-						ghLink={item.ghlink}
-						ghName={item.ghname}
-						scores={item.data}
-						detailedScores={item.additionalData}
-						dateSubmitted={item.dateSubmitted}
-						publications={item.publications}
-						approved={item.approved}
+						data={item}
+						// title={item.algorithm}
+						// ghLink={item.ghlink}
+						// ghName={item.ghname}
+						// scores={item.data}
+						// detailedScores={item.additionalData}
+						// dateSubmitted={item.dateSubmitted}
+						// publications={item.publications}
+						// approved={item.approved}
 						activate={this.activateIndex.bind(this, item.algorithm)}
 					/>
 				);
