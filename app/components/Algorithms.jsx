@@ -149,7 +149,7 @@ const AlgorithmElement = props => {
 		let publications = ""
 		if (props.publications) {
 			publications = props.publications.map((item, idx) => {
-				return <a onClick={props.linkOnClick} target="_blank" href={item} key={"publication_" + idx}> ({idx + 1})</a>
+				return <a onClick={Algorithms.linkOnClick} target="_blank" href={item} key={"publication_" + idx}> ({idx + 1})</a>
 			})
 			publications = <h6>Publications: {publications}</h6>
 		}
@@ -173,7 +173,7 @@ const AlgorithmElement = props => {
 				 onClick={props.activate}>
 				<div className="row">
 					<div className="col-sm-3">
-						<h5 className="algo-name">{props.title}<a onClick={props.linkOnClick} target="_blank"
+						<h5 className="algo-name">{props.title}<a onClick={Algorithms.linkOnClick} target="_blank"
 																  href={props.ghLink}> <i
 							className="glyphicon glyphicon-link"/></a></h5>
 						<h6 className="gh-name">by {props.ghName}</h6>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 // import { slugify } from "../utils/utils";
 
 export const About = () => (
@@ -20,6 +21,7 @@ export const Challenges = props => {
 			<Challenge
 				name={item.name}
 				key={"Challenge_" + item.id}
+				challengeid={item.id}
 				datasetcount={item.datasets}
 				submissions={item.submissions}
 				image={item.image_path}
@@ -32,15 +34,17 @@ export const Challenges = props => {
 
 export const Challenge = props => (
 	// Todo put link back in
-	// const routeId = slugify(props.name);
+
 	<div className="col-md-4 challenge">
-		<img className="pull-left dataset-img" src={props.image} alt="placeholder" />
-		<div>
-			<h4>{props.name}</h4>
-			<div>{props.description}</div>
-			<div>datasets: {props.datasetcount}</div>
-			<div>submissions: {props.submissions}</div>
-		</div>
+		<Link to={`/challenge/${props.challengeid}`}>
+			<img className="pull-left dataset-img" src={props.image} alt="placeholder" />
+			<div>
+				<h4>{props.name}</h4>
+				<div>{props.description}</div>
+				<div>datasets: {props.datasetcount}</div>
+				<div>submissions: {props.submissions}</div>
+			</div>
+		</Link>
 	</div>
 );
 
@@ -84,26 +88,3 @@ export const FAQ = () => (
 		</p>
 	</div>
 );
-
-export const Tabs = props => {
-	const tablinks = props.tabs.map((tabname, idx) => {
-		let tabclass = "col-md-2 tab clickable ";
-		if (tabname === props.activetab) tabclass += "tab-selected";
-		return (
-			<div
-				key={`my_tab_link_${idx}`}
-				className={tabclass}
-				data-tabname={tabname}
-				onClick={props.onclick}
-			>
-				{tabname} //
-			</div>
-		);
-	});
-	return (
-		<div>
-			<div className="row">{tablinks}</div>
-			{props.content}
-		</div>
-	);
-};

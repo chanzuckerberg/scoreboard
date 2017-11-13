@@ -4,7 +4,7 @@ import { REQUEST_CHALLENGES, RECEIVE_CHALLENGES, LOGIN, LOGOUT } from "../action
 
 
 
-const challengeData = (state = {isFetching: false, challenges: []}, action) => {
+export const challengeData = (state = {isFetching: false, challenges: []}, action) => {
 	if (action.type === REQUEST_CHALLENGES) {
 		return {
 			...state,
@@ -19,7 +19,7 @@ const challengeData = (state = {isFetching: false, challenges: []}, action) => {
 	} else {return state}
 }
 
-const user = (state = {name: "", isAdmin: false }, action) => {
+export const user = (state = {name: "", isAdmin: false }, action) => {
 	 if (action.type === LOGIN) {
 		return {
 			...state,
@@ -38,9 +38,3 @@ const user = (state = {name: "", isAdmin: false }, action) => {
 
 
 
-const rootReducer = combineReducers({
-	challengeData,
-	user
-});
-
-export default rootReducer;

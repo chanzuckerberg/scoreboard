@@ -1,5 +1,6 @@
 import React from "react";
 import { LoginModal } from "../components/Header.jsx";
+import { Link } from "react-router-dom";
 
 export class Header extends React.Component {
 	constructor(props) {
@@ -33,7 +34,9 @@ export class Header extends React.Component {
 			<div className="row">
 				<header>
 					<div className="pull-left title">
-						<h1 className="clickable">{this.props.title}</h1>
+						<Link to="/">
+							<h1 className="clickable">{this.props.title}</h1>
+						</Link>
 						<h3>{this.props.subtitle}</h3>
 					</div>
 					<div className="pull-right clickable" id="login-section">
