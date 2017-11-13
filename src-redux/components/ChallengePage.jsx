@@ -35,18 +35,26 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
+	const descriptions = props.datasets.map(dataset => {
+		return (
+			<p key={`description_${dataset.id}`}>
+				<strong>{dataset.name}</strong>: {dataset.description}
+			</p>
+		);
+	});
+	// Combine and flatten tree data
+	const treeData = [].concat.apply(
+		[],
+		props.datasets.map(dataset => {
+			return dataset.dataset_metadata;
+		})
+	);
+	console.log(treeData);
 	return (
 		<div className="col-md-12 tab-content">
 			<h4>Datasets</h4>
-			<p>
-				Dataset1: Mauris ut ex orci. Nunc tincidunt nisl vitae augue dapibus faucibus. Donec
-				quis lacus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.{" "}
-			</p>
-			<p>
-				Dataset2: Mauris ut ex orci. Nunc tincidunt nisl vitae augue dapibus faucibus. Donec
-				quis lacus eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.{" "}
-			</p>
-			<Tree tree={props.tree} />
+			{descriptions}
+			<Tree tree={treeData} />
 			<br />
 			<Button bsStyle="success">Download ({props.downloadsize})</Button>
 		</div>

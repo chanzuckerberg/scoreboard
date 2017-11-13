@@ -1,4 +1,4 @@
-import { REQUEST_CHALLENGES, RECEIVE_CHALLENGES, LOGIN, LOGOUT, REQUEST_SUBMISSIONS, RECEIVE_SUBMISSIONS } from "../actions";
+import { REQUEST_CHALLENGES, RECEIVE_CHALLENGES, LOGIN, LOGOUT, REQUEST_SUBMISSIONS, RECEIVE_SUBMISSIONS, RECEIVE_DATASETS, REQUEST_DATASETS } from "../actions";
 
 export const challengeData = (state = {isFetching: false, challenges: []}, action) => {
 	if (action.type === REQUEST_CHALLENGES) {
@@ -42,6 +42,21 @@ export const submissionData =  (state = {isFetching: false, submissions: []}, ac
 			...state,
 			isFetching: false,
 			submissions: action.submissions,
+		}
+	} else {return state}
+}
+
+export const datasetData =  (state = {isFetching: false, datasets: []}, action) => {
+	if (action.type === REQUEST_DATASETS) {
+		return {
+			...state,
+			isFetching: true,
+		}
+	} else if (action.type === RECEIVE_DATASETS) {
+		return {
+			...state,
+			isFetching: false,
+			datasets: action.datasets,
 		}
 	} else {return state}
 }

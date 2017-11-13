@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
 import { HomeTabs } from "./Home.jsx";
-import { fetchChallenges, login, logout, fetchSubmissions } from "../actions/index";
+import {
+	fetchChallenges,
+	login,
+	logout,
+	fetchSubmissions,
+	fetchOneChallenge,
+} from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
 
@@ -44,7 +50,7 @@ class HomeApp extends Component {
 class ChallengeApp extends Component {
 	componentWillMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchSubmissions(this.props.match.params.id));
+		dispatch(fetchOneChallenge(this.props.match.params.id));
 	}
 	login(e) {
 		const { dispatch } = this.props;
@@ -72,6 +78,7 @@ class ChallengeApp extends Component {
 						username={this.props.userName}
 						active="about"
 						submissions={this.props.submissions}
+						datasets={this.props.datasets}
 					/>
 				</div>
 				<Footer />
@@ -81,7 +88,7 @@ class ChallengeApp extends Component {
 }
 
 const mapStateToProps = function(state) {
-	const { user, challengeData, submissionData } = state;
+	const { user, challengeData, submissionData, datasetData } = state;
 	return {
 		challenges: challengeData.challenges,
 		isFetchingChallenges: challengeData.isFetching,
@@ -89,6 +96,8 @@ const mapStateToProps = function(state) {
 		isAdmin: user.isAdmin,
 		isFetchingSubmissions: submissionData.isFetching,
 		submissions: submissionData.submissions,
+		isFetchingDatasets: datasetData.isFetching,
+		datasets: datasetData.datasets,
 	};
 };
 

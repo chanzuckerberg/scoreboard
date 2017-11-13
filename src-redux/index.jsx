@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import { challengeData, submissionData, user } from "./reducers";
+import { challengeData, submissionData, user, datasetData } from "./reducers";
 import { Challenge, Home } from "./containers/App.jsx";
 
 import createHistory from "history/createBrowserHistory";
@@ -18,6 +18,7 @@ const store = createStore(
 		challengeData,
 		user,
 		submissionData,
+		datasetData,
 		router: routerReducer,
 	}),
 	applyMiddleware(thunk, middleware)
