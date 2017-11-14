@@ -30,6 +30,27 @@ function getChallenges(req, res, next) {
 	})
 }
 
+function getOneChallenges(req, res, next) {
+	const challengeID = parseInt(req.params.challegeid)
+	console.log(challengeID, "HERE I AM")
+	db.any(
+		'select c.id, c.name, c.description, c.image_path, c.start_date ' +
+		'from challenges c ' +
+		'where c.id = $1 ', challengeID
+	)
+	.then(function (data) {
+		// TODO what if fetch returns 0 items or > 1?
+		res.status(200).json({
+			status: 'success',
+			data: data[0],
+			message: 'Retrieved one challenges'
+		})
+	})
+	.catch(function (err) {
+		return next(err)
+	})
+}
+
 function getDatasets(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid)
 	db.any("select * from datasets where challenge_id = $1", challengeID)
@@ -67,4 +88,5 @@ module.exports = {
 	getChallenges,
 	getDatasets,
 	getSubmissions,
+	getOneChallenges,
 }

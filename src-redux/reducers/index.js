@@ -1,16 +1,20 @@
-import { REQUEST_CHALLENGES, RECEIVE_CHALLENGES, LOGIN, LOGOUT, REQUEST_SUBMISSIONS, RECEIVE_SUBMISSIONS, RECEIVE_DATASETS, REQUEST_DATASETS } from "../actions";
+import { RECEIVE_CHALLENGES, LOGIN, LOGOUT, RECEIVE_SUBMISSIONS, RECEIVE_DATASETS, RECEIVE_CHALLENGE } from "../actions";
 
-export const challengeData = (state = {isFetching: false, challenges: []}, action) => {
-	if (action.type === REQUEST_CHALLENGES) {
-		return {
-			...state,
-			isFetching: true,
-		}
-	} else if (action.type === RECEIVE_CHALLENGES) {
+export const challengeData = (state = {challenges: []}, action) => {
+if (action.type === RECEIVE_CHALLENGES) {
 		return {
 			...state,
 			isFetching: false,
 			challenges: action.challenges,
+		}
+	} else {return state}
+}
+export const selectedChallege = (state = {challenge: {}}, action) => {
+if (action.type === RECEIVE_CHALLENGE) {
+		return {
+			...state,
+			isFetching: false,
+			challenge: action.challenge,
 		}
 	} else {return state}
 }
@@ -31,13 +35,8 @@ export const user = (state = {name: "", isAdmin: false }, action) => {
 	} else {return state}
 }
 
-export const submissionData =  (state = {isFetching: false, submissions: []}, action) => {
-	if (action.type === REQUEST_SUBMISSIONS) {
-		return {
-			...state,
-			isFetching: true,
-		}
-	} else if (action.type === RECEIVE_SUBMISSIONS) {
+export const submissionData =  (state = {submissions: []}, action) => {
+	if (action.type === RECEIVE_SUBMISSIONS) {
 		return {
 			...state,
 			isFetching: false,
@@ -46,13 +45,8 @@ export const submissionData =  (state = {isFetching: false, submissions: []}, ac
 	} else {return state}
 }
 
-export const datasetData =  (state = {isFetching: false, datasets: []}, action) => {
-	if (action.type === REQUEST_DATASETS) {
-		return {
-			...state,
-			isFetching: true,
-		}
-	} else if (action.type === RECEIVE_DATASETS) {
+export const datasetData =  (state = {datasets: []}, action) => {
+if (action.type === RECEIVE_DATASETS) {
 		return {
 			...state,
 			isFetching: false,

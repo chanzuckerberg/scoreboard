@@ -2,13 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
 import { HomeTabs } from "./Home.jsx";
-import {
-	fetchChallenges,
-	login,
-	logout,
-	fetchSubmissions,
-	fetchOneChallenge,
-} from "../actions/index";
+import { fetchChallenges, login, logout, fetchOneChallenge } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
 
@@ -61,7 +55,8 @@ class ChallengeApp extends Component {
 	}
 
 	render() {
-		const challenge = "Fake Challenge";
+		let challenge = "";
+		if (this.props.selectedChallege) challenge = this.props.selectedChallege.name;
 		return (
 			<div>
 				<div className="container content">
@@ -88,15 +83,14 @@ class ChallengeApp extends Component {
 }
 
 const mapStateToProps = function(state) {
-	const { user, challengeData, submissionData, datasetData } = state;
+	const { user, challengeData, submissionData, datasetData, selectedChallege } = state;
+	console.log("STATE", state);
 	return {
 		challenges: challengeData.challenges,
-		isFetchingChallenges: challengeData.isFetching,
+		selectedChallege: selectedChallege.challenge,
 		userName: user.name,
 		isAdmin: user.isAdmin,
-		isFetchingSubmissions: submissionData.isFetching,
 		submissions: submissionData.submissions,
-		isFetchingDatasets: datasetData.isFetching,
 		datasets: datasetData.datasets,
 	};
 };

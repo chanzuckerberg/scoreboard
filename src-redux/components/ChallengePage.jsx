@@ -49,7 +49,6 @@ export const Datasets = props => {
 			return dataset.dataset_metadata;
 		})
 	);
-	console.log(treeData);
 	return (
 		<div className="col-md-12 tab-content">
 			<h4>Datasets</h4>
