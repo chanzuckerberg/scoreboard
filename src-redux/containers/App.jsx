@@ -84,7 +84,6 @@ class ChallengeApp extends Component {
 
 const mapStateToProps = function(state) {
 	const { user, challengeData, submissionData, datasetData, selectedChallege } = state;
-	console.log("STATE", state);
 	return {
 		challenges: challengeData.challenges,
 		selectedChallege: selectedChallege.challenge,

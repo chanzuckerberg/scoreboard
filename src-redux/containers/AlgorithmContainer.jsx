@@ -1,9 +1,11 @@
 import React from "react";
-import { DropdownButton, MenuItem } from "react-bootstrap";
+import { connect } from "react-redux";
 import { slugify } from "../utils/utils";
 import { Algorithm } from "../components/Algorithm.jsx";
+import { SortPane } from "../components/SortPane.jsx";
+import { sortAlgorithms, toggleAlgortirhmActivation } from "../actions";
 
-export class Algorithms extends React.Component {
+class AlgorithmsContainer extends React.Component {
 	constructor(props) {
 		super(props);
 		let activeIndicies = {};
@@ -19,93 +21,72 @@ export class Algorithms extends React.Component {
 	}
 
 	onclick(e, data) {
+		const { dispatch } = this.props;
 		const sortAttr = e.target.getAttribute("data-sortby");
-		const sortIdx = parseInt(e.target.getAttribute("data-idx")) - this.ALGO_SORT_OPTIONS.length;
-		let sortedData = this.state.data.slice();
-		if (sortAttr === "Date Submitted") {
-			sortedData.sort(function(x, y) {
-				return y.dateSubmitted - x.dateSubmitted;
-			});
-		} else if (sortAttr === "Name") {
-			sortedData.sort(function(x, y) {
-				if (x.algorithm < y.algorithm) return -1;
-				if (x.algorithm > y.algorithm) return 1;
-				return 0;
-			});
-		} else if (sortAttr === "Submitter") {
-			sortedData.sort(function(x, y) {
-				if (x.ghname < y.ghname) return -1;
-				if (x.ghname > y.ghname) return 1;
-				return 0;
-			});
-		} else {
-			sortedData.sort(function(x, y) {
-				return y.data[sortIdx] - x.data[sortIdx];
-			});
-		}
-
-		this.setState({ data: sortedData, sortedBy: sortAttr });
+		const dataIdx = e.target.getAttribute("data-idx");
+		dispatch(sortAlgorithms(sortAttr, dataIdx));
 	}
 
-	activateIndex(name, e, data) {
-		let activeIndicies = this.state.activeIndicies;
-		activeIndicies[name] = !activeIndicies[name];
-		this.setState({ activeIndicies: activeIndicies });
+	activateIndex(alID, e, data) {
+		const { dispatch } = this.props;
+		dispatch(toggleAlgortirhmActivation(alID));
 	}
 
 	componentWillMount() {
 		this.setState({ data: this.props.data });
 	}
 
+	sortData() {
+		const sortAttr = this.props.sortSelection;
+		let sortedData = this.props.data.slice();
+		if (sortAttr === "Date Submitted") {
+			sortedData.sort(function(x, y) {
+				return y.submission_date - x.submission_date;
+			});
+		} else if (sortAttr === "Name") {
+			sortedData.sort(function(x, y) {
+				if (x.name < y.name) return -1;
+				if (x.name > y.name) return 1;
+				return 0;
+			});
+		} else if (sortAttr === "Submitter") {
+			sortedData.sort(function(x, y) {
+				if (x.user_name < y.user_name) return -1;
+				if (x.user_name > y.user_name) return 1;
+				return 0;
+			});
+		} else {
+			// Where can I get sort index from?
+			const sortIdx = parseInt(this.props.dataIdx) - this.ALGO_SORT_OPTIONS.length;
+			sortedData.sort(function(x, y) {
+				return y.score_data.data[sortIdx] - x.score_data.data[sortIdx];
+			});
+		}
+		return sortedData;
+	}
+
 	render() {
-		const algorithms = this.props.data.map(item => {
+		let sortedData = this.sortData();
+		const algorithms = sortedData.map(item => {
 			if (item.is_accepted || this.props.isAdmin) {
 				return (
 					<Algorithm
-						active={this.state.activeIndicies[item.algorithm]}
+						active={item.active}
 						key={"submission_" + item.id}
 						linkOnClick={Algorithms.linkOnClick}
 						data={item}
-						// title={item.algorithm}
-						// ghLink={item.ghlink}
-						// ghName={item.ghname}
-						// scores={item.data}
-						// detailedScores={item.additionalData}
-						// dateSubmitted={item.dateSubmitted}
-						// publications={item.publications}
-						// approved={item.approved}
-						activate={this.activateIndex.bind(this, item.algorithm)}
+						activate={this.activateIndex.bind(this, item.id)}
 					/>
 				);
 			}
 		});
 		const sortables = [...this.ALGO_SORT_OPTIONS, ...this.props.categories];
-		let sortCategories = sortables.map((item, idx) => {
-			let active = false;
-			if (this.state.sortedBy === item) active = true;
-			return (
-				<MenuItem
-					key={"sort_item_" + idx}
-					onClick={this.onclick.bind(this)}
-					data-idx={idx}
-					data-sortby={item}
-					eventKey={item}
-					active={active}
-				>
-					{item}
-				</MenuItem>
-			);
-		});
-		sortCategories = (
-			<DropdownButton
-				bsSize="small"
-				className="dropdown-sort"
-				bsStyle="success"
-				id="AlgoSortDropdown"
-				title={this.state.sortedBy}
-			>
-				{sortCategories}
-			</DropdownButton>
+		const sortPane = (
+			<SortPane
+				sortOptions={sortables}
+				sortSelection={this.props.sortSelection}
+				onSortSelect={this.onclick.bind(this)}
+			/>
 		);
 		const dataCategories = this.props.categories.map(item => {
 			return (
@@ -121,9 +102,7 @@ export class Algorithms extends React.Component {
 					<div className="row">
 						<div className="col-sm-3 bold-text">Info</div>
 						<div className="col-sm-6 bold-text ">Scores</div>
-						<div className="col-sm-3">
-							<label htmlFor="AlgoSortDropdown">Sort By: </label> {sortCategories}
-						</div>
+						<div className="col-sm-3">{sortPane}</div>
 					</div>
 					<div className="row">
 						<div className="col-sm-9 col-sm-offset-3">
@@ -136,3 +115,14 @@ export class Algorithms extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = function(state) {
+	const { submissionData } = state;
+	return {
+		submissions: submissionData.submissions,
+		sortSelection: submissionData.sortBy,
+		dataIdx: submissionData.dataIdx,
+	};
+};
+
+export const Algorithms = connect(mapStateToProps)(AlgorithmsContainer);
