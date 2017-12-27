@@ -1,8 +1,8 @@
 const webpack = require("webpack");
 const path = require("path");
 
-const BUILD_DIR = path.resolve(__dirname, "dist-redux");
-const APP_DIR = path.resolve(__dirname, "src-redux");
+const BUILD_DIR = path.resolve(__dirname, "dist");
+const APP_DIR = path.resolve(__dirname, "src");
 
 const config = {
 	entry: `${APP_DIR}/index.jsx`,
