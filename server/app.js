@@ -11,7 +11,7 @@ app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:htt
 
 // Serve static assets
 app.use("/assets", express.static(path.resolve(__dirname, '..', 'assets')));
-app.use("/dist", express.static(path.resolve(__dirname, '..', 'dist-redux')));
+app.use("/dist", express.static(path.resolve(__dirname, '..', 'dist')));
 
 app.get("/api/challenges", db.getChallenges)
 app.get("/api/datasets/:challegeid", db.getDatasets)
