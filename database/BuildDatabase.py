@@ -29,6 +29,8 @@ class Challenge(Base):
     description = Column(String)
     start_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     image_path = Column(String)
+    data_path = Column(String)
+    data_size = Column(String)
     is_open = Column(Boolean, nullable=False)
 
 class Dataset(Base):
@@ -48,13 +50,20 @@ class Submission(Base):
     challenge_id = Column(Integer, ForeignKey("challenges.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     repository = Column(String, nullable=False)
-    results_path = Column(String, nullable=False)
-    score_data = Column(JSONB)
     is_private = Column(Boolean, nullable=False)
     institution = Column(String)
     publication = Column(String)
-    submission_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     is_accepted = Column(Boolean, nullable=False)
+
+class Result(Base):
+    __tablename__ = 'results'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True)
+    submission_id = Column(Integer, ForeignKey("submissions.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    results_path = Column(String, nullable=False)
+    score_data = Column(JSONB)
+    is_current = Column(Boolean, nullable=False)
+    submission_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
 Base.metadata.create_all(engine)
 
@@ -75,11 +84,11 @@ for user in users:
     session.add(new_user)
 session.commit()
 challenges = [
-    {"name":"doublet detection", "description":"this challenge is doublet detection", "image_path":"http://via.placeholder.com/100/00ccff", "is_open":True},
-    {"name":"cell identification", "description":"this challenge is cell identification", "image_path":"http://via.placeholder.com/100/00ccff", "is_open":True},
-    {"name":"batch effect correction", "description":"this challenge is batch effect correction", "image_path":"http://via.placeholder.com/100/00ccff", "is_open":True},
-    {"name":"experimental design", "description":"this challenge is experimental design", "image_path":"http://via.placeholder.com/100/00ccff", "is_open":True},
-    {"name":"cell type clustering", "description":"this challenge is cell type clustering", "image_path":"http://via.placeholder.com/100/00ccff", "is_open":True},
+    {"name":"doublet detection", "description":"this challenge is doublet detection", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB", "is_open":True},
+    {"name":"cell identification", "description":"this challenge is cell identification", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
+    {"name":"batch effect correction", "description":"this challenge is batch effect correction", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
+    {"name":"experimental design", "description":"this challenge is experimental design", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
+    {"name":"cell type clustering", "description":"this challenge is cell type clustering", "image_path":"http://via.placeholder.com/100/00ccff","data_path": "fake/path", "data_size":"83GB", "is_open":True},
 ]
 for challenge in challenges:
     new_challenge = Challenge(**challenge)
@@ -124,11 +133,6 @@ submissions = [
         "user_id": 1,
         "challenge_id": 1,
         "repository": "https://github.com/chanzuckerberg/hca-bakeoff-site",
-        "results_path": "",
-        "score_data": {
-            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
-            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-        },
         "publication": "https://chanzuckerberg.com/",
         "institution": "",
         "is_private": False,
@@ -139,11 +143,6 @@ submissions = [
         "user_id": 2,
         "challenge_id": 1,
         "repository": "https://github.com/chanzuckerberg/hca-bakeoff-site",
-        "results_path": "",
-        "score_data": {
-            "data": [0.6, 0.5, 0.3, 0.4, 0.89, 0.3],
-            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-        },
         "publication": "https://chanzuckerberg.com/, https://chanzuckerberg.com/",
         "institution": "",
         "is_private": False,
@@ -154,11 +153,6 @@ submissions = [
         "user_id": 2,
         "challenge_id": 1,
         "repository": "https://github.com/chanzuckerberg/hca-bakeoff-site",
-        "results_path": "",
-        "score_data": {
-            "data": [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
-            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-        },
         "institution": "",
         "is_private": False,
         "is_accepted": True,
@@ -168,11 +162,6 @@ submissions = [
         "user_id": 4,
         "challenge_id": 1,
         "repository": "https://github.com/chanzuckerberg/hca-bakeoff-site",
-        "results_path": "",
-        "score_data": {
-            "data": [0.4, 0.11, 0.1, 0.99, 0.46, 0.32],
-            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
-        },
         "institution": "",
         "is_private": False,
         "is_accepted": True,
@@ -181,6 +170,58 @@ submissions = [
 for submission in submissions:
     new_submission = Submission(**submission)
     session.add(new_submission)
+session.commit()
+
+results = [
+    {
+        "submission_id": 1,
+        "results_path": "",
+        "score_data": {
+            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": True,
+    },
+    {
+        "submission_id": 2,
+        "results_path": "",
+        "score_data": {
+            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": True,
+    },
+    {
+        "submission_id": 3,
+        "results_path": "",
+        "score_data": {
+            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": True,
+    },
+    {
+        "submission_id": 4,
+        "results_path": "",
+        "score_data": {
+            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.4],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": True,
+    },
+        {
+        "submission_id": 4,
+        "results_path": "",
+        "score_data": {
+            "data": [0.9, 0.8, 0.7, 0.6, 0.5, 0.1],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": False,
+    },
+]
+for result in results:
+    new_result = Result(**result)
+    session.add(new_result)
 session.commit()
 
 
