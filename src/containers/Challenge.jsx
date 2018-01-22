@@ -7,7 +7,7 @@ export class ChallengeTabs extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			active: props.active,
+			active: "",
 		};
 	}
 

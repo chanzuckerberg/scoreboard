@@ -105,26 +105,26 @@ a:hover {
 	border: solid 3px rgb(114, 154, 208);
 	padding: 8px 0.5% 10px 6px;
 	border-radius: 2px;
-	transition: .25s ease-out;
+	transition: border .25s ease-out, transform .25s ease-out, padding .25s ease-out;
 }
 
 .tab.tab-selected {
 	border-left: solid 6px rgb(114, 154, 208) !important;
+	background: rgb(114, 154, 208) !important;
 	padding-left: 3px !important;
+	color: white;
 }
 
 .tab:hover {
 	border-left: solid 6px rgb(114, 154, 208) !important;
 	padding-left: 3px !important;
 	transform: scale(1.05);
-	transition: .25s ease-out;
 }
 
 .tab-content {
 	margin-top: 20px;
-	margin-bottom: 20px;
 	padding: 20px;
-	border: solid 3px rgb(151, 151, 151);
+	border: solid 3px rgb(114, 154, 208);
 	border-radius: 2px;
 }
 
@@ -257,6 +257,7 @@ a:hover {
 /* Challenge Data */
 
 .overview {
+	margin-top: 20px;
 	position: relative;
 	display: inline-block;
 }
