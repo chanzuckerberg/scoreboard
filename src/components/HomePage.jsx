@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import { slugify } from "../utils/utils";
 
 export const About = () => (
-	<div className="col-md-12 tab-content">
+	<div className="col-md-8 col-md-offset-2 about">
 		<p>
 			Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas,
 			egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien
@@ -29,7 +29,7 @@ export const Challenges = props => {
 			/>
 		);
 	});
-	return <div>{challenges}</div>;
+	return <div className="col-md-10 col-md-offset-1">{challenges}</div>;
 };
 
 export const Challenge = props => (
@@ -37,26 +37,21 @@ export const Challenge = props => (
 
 	<div className="col-md-4 challenge">
 		<Link to={`/challenge/${props.challengeid}`}>
-			<img className="pull-left dataset-img" src={props.image} alt="placeholder" />
-			<div>
-				<h4>{props.name}</h4>
-				<div>{props.description}</div>
-				<div>datasets: {props.datasetcount}</div>
-				<div>submissions: {props.submissions}</div>
+			<div className="challenge-box">
+				<img className="pull-left challenge-img" src={props.image} alt="placeholder" />
+				<div className="challenge-info">
+					<div className="challenge-name">{props.name}</div>
+					<div className="challenge-detail">{props.description}</div>
+					<div className="challenge-detail">datasets: {props.datasetcount}</div>
+					<div className="challenge-detail">submissions: {props.submissions}</div>
+				</div>
 			</div>
 		</Link>
 	</div>
 );
 
-export const SlackHelp = () => (
-	<div className="col-md-12 tab-content">
-		The best way to get help is to join our slack channel. Ask questions and read through
-		discussion.
-	</div>
-);
-
 export const FAQ = () => (
-	<div className="col-md-12">
+	<div className="col-md-8 col-md-offset-2 faq">
 		<p className="question">What is a challenge?</p>
 		<p className="answer">
 			Mauris ac lectus ipsum. Sed malesuada velit ut euismod ultrices. Quisque aliquet feugiat
@@ -85,6 +80,11 @@ export const FAQ = () => (
 			Cras gravida, lacus non ultrices varius, justo leo volutpat orci, vitae tempor libero
 			nisi eget odio. Aenean eu pharetra augue, eu porttitor justo. Sed sollicitudin libero
 			eget elit cursus, in hendrerit lorem viverra. In porttitor nisi eu mattis viverra.
+		</p>
+		<p className="question">How do I get in touch?</p>
+		<p className="answer">
+			The best way to get help is to join our slack channel. Ask questions and read through
+		discussion.
 		</p>
 	</div>
 );

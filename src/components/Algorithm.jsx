@@ -1,12 +1,15 @@
 import React from "react";
 import { linkOnClick } from "../utils/utils";
 import { Button } from "react-bootstrap";
+import { scaleLinear } from "d3-scale"
+
+var colorize = scaleLinear().domain([0, 1]).range(['rgb(85, 95, 115)', 'rgb(110, 180, 255)'])
 
 export const Algorithm = props => {
 	let scores = props.data.score_data.data.map((item, idx) => {
 		return (
-			<div key={"score_" + idx} className="single-score col-sm-2">
-				<span className="score-span">{item.toFixed(2)}</span>
+			<div key={"score_" + idx} style={{width: "16.66%"}} className="single-score">
+				<span className="score-span" style={{backgroundColor: colorize(item)}}>{item.toFixed(2)}</span>
 			</div>
 		);
 	});
@@ -17,8 +20,8 @@ export const Algorithm = props => {
 		detailedScores = props.data.score_data.additionalData.map((item, idx) => {
 			let eachDetailedScore = item.map((item2, idx2) => {
 				return (
-					<div key={"score_" + idx + "_" + idx2} className="single-score col-sm-2">
-						<span className="score-span">{item2.toFixed(2)}</span>
+					<div key={"score_" + idx + "_" + idx2} style={{width: "16.66%"}} className="single-score">
+						<span className="score-span" style={{backgroundColor: colorize(item2)}} >{item2.toFixed(2)}</span>
 					</div>
 				);
 			});
@@ -40,13 +43,13 @@ export const Algorithm = props => {
 				);
 			});
 			publications = (
-				<h6 key={`publication_${props.data.name}`}>Publications: {publications}</h6>
+				<div className="algo-detail" key={`publication_${props.data.name}`}>Publications: {publications}</div>
 			);
 		}
 		detailedInfo = [
-			<h6 key={`submit_date_${props.data.name}`}>
+			<div className="algo-detail" key={`submit_date_${props.data.name}`}>
 				{props.data.submission_date.slice(0, 10)}
-			</h6>,
+			</div>,
 			publications,
 		];
 	}
@@ -67,19 +70,19 @@ export const Algorithm = props => {
 		<div>
 			<div
 				data-idx={props.index}
-				className={"col-sm-offset-1 col-sm-10 algorithm " + activeClass + unapprovedClass}
+				className={"algorithm " + activeClass + unapprovedClass}
 				onClick={props.activate}
 			>
 				<div className="row">
-					<div className="col-sm-3">
-						<h5 className="algo-name">
-							{props.data.name}
+					<div className="col-sm-3 algorithm-detail">
+						<div className="algo-name">
 							<a onClick={linkOnClick} target="_blank" href={props.data.repository}>
 								{" "}
-								<i className="glyphicon glyphicon-link" />
+								<i className="algo-link glyphicon glyphicon-link" />
 							</a>
-						</h5>
-						<h6 className="gh-name">by {props.data.user_name}</h6>
+							{props.data.name}
+						</div>
+						<div className="gh-name algo-detail">by {props.data.user_name}</div>
 						{detailedInfo}
 					</div>
 					<div className="col-sm-9 scores">

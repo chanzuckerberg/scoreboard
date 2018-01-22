@@ -4,7 +4,7 @@ export const Footer = () => {
 	return (
 		<div className="row">
 			<footer className="footer">
-				<div className="pull-left">
+				<div>
 					<a href="https://chanzuckerberg.com/">
 						<img
 							alt="Chan Zuckerberg Initiative"
@@ -20,7 +20,6 @@ export const Footer = () => {
 						/>
 					</a>
 				</div>
-				<div className="pull-right center-text">© 2017 Chan Zuckerberg Initiative</div>
 			</footer>
 		</div>
 	);

@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 
 export const About = props => {
 	return (
-		<div className="col-md-12 tab-content">
+		<div className="tab-content">
 			<p>
 				Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas,
 				egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida
@@ -38,7 +38,7 @@ export const Datasets = props => {
 	const descriptions = props.datasets.map(dataset => {
 		return (
 			<p key={`description_${dataset.id}`}>
-				<strong>{dataset.name}</strong>: {dataset.description}
+				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
 			</p>
 		);
 	});
@@ -51,7 +51,8 @@ export const Datasets = props => {
 	);
 	return (
 		<div className="col-md-12 tab-content">
-			<h4>Datasets</h4>
+			<div>Available datasets:</div>
+			<br />
 			{descriptions}
 			<Tree tree={treeData} />
 			<br />
