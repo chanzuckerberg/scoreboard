@@ -69,11 +69,10 @@ class SubmitChallenge extends React.Component {
 	render() {
 		const modalId = "submitModal";
 		return (
-			<div>
-				<div className="col-md-12 tab-content">
+			<div className="col-md-12 tab-content">
+				<div>
 					<p>
-						<strong>Instructions:</strong> Etiam a diam nec orci porta mattis sit amet
-						in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris.
+						<span className="control-label">Instructions</span> Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris.
 						Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc
 						scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum
 						malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus

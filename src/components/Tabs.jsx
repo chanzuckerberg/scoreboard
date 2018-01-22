@@ -2,7 +2,7 @@ import React from "react";
 
 export const Tabs = props => {
 	const tablinks = props.tabs.map((tabname, idx) => {
-		let tabclass = "col-md-2 tab clickable ";
+		let tabclass = "tab clickable ";
 		if (tabname === props.activetab) tabclass += "tab-selected";
 		return (
 			<div
@@ -11,13 +11,15 @@ export const Tabs = props => {
 				onClick={props.onclick}
 				key={`${tabname}_data_tab`}
 			>
-				{tabname} //
+				{tabname}
 			</div>
 		);
 	});
 	return (
-		<div>
-			<div className="row">{tablinks}</div>
+		<div className="col-md-10 col-md-offset-1">
+			<div className="tab-container">
+				{tablinks}
+			</div>
 			{props.content}
 		</div>
 	);

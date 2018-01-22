@@ -34,7 +34,7 @@ export const SortPane = props => {
 	);
 	return (
 		<div>
-			<label htmlFor="AlgoSortDropdown">Sort By: </label> {sortCategories}
+			<label className="sort-label" htmlFor="AlgoSortDropdown">Sort By: </label> {sortCategories}
 		</div>
 	);
 };

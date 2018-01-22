@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
 import { HomeTabs } from "./Home.jsx";
+import { About, Challenges, FAQ } from "../components/HomePage.jsx";
 import { fetchChallenges, login, logout, fetchOneChallenge } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
@@ -26,14 +27,23 @@ class HomeApp extends Component {
 			<div>
 				<div className="container content">
 					<Header
-						title="analysis scoreboard"
+						title="scoreboard"
 						login={this.login.bind(this)}
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						subtitle="Human Cell Atlas"
 					/>
-					<hr />
-					<HomeTabs challenges={this.props.challenges} active="about" />
+					<div>
+						<div className="row">
+							<About />
+						</div>
+						<div className="row">
+							<Challenges challenges={this.props.challenges} />
+						</div>
+						<div className="row">
+							<FAQ />
+						</div>
+					</div>
 				</div>
 				<Footer />
 			</div>
@@ -61,13 +71,12 @@ class ChallengeApp extends Component {
 			<div>
 				<div className="container content">
 					<Header
-						title="analysis scoreboard"
+						title="scoreboard"
 						login={this.login.bind(this)}
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						subtitle={challenge}
 					/>
-					<hr />
 					<ChallengeTabs
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}

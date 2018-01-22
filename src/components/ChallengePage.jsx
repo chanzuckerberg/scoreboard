@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 
 export const About = props => {
 	return (
-		<div className="col-md-12 tab-content">
+		<div className="tab-content">
 			<p>
 				Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas,
 				egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida

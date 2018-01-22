@@ -90,7 +90,7 @@ class AlgorithmsContainer extends React.Component {
 		);
 		const dataCategories = this.props.categories.map(item => {
 			return (
-				<div className="col-sm-2 dataset-text" key={"algo_data_" + slugify(item)}>
+				<div className="dataset-text" style={{width: "16.66%"}} key={"algo_data_" + slugify(item)}>
 					{item}
 				</div>
 			);
@@ -98,14 +98,17 @@ class AlgorithmsContainer extends React.Component {
 
 		return (
 			<div>
-				<div className="algorithms col-sm-10 col-sm-offset-1">
-					<div className="row">
-						<div className="col-sm-3 bold-text">Info</div>
-						<div className="col-sm-6 bold-text ">Scores</div>
-						<div className="col-sm-3">{sortPane}</div>
+				<div className="overview">
+					<div className="overview-description">
+						Each panel shows results for a different algorithm. Click a panel to see more info. Columns are scores, and rows are datasets.
 					</div>
+					<div className="overview-sort">
+						{sortPane}
+					</div>
+				</div>
+				<div className="algorithms score-labels">
 					<div className="row">
-						<div className="col-sm-9 col-sm-offset-3">
+						<div className="col-sm-9 col-sm-offset-3 score-labels-header">
 							<div className="row">{dataCategories}</div>
 						</div>
 					</div>
