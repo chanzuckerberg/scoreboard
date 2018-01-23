@@ -6,7 +6,6 @@ export const unslugify = function(word) {
 	return word.replace(/\_/i, " ");
 };
 
-
 export const linkOnClick = function(e) {
-		e.stopPropagation();
-	}
+	e.stopPropagation();
+};

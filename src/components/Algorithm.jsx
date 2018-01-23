@@ -66,16 +66,20 @@ export const Algorithm = props => {
 			publications,
 		];
 	}
-	// TODO fix problem where this triggers expanding the class
 	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
 	const approveButton = props.data.is_accepted ? (
 		""
 	) : (
 		<div className="admin-approve-container">
-			<Button className="admin-approve" bsSize="xsmall" bsStyle="info">
+			<Button onClick={linkOnClick} className="admin-approve" bsSize="xsmall" bsStyle="info">
 				Approve
 			</Button>
-			<Button className="admin-approve" bsSize="xsmall" bsStyle="warning">
+			<Button
+				onClick={linkOnClick}
+				className="admin-approve"
+				bsSize="xsmall"
+				bsStyle="warning"
+			>
 				Reject
 			</Button>
 		</div>
