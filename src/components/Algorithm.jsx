@@ -61,7 +61,7 @@ export const Algorithm = props => {
 		}
 		detailedInfo = [
 			<div className="algo-detail" key={`submit_date_${props.data.name}`}>
-				{/*{props.data.submission_date.slice(0, 10)}*/}
+				{props.data.submission_date.slice(0, 10)}
 			</div>,
 			publications,
 		];

@@ -21,7 +21,7 @@ export const Footer = () => {
 					</a>
 				</div>
 				<div className="footer-built">
-					Built with
+					Built with{" "}
 					<a
 						className="clickable underline"
 						href="https://github.com/chanzuckerberg/scoreboard"
