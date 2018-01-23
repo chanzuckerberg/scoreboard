@@ -166,6 +166,15 @@ submissions = [
         "is_private": False,
         "is_accepted": True,
     },
+    {
+        "name": "Private-Algorithm #5",
+        "user_id": 1,
+        "challenge_id": 1,
+        "repository": "https://github.com/chanzuckerberg/hca-bakeoff-site",
+        "institution": "",
+        "is_private": True,
+        "is_accepted": True,
+    },
 ]
 for submission in submissions:
     new_submission = Submission(**submission)
@@ -217,6 +226,15 @@ results = [
             "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
         },
         "is_current": False,
+    },
+    {
+        "submission_id": 5,
+        "results_path": "",
+        "score_data": {
+            "data": [0.2, 0.2, 0.2, 0.2, 0.2, 0.1],
+            "additionalData": [[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]],
+        },
+        "is_current": True,
     },
 ]
 for result in results:

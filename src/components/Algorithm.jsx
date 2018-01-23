@@ -1,27 +1,38 @@
 import React from "react";
 import { linkOnClick } from "../utils/utils";
 import { Button } from "react-bootstrap";
-import { scaleLinear } from "d3-scale"
+import { scaleLinear } from "d3-scale";
 
-var colorize = scaleLinear().domain([0, 1]).range(['rgb(85, 95, 115)', 'rgb(110, 180, 255)'])
+var colorize = scaleLinear()
+	.domain([0, 1])
+	.range(["rgb(85, 95, 115)", "rgb(110, 180, 255)"]);
 
 export const Algorithm = props => {
 	let scores = props.data.score_data.data.map((item, idx) => {
 		return (
-			<div key={"score_" + idx} style={{width: "16.66%"}} className="single-score">
-				<span className="score-span" style={{backgroundColor: colorize(item)}}>{item.toFixed(2)}</span>
+			<div key={"score_" + idx} style={{ width: "16.66%" }} className="single-score">
+				<span className="score-span" style={{ backgroundColor: colorize(item) }}>
+					{item.toFixed(2)}
+				</span>
 			</div>
 		);
 	});
 	let activeClass = props.active ? "algorithm-selected" : "";
+	let privateClass = props.data.is_private ? " algorithm-private" : "";
 	let detailedScores = "";
 	let detailedInfo = "";
 	if (props.active) {
 		detailedScores = props.data.score_data.additionalData.map((item, idx) => {
 			let eachDetailedScore = item.map((item2, idx2) => {
 				return (
-					<div key={"score_" + idx + "_" + idx2} style={{width: "16.66%"}} className="single-score">
-						<span className="score-span" style={{backgroundColor: colorize(item2)}} >{item2.toFixed(2)}</span>
+					<div
+						key={"score_" + idx + "_" + idx2}
+						style={{ width: "16.66%" }}
+						className="single-score"
+					>
+						<span className="score-span" style={{ backgroundColor: colorize(item2) }}>
+							{item2.toFixed(2)}
+						</span>
 					</div>
 				);
 			});
@@ -43,21 +54,24 @@ export const Algorithm = props => {
 				);
 			});
 			publications = (
-				<div className="algo-detail" key={`publication_${props.data.name}`}>Publications: {publications}</div>
+				<div className="algo-detail" key={`publication_${props.data.name}`}>
+					Publications: {publications}
+				</div>
 			);
 		}
 		detailedInfo = [
 			<div className="algo-detail" key={`submit_date_${props.data.name}`}>
-				{props.data.submission_date.slice(0, 10)}
+				{/*{props.data.submission_date.slice(0, 10)}*/}
 			</div>,
 			publications,
 		];
 	}
+	// TODO fix problem where this triggers expanding the class
 	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
 	const approveButton = props.data.is_accepted ? (
 		""
 	) : (
-		<div className="col-sm-1">
+		<div className="admin-approve-container">
 			<Button className="admin-approve" bsSize="xsmall" bsStyle="info">
 				Approve
 			</Button>
@@ -70,7 +84,7 @@ export const Algorithm = props => {
 		<div>
 			<div
 				data-idx={props.index}
-				className={"algorithm " + activeClass + unapprovedClass}
+				className={"algorithm " + activeClass + unapprovedClass + privateClass}
 				onClick={props.activate}
 			>
 				<div className="row">
@@ -89,9 +103,9 @@ export const Algorithm = props => {
 						<div className="row">{scores}</div>
 						<div className="detailed-scores">{detailedScores}</div>
 					</div>
+					{approveButton}
 				</div>
 			</div>
-			{approveButton}
 		</div>
 	);
 };

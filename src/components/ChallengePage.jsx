@@ -1,5 +1,4 @@
 import React from "react";
-import { Tree } from "../containers/Tree.jsx";
 import { Modal, Button } from "react-bootstrap";
 
 export const About = props => {
@@ -54,7 +53,6 @@ export const Datasets = props => {
 			<div>Available datasets:</div>
 			<br />
 			{descriptions}
-			<Tree tree={treeData} />
 			<br />
 			<Button bsStyle="success">Download ({props.downloadsize})</Button>
 		</div>

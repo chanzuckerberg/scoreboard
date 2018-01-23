@@ -16,9 +16,8 @@ class HomeApp extends Component {
 	login(e) {
 		const { dispatch } = this.props;
 		const role = e.target.getAttribute("data-role");
-		console.log(role);
-		if (role === "admin") dispatch(login(role, true));
-		else if (role === "user") dispatch(login(role, false));
+		if (role === "admin") dispatch(login(role, true, 4));
+		else if (role === "user") dispatch(login(role, false, 1));
 		else dispatch(logout());
 	}
 
@@ -59,8 +58,8 @@ class ChallengeApp extends Component {
 	login(e) {
 		const { dispatch } = this.props;
 		const role = e.target.getAttribute("data-role");
-		if (role === "admin") dispatch(login(role, true));
-		else if (role === "user") dispatch(login(role, false));
+		if (role === "admin") dispatch(login(role, true, 4));
+		else if (role === "user") dispatch(login(role, false, 1));
 		else dispatch(logout());
 	}
 
@@ -79,6 +78,7 @@ class ChallengeApp extends Component {
 					/>
 					<ChallengeTabs
 						isAdmin={this.props.isAdmin}
+						userId={this.props.userId}
 						username={this.props.userName}
 						active="about"
 						submissions={this.props.submissions}
@@ -98,6 +98,7 @@ const mapStateToProps = function(state) {
 		selectedChallege: selectedChallege.challenge,
 		userName: user.name,
 		isAdmin: user.isAdmin,
+		userId: user.userId,
 		submissions: submissionData.submissions,
 		datasets: datasetData.datasets,
 	};

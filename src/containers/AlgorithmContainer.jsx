@@ -68,7 +68,11 @@ class AlgorithmsContainer extends React.Component {
 	render() {
 		let sortedData = this.sortData();
 		const algorithms = sortedData.map(item => {
-			if (item.is_accepted || this.props.isAdmin) {
+			if (
+				(item.is_accepted && !item.is_private) ||
+				this.props.isAdmin ||
+				(item.is_private && item.user_id === this.props.userId)
+			) {
 				return (
 					<Algorithm
 						active={item.active}
@@ -90,7 +94,11 @@ class AlgorithmsContainer extends React.Component {
 		);
 		const dataCategories = this.props.categories.map(item => {
 			return (
-				<div className="dataset-text" style={{width: "16.66%"}} key={"algo_data_" + slugify(item)}>
+				<div
+					className="dataset-text"
+					style={{ width: "16.66%" }}
+					key={"algo_data_" + slugify(item)}
+				>
 					{item}
 				</div>
 			);
@@ -100,11 +108,10 @@ class AlgorithmsContainer extends React.Component {
 			<div>
 				<div className="overview">
 					<div className="overview-description">
-						Each panel shows results for a different algorithm. Click a panel to see more info. Columns are scores, and rows are datasets.
+						Each panel shows results for a different algorithm. Click a panel to see
+						more info. Columns are scores, and rows are datasets.
 					</div>
-					<div className="overview-sort">
-						{sortPane}
-					</div>
+					<div className="overview-sort">{sortPane}</div>
 				</div>
 				<div className="algorithms score-labels">
 					<div className="row">

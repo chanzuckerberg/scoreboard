@@ -33,11 +33,11 @@ export const fetchChallenges = () => {
 
 // Login and logout for admin roles
 // TODO this is a temp hack, actually log in using github
-export const login = (name, role) => {
-	console.log("LOGIN", name, role);
+export const login = (name, role, userid) => {
 	return {
 		name,
 		role,
+		userid,
 		type: LOGIN,
 	};
 };

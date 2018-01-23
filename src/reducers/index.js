@@ -32,18 +32,20 @@ export const selectedChallege = (state = { challenge: {} }, action) => {
 	}
 };
 
-export const user = (state = { name: "", isAdmin: false }, action) => {
+export const user = (state = { name: "", isAdmin: false, userId: -1 }, action) => {
 	if (action.type === LOGIN) {
 		return {
 			...state,
 			name: action.name,
 			isAdmin: action.role,
+			userId: action.userid,
 		};
 	} else if (action.type === LOGOUT) {
 		return {
 			...state,
 			name: "",
 			isAdmin: false,
+			userId: -1,
 		};
 	} else {
 		return state;

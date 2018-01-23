@@ -20,6 +20,16 @@ export const Footer = () => {
 						/>
 					</a>
 				</div>
+				<div className="footer-built">
+					Built with
+					<a
+						className="clickable underline"
+						href="https://github.com/chanzuckerberg/scoreboard"
+						target="_window"
+					>
+						scoreboard
+					</a>
+				</div>
 			</footer>
 		</div>
 	);
