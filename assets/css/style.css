@@ -457,5 +457,29 @@ a:hover {
 }
 .admin-approve-container {
 	position: absolute;
-	right: -95px;
+	right: -55px;
+}
+.admin-approve-button {
+	background-color: #00aa55 !important;
+	border-color: #00aa55 !important;
+	transition: 0.1s;
+}
+.admin-reject-button {
+	background-color: #c9302c !important;
+	border-color: #c9302c !important;
+	transition: 0.1s;
+}
+
+.admin-approve-button:hover {
+	color:  #00aa55 !important;
+	background-color: white !important;
+}
+
+.admin-reject-button:hover {
+	color: #c9302c !important;
+	background-color: white !important;
+}
+
+.btn:focus {
+	outline: none !important;
 }

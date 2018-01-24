@@ -78,14 +78,20 @@ export const Algorithm = props => {
 		""
 	) : (
 		<div className="admin-approve-container">
-			<Button onClick={linkOnClick} className="admin-approve" bsSize="xsmall" bsStyle="info">
-				Approve
-			</Button>
 			<Button
 				onClick={linkOnClick}
-				className="admin-approve"
+				className="admin-approve admin-approve-button"
 				bsSize="xsmall"
-				bsStyle="warning"
+				bsStyle="success"
+			>
+				Approve
+			</Button>
+			<br />
+			<Button
+				onClick={linkOnClick}
+				className="admin-approve admin-reject-button"
+				bsSize="xsmall"
+				bsStyle="danger"
 			>
 				Reject
 			</Button>
