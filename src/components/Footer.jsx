@@ -1,6 +1,8 @@
 import React from "react";
+import config from "../scoreboard.cfg.js";
 
 export const Footer = () => {
+	console.log(config);
 	return (
 		<div className="row">
 			<footer className="footer">
