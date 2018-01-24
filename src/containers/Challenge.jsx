@@ -13,7 +13,9 @@ export class ChallengeTabs extends React.Component {
 
 	clickLink(e, data) {
 		const activetab = e.target.getAttribute("data-tabname");
-		this.setState({ active: activetab });
+		// toggle if the new tab is the same as the old, otherwise switch tabs
+		if (activetab === this.state.active) this.setState({ active: "" });
+		else this.setState({ active: activetab });
 	}
 
 	render() {
