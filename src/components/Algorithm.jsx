@@ -8,9 +8,16 @@ var colorize = scaleLinear()
 	.range(["rgb(85, 95, 115)", "rgb(110, 180, 255)"]);
 
 export const Algorithm = props => {
+	let score_count = 1;
+	let score_width = 100;
+	if (props.data.score_data.data.length > 0) {
+		score_count = props.data.score_data.data.length;
+		if (score_count > 10) score_count = 10;
+		score_width = 100 / score_count;
+	}
 	let scores = props.data.score_data.data.map((item, idx) => {
 		return (
-			<div key={"score_" + idx} style={{ width: "16.66%" }} className="single-score">
+			<div key={"score_" + idx} style={{ width: score_width + "%" }} className="single-score">
 				<span className="score-span" style={{ backgroundColor: colorize(item) }}>
 					{item.toFixed(2)}
 				</span>
@@ -27,7 +34,7 @@ export const Algorithm = props => {
 				return (
 					<div
 						key={"score_" + idx + "_" + idx2}
-						style={{ width: "16.66%" }}
+						style={{ width: score_width + "%" }}
 						className="single-score"
 					>
 						<span className="score-span" style={{ backgroundColor: colorize(item2) }}>
