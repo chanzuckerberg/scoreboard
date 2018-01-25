@@ -11,9 +11,9 @@ export const Algorithm = props => {
 		score_width = 100 / score_count;
 	}
 	const algoColor = props.color;
-	let bgColor = colorScale(algoColor, item);
-	let text = textColor(bgColor);
 	let scores = props.data.score_data.data.map((item, idx) => {
+		let bgColor = colorScale(algoColor, item);
+		let text = textColor(bgColor);
 		return (
 			<div key={"score_" + idx} style={{ width: score_width + "%" }} className="single-score">
 				<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>

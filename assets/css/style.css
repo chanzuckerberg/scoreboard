@@ -120,14 +120,14 @@ a:hover {
 }
 
 .tab.tab-selected {
-	border-left: solid 6px rgb(114, 154, 208) !important;
-	background: rgb(114, 154, 208) !important;
+	border-left: solid 6px !important;
+	background: rgb(235, 235, 235) !important;
 	padding-left: 3px !important;
 	color: white;
 }
 
 .tab:hover {
-	border-left: solid 6px rgb(114, 154, 208) !important;
+	border-left: solid 6px !important;
 	padding-left: 3px !important;
 	transform: scale(1.05);
 }

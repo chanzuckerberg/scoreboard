@@ -5,13 +5,7 @@ import { Tree } from "../containers/Tree.jsx";
 export const About = props => {
 	return (
 		<div className="tab-content">
-			<p>
-				Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas,
-				egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida
-				sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh.
-				Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus
-				porttitor odio, interdum vestibulum dolor mattis non.
-			</p>
+			<p>{props.content}</p>
 		</div>
 	);
 };

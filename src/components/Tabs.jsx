@@ -1,8 +1,6 @@
 import React from "react";
 
 export const Tabs = props => {
-	console.log("Tabs", props);
-
 	const tablinks = props.tabs.map((tabname, idx) => {
 		let tabclass = "tab clickable ";
 		if (tabname === props.activetab) tabclass += "tab-selected";
