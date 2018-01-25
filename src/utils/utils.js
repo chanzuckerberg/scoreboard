@@ -9,3 +9,4 @@ export const unslugify = function(word) {
 export const linkOnClick = function(e) {
 	e.stopPropagation();
 };
+

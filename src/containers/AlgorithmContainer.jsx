@@ -4,6 +4,7 @@ import { slugify } from "../utils/utils";
 import { Algorithm } from "../components/Algorithm.jsx";
 import { SortPane } from "../components/SortPane.jsx";
 import { sortAlgorithms, toggleAlgortirhmActivation } from "../actions";
+import { config } from "../scoreboard.cfg";
 
 class AlgorithmsContainer extends React.Component {
 	constructor(props) {
@@ -67,6 +68,9 @@ class AlgorithmsContainer extends React.Component {
 
 	render() {
 		let sortedData = this.sortData();
+		let challengeColor = "rgb(110, 180, 255)";
+		if (this.props.challengeName)
+			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
 		const algorithms = sortedData.map(item => {
 			if (
 				(item.is_accepted && !item.is_private) ||
@@ -77,8 +81,8 @@ class AlgorithmsContainer extends React.Component {
 					<Algorithm
 						active={item.active}
 						key={"submission_" + item.id}
-						linkOnClick={Algorithms.linkOnClick}
 						data={item}
+						color={challengeColor}
 						activate={this.activateIndex.bind(this, item.id)}
 					/>
 				);
@@ -127,11 +131,12 @@ class AlgorithmsContainer extends React.Component {
 }
 
 const mapStateToProps = function(state) {
-	const { submissionData } = state;
+	const { submissionData, selectedChallege } = state;
 	return {
 		submissions: submissionData.submissions,
 		sortSelection: submissionData.sortBy,
 		dataIdx: submissionData.dataIdx,
+		challengeName: selectedChallege.challenge.name,
 	};
 };
 

@@ -1,25 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { slugify } from "../utils/utils";
+import { config } from "../scoreboard.cfg.js";
 
 export const About = () => (
 	<div className="col-md-8 col-md-offset-2 about">
-		<p>
-			Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas,
-			egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien
-			sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum
-			malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor
-			odio, interdum vestibulum dolor mattis non.
-		</p>
+		<p>{config.general.about}</p>
 	</div>
 );
 
 export const Challenges = props => {
-	console.log(props);
 	const challenges = props.challenges.map(item => {
+		const lowername = item.name.toLowerCase();
+		const color = config.challenges[lowername].color;
 		return (
 			<Challenge
 				name={item.name}
+				color={color}
 				key={"Challenge_" + item.id}
 				challengeid={item.id}
 				datasetcount={item.datasets}
@@ -32,23 +28,28 @@ export const Challenges = props => {
 	return <div className="col-md-10 col-md-offset-1">{challenges}</div>;
 };
 
-export const Challenge = props => (
-	// Todo put link back in
-
-	<div className="col-md-4 challenge">
-		<Link to={`/challenge/${props.challengeid}`}>
-			<div className="challenge-box">
-				<img className="pull-left challenge-img" src={props.image} alt="placeholder" />
-				<div className="challenge-info">
-					<div className="challenge-name">{props.name}</div>
-					<div className="challenge-detail">{props.description}</div>
-					<div className="challenge-detail">datasets: {props.datasetcount}</div>
-					<div className="challenge-detail">submissions: {props.submissions}</div>
+export const Challenge = props => {
+	const style = {
+		borderColor: props.color,
+		borderWidth: "3px",
+		borderStyle: "solid",
+	};
+	return (
+		<div className="col-md-4 challenge">
+			<Link to={`/challenge/${props.challengeid}`}>
+				<div className="challenge-box" style={style}>
+					<img className="pull-left challenge-img" src={props.image} alt="placeholder" />
+					<div className="challenge-info">
+						<div className="challenge-name">{props.name}</div>
+						<div className="challenge-detail">{props.description}</div>
+						<div className="challenge-detail">datasets: {props.datasetcount}</div>
+						<div className="challenge-detail">submissions: {props.submissions}</div>
+					</div>
 				</div>
-			</div>
-		</Link>
-	</div>
-);
+			</Link>
+		</div>
+	);
+};
 
 export const FAQ = () => (
 	<div className="col-md-8 col-md-offset-2 faq">
@@ -84,7 +85,7 @@ export const FAQ = () => (
 		<p className="question">How do I get in touch?</p>
 		<p className="answer">
 			The best way to get help is to join our slack channel. Ask questions and read through
-		discussion.
+			discussion.
 		</p>
 	</div>
 );

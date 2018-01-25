@@ -1,27 +1,18 @@
 import React from "react";
-import config from "../scoreboard.cfg.js";
+import { config } from "../scoreboard.cfg.js";
 
 export const Footer = () => {
-	console.log(config);
+	const logos = config.general.logo.map(logo => {
+		return (
+			<a key={"logo" + logo.name} href={logo.link}>
+				<img alt={logo.name} className="logo-link" src={"/assets/img/" + logo.filename} />
+			</a>
+		);
+	});
 	return (
 		<div className="row">
 			<footer className="footer">
-				<div>
-					<a href="https://chanzuckerberg.com/">
-						<img
-							alt="Chan Zuckerberg Initiative"
-							className="logo-link"
-							src="/assets/img/CZ_LOGO_WHITE.svg"
-						/>
-					</a>
-					<a href="https://www.humancellatlas.org/">
-						<img
-							alt="Human Cell Atlas"
-							className="logo-link"
-							src="/assets/img/flogo.png"
-						/>
-					</a>
-				</div>
+				<div>{logos}</div>
 				<div className="footer-built">
 					Built with{" "}
 					<a

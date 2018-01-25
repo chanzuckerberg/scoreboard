@@ -204,7 +204,7 @@ a:hover {
 .challenge-box {
 	margin-top: 20px;
 	min-height: 150px !important;
-	border: 3px solid rgb(150,150,150);
+	border-width: 3px;
 	padding-left: 6px;
 	border-radius: 2px;
 	width: 100%;
@@ -213,7 +213,8 @@ a:hover {
 }
 
 .challenge-box:hover {
-	border-left: solid 6px rgb(150, 150, 150) !important;
+	border-left-width: 6px !important;
+	border-left-style: solid;
 	padding-left: 3px !important;
 	transform: scale(1.05);
 	transition: .25s ease-out;

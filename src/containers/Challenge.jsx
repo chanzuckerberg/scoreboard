@@ -1,9 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Tabs } from "../components/Tabs.jsx";
 import { About, SubmitModal, Datasets } from "../components/ChallengePage.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
+import { config } from "../scoreboard.cfg";
 
-export class ChallengeTabs extends React.Component {
+class ChallengeTabsClass extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -19,6 +21,10 @@ export class ChallengeTabs extends React.Component {
 	}
 
 	render() {
+		console.log("C", this.props);
+		let challengeColor = "rgb(110, 180, 255)";
+		if (this.props.challengeName)
+			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
 		let content = "";
 		const dlSize = "83 GB";
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
@@ -48,6 +54,7 @@ export class ChallengeTabs extends React.Component {
 				onclick={this.clickLink.bind(this)}
 				activetab={this.state.active}
 				content={content}
+				color={challengeColor}
 			/>
 		);
 	}
@@ -154,3 +161,12 @@ class SubmitChallenge extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = function(state) {
+	const { selectedChallege } = state;
+	return {
+		challengeName: selectedChallege.challenge.name,
+	};
+};
+
+export const ChallengeTabs = connect(mapStateToProps)(ChallengeTabsClass);

@@ -1,12 +1,7 @@
 import React from "react";
 import { linkOnClick } from "../utils/utils";
 import { Button } from "react-bootstrap";
-import { scaleLinear } from "d3-scale";
-
-var colorize = scaleLinear()
-	.domain([0, 1])
-	.range(["rgb(85, 95, 115)", "rgb(110, 180, 255)"]);
-
+import { colorScale, textColor } from "../utils/color-utils";
 export const Algorithm = props => {
 	let score_count = 1;
 	let score_width = 100;
@@ -15,10 +10,13 @@ export const Algorithm = props => {
 		if (score_count > 10) score_count = 10;
 		score_width = 100 / score_count;
 	}
+	const algoColor = props.color;
+	let bgColor = colorScale(algoColor, item);
+	let text = textColor(bgColor);
 	let scores = props.data.score_data.data.map((item, idx) => {
 		return (
 			<div key={"score_" + idx} style={{ width: score_width + "%" }} className="single-score">
-				<span className="score-span" style={{ backgroundColor: colorize(item) }}>
+				<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
 					{item.toFixed(2)}
 				</span>
 			</div>
@@ -31,13 +29,18 @@ export const Algorithm = props => {
 	if (props.active) {
 		detailedScores = props.data.score_data.additionalData.map((item, idx) => {
 			let eachDetailedScore = item.map((item2, idx2) => {
+				let bgColor = colorScale(algoColor, item2);
+				let text = textColor(bgColor);
 				return (
 					<div
 						key={"score_" + idx + "_" + idx2}
 						style={{ width: score_width + "%" }}
 						className="single-score"
 					>
-						<span className="score-span" style={{ backgroundColor: colorize(item2) }}>
+						<span
+							className="score-span"
+							style={{ backgroundColor: bgColor, color: text }}
+						>
 							{item2.toFixed(2)}
 						</span>
 					</div>

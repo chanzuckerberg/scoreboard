@@ -1,6 +1,5 @@
 export const config = {
 	general: {
-		favicon: "favicon.ico",
 		logo: [
 			{
 				name: "Chan Zuckerberg Initiative",
@@ -13,32 +12,34 @@ export const config = {
 				link: "https://www.humancellatlas.org/",
 			},
 		],
-		title: "Scoreboard",
+		title: "scoreboard",
 		subtitle: "Human Cell Atlas",
+		about:
+			"Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 	},
 	challenges: {
 		"doublet detection": {
-			color: "rgb(100,20,20)",
+			color: "#AD3E97",
 			about:
 				"A: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 		},
 		"cell identification": {
-			color: "rgb(20,100,20)",
+			color: "#BAB942",
 			about:
 				"B: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 		},
 		"batch effect correction": {
-			color: "rgb(20,20,100)",
+			color: "#3C57C4",
 			about:
 				"C: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 		},
 		"experimental design": {
-			color: "rgb(100,100,20)",
+			color: "#C47C3C",
 			about:
 				"D: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 		},
 		"cell type clustering": {
-			color: "rgb(20,100,100)",
+			color: "#39BA79",
 			about:
 				"E: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 		},

@@ -6,6 +6,7 @@ import { About, Challenges, FAQ } from "../components/HomePage.jsx";
 import { fetchChallenges, login, logout, fetchOneChallenge } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
+import { config } from "../scoreboard.cfg.js";
 
 class HomeApp extends Component {
 	componentWillMount() {
@@ -26,11 +27,11 @@ class HomeApp extends Component {
 			<div>
 				<div className="container content">
 					<Header
-						title="scoreboard"
+						title={config.general.title}
 						login={this.login.bind(this)}
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
-						subtitle="Human Cell Atlas"
+						subtitle={config.general.subtitle}
 					/>
 					<div>
 						<div className="row">
@@ -65,6 +66,7 @@ class ChallengeApp extends Component {
 
 	render() {
 		let challenge = "";
+		console.log(this.props);
 		if (this.props.selectedChallege) challenge = this.props.selectedChallege.name;
 		return (
 			<div>
