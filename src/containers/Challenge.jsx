@@ -62,7 +62,7 @@ class ChallengeTabsClass extends React.Component {
 	}
 }
 
-class SubmitChallenge extends React.Component {
+class SubmitChallengeClass extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -80,6 +80,18 @@ class SubmitChallenge extends React.Component {
 
 	render() {
 		const modalId = "submitModal";
+		let exampleFile = "";
+		if (this.props.challengeName) {
+			exampleFile = (
+				<a
+					className="clickable underline"
+					download
+					href={config.challenges[this.props.challengeName.toLowerCase()].examplefile}
+				>
+					Example Submission
+				</a>
+			);
+		}
 		return (
 			<div className="col-md-12 tab-content">
 				<div>
@@ -89,7 +101,8 @@ class SubmitChallenge extends React.Component {
 						a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien
 						sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh.
 						Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor.
-						Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.
+						Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.{" "}
+						{exampleFile}
 					</p>
 				</div>
 
@@ -172,3 +185,4 @@ const mapStateToProps = function(state) {
 };
 
 export const ChallengeTabs = connect(mapStateToProps)(ChallengeTabsClass);
+export const SubmitChallenge = connect(mapStateToProps)(SubmitChallengeClass);
