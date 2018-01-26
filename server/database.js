@@ -33,7 +33,6 @@ function getChallenges(req, res, next) {
 
 function getOneChallenges(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
-	console.log(challengeID, "HERE I AM");
 	db
 		.any(
 			"select c.id, c.name, c.description, c.image_path, c.start_date " +
