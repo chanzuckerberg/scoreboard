@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Tabs } from "../components/Tabs.jsx";
-import { About, SubmitModal, Datasets } from "../components/ChallengePage.jsx";
+import { About, SubmitModal, Datasets, FormErrorMessage } from "../components/ChallengePage.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
 import { config } from "../scoreboard.cfg";
 
@@ -67,11 +67,105 @@ class SubmitChallengeClass extends React.Component {
 		super(props);
 		this.state = {
 			modalOpen: false,
+			submission: "",
+			repo: "",
+			publications: "",
+			institution: "",
+			private: false,
+			errors: false,
 		};
+		this.handleChange = this.handleChange.bind(this);
 	}
 
-	submitForm() {
-		this.setState({ modalOpen: true });
+	handleChange(event) {
+		const target_name = event.target.id;
+		let new_state = {};
+		new_state[target_name] =
+			event.target.type === "checkbox" ? event.target.checked : event.target.value;
+		this.setState(new_state);
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+		const is_valid = this.validateForm();
+		if (!is_valid.valid_form) this.setState({ errors: is_valid.validation_errors });
+		let data = new FormData(event.target);
+		if (this.props.userID) {
+			data.set("userid", this.props.userID);
+			data.set("challengeid", this.props.challengeId);
+			// clean up private checkbox in form
+			if (data.get("private") === "") data.set("private", true);
+			else data.set("private", false);
+		} else {
+			let current_errors = Object.assign({}, this.state.errors);
+			current_errors.login = "You must be logged in to submit an algorithm.";
+			this.setState({ errors: current_errors });
+			return;
+		}
+		// promise validate
+		this.readFile().then(
+			// on success submit
+			function(result) {
+				this.submitForm(data);
+			}.bind(this),
+			// on error set error state
+			function(err) {
+				let current_errors = Object.assign({}, this.state.errors);
+				current_errors.file = err.error;
+				this.setState({ errors: current_errors });
+			}.bind(this)
+		);
+	}
+
+	submitForm(data) {
+		this.setState({ modalOpen: true, errors: false });
+		// TODO move this to redux
+		fetch("/api/submitresults", {
+			method: "POST",
+			body: data,
+		});
+	}
+
+	readFile() {
+		return new Promise(resolve => {
+			const results_file = this.results.files[0];
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				let contents = e.target.result;
+				let header = contents.substr(0, contents.indexOf("\n"));
+				if (header !== "\tcall\tp_doublet") {
+					reject({ error: "Bad header" });
+				} else {
+					resolve({ valid: true, error: "" });
+				}
+			};
+			reader.onerror = function(e) {
+				reject({ error: "Error reading file" });
+			};
+			reader.readAsText(results_file);
+		});
+	}
+
+	// TODO use third party package for form validation
+	validateForm(valid, error) {
+		let valid_form = true;
+		let validation_errors = {};
+		// Ensure name, gh repo, file
+		if (this.state.submission === "") {
+			valid_form = false;
+			validation_errors["submission"] = "Submission Name is a required field";
+		}
+		// Validate ghrepo is actual repo
+		if (this.state.repo === "" || this.state.repo.toLowerCase().indexOf("github.com") === -1) {
+			valid_form = false;
+			validation_errors["repo"] =
+				"Github Repo is required and must contain a valid link to a github repo.";
+		}
+		if (!this.results.files[0]) {
+			valid_form = false;
+			validation_errors["file"] = "Results file is required.";
+		}
+		return { valid_form, validation_errors };
 	}
 
 	closeModal() {
@@ -81,6 +175,10 @@ class SubmitChallengeClass extends React.Component {
 	render() {
 		const modalId = "submitModal";
 		let exampleFile = "";
+		let error_message = "";
+		let submission_error_message = "";
+		let repo_error_message = "";
+		let file_error_message = "";
 		if (this.props.challengeName) {
 			exampleFile = (
 				<a
@@ -91,6 +189,24 @@ class SubmitChallengeClass extends React.Component {
 					Example Submission
 				</a>
 			);
+		}
+		if (this.state.errors) {
+			error_message = (
+				<div className="submit-error">Please check errors before submitting.</div>
+			);
+			if ("login" in this.state.errors) {
+				error_message = <div className="submit-error">{this.state.errors.login}</div>;
+			}
+			if ("submission" in this.state.errors)
+				submission_error_message = (
+					<FormErrorMessage errormessage={this.state.errors.submission} />
+				);
+			if ("repo" in this.state.errors) {
+				repo_error_message = <FormErrorMessage errormessage={this.state.errors.repo} />;
+			}
+			if ("file" in this.state.errors) {
+				file_error_message = <FormErrorMessage errormessage={this.state.errors.file} />;
+			}
 		}
 		return (
 			<div className="col-md-12 tab-content">
@@ -106,37 +222,65 @@ class SubmitChallengeClass extends React.Component {
 					</p>
 				</div>
 
-				<form role="form" className="form-horizontal">
+				<form
+					onSubmit={this.handleSubmit.bind(this)}
+					role="form"
+					className="form-horizontal"
+				>
 					<div className="form-group ">
 						<label className="col-sm-4 control-label" htmlFor="submission">
 							submission name *
 						</label>
 						<div className="col-sm-6">
-							<input id="submission" className="form-control" />
+							<input
+								id="submission"
+								name="submission"
+								onChange={this.handleChange}
+								className="form-control"
+							/>
 						</div>
+						{submission_error_message}
 					</div>
 					<div className="form-group">
 						<label className="col-sm-4 control-label" htmlFor="repo">
 							github repo *
 						</label>
 						<div className="col-sm-6">
-							<input id="repo" className="form-control" />
+							<input
+								id="repo"
+								name="repo"
+								onChange={this.handleChange}
+								className="form-control"
+							/>
 						</div>
+						{repo_error_message}
 					</div>
 					<div className="form-group">
 						<label className="col-sm-4 control-label" htmlFor="results">
 							results file *
 						</label>
 						<div className="col-sm-6">
-							<input id="results" type="file" className="form-control" />
+							<input
+								id="results"
+								name="results"
+								type="file"
+								ref={input => (this.results = input)}
+								className="form-control"
+							/>
 						</div>
+						{file_error_message}
 					</div>
 					<div className="form-group">
 						<label className="col-sm-4 control-label" htmlFor="publications">
 							link(s) to publications
 						</label>
 						<div className="col-sm-6">
-							<input id="publications" className="form-control" />
+							<input
+								id="publications"
+								name="publications"
+								onChange={this.handleChange}
+								className="form-control"
+							/>
 						</div>
 					</div>
 					<div className="form-group">
@@ -144,7 +288,12 @@ class SubmitChallengeClass extends React.Component {
 							institution
 						</label>
 						<div className="col-sm-6">
-							<input id="institution" className="form-control" />
+							<input
+								id="institution"
+								name="institution"
+								onChange={this.handleChange}
+								className="form-control"
+							/>
 						</div>
 					</div>
 					<div className="form-group">
@@ -152,18 +301,21 @@ class SubmitChallengeClass extends React.Component {
 							keep private
 						</label>
 						<div className="col-sm-6">
-							<input id="private" type="checkbox" value="" />
+							<input
+								id="private"
+								name="private"
+								onChange={this.handleChange}
+								type="checkbox"
+								value=""
+							/>
 						</div>
 					</div>
 					<div className="form-group">
 						<div className="col-sm-offset-4 col-sm-6">
-							<button
-								onClick={this.submitForm.bind(this)}
-								type="button"
-								className="btn btn-info"
-							>
+							<button type="submit" className="btn btn-info">
 								Submit
 							</button>
+							{error_message}
 						</div>
 					</div>
 				</form>
@@ -178,9 +330,11 @@ class SubmitChallengeClass extends React.Component {
 }
 
 const mapStateToProps = function(state) {
-	const { selectedChallege } = state;
+	const { selectedChallege, user } = state;
 	return {
 		challengeName: selectedChallege.challenge.name,
+		challengeId: selectedChallege.challenge.id,
+		userID: user.userId,
 	};
 };
 

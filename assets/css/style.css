@@ -229,6 +229,11 @@ a:hover {
 	margin-right: 15px;
 }
 
+.submit-error {
+	font-size: 0.75em;
+	color: #c9302c;
+}
+
 /* FAQ */
 
 .faq {

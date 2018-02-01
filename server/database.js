@@ -1,4 +1,5 @@
 const pgp = require("pg-promise")();
+const { exec } = require("child_process");
 const connection = {
 	host: "localhost",
 	port: 5432,
@@ -88,9 +89,109 @@ function getSubmissions(req, res, next) {
 		});
 }
 
+function submitResults(req, res, next) {
+	// Verify form
+	_validateForm(req.body, req.file);
+	// Score with docker
+	exec(
+		`docker run -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
+			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
+		(err, stdout, stderr) => {
+			if (err) {
+				// node couldn't execute the command
+				console.log("Error", err);
+				return;
+			}
+
+			// the *entire* stdout and stderr (buffered)
+			const results = JSON.parse(stdout);
+			_loadScore(req.body, results, req.file.path).then(() => {
+				res.status(200).json({
+					status: "success",
+					message: "hip hip hooray",
+				});
+			});
+		}
+	);
+	return true;
+}
+function _loadScore(form, data, filepath) {
+	// create or get submission
+	return new Promise(resolve => {
+		db.tx(t => {
+			return (
+				t
+					.oneOrNone(
+						"select id from submissions where user_id = $1 and challenge_id = $2 and name= $3",
+						[form.userid, form.challengeid, form.submission]
+					)
+					.then(submissionid => {
+						if (!submissionid) {
+							// if submission doesn't exist, insert it
+							const is_private = form.private === "true";
+							return t
+								.one(
+									"insert into submissions(user_id, challenge_id, name, repository, is_private, institution, publication, is_accepted) " +
+										"values ($1, $2, $3, $4, $5, $6, $7, false) RETURNING id",
+									[
+										form.userid,
+										form.challengeid,
+										form.submission,
+										form.repo,
+										is_private,
+										form.institution,
+										form.publications,
+									]
+								)
+								.then(data => {
+									return data.id;
+								});
+
+							// insert submission ; get new id
+						} else {
+							// TODO or should I update it?
+							return submissionid.id;
+						}
+
+						// flip old score's current switch to false
+					})
+					// insert new submission if not exists
+					.then(submissionid => {
+						// insert score
+						return t
+							.one(
+								"insert into results(submission_id, results_path, score_data, is_current, submission_date)" +
+									"values ($1, $2, $3, true, $4) RETURNING id",
+								[submissionid, filepath, data, new Date()]
+							)
+							.then(data => {
+								return { results_id: data.id, submission_id: submissionid };
+							});
+					})
+					// flip is_current switch to false on older results files for same algorithm
+					.then(dbids => {
+						return t.manyOrNone(
+							"update results set is_current=false where submission_id = $1 and id != $2",
+							[dbids.submission_id, dbids.results_id]
+						);
+					})
+					.then(() => {
+						resolve();
+					})
+			);
+		});
+	});
+}
+
+function _validateForm(form, file) {
+	//TODO flesh this out
+	return true;
+}
+
 module.exports = {
 	getChallenges,
 	getDatasets,
 	getSubmissions,
 	getOneChallenges,
+	submitResults,
 };
