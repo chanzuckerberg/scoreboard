@@ -146,14 +146,10 @@ function _loadScore(form, data, filepath) {
 								.then(data => {
 									return data.id;
 								});
-
-							// insert submission ; get new id
 						} else {
 							// TODO or should I update it?
 							return submissionid.id;
 						}
-
-						// flip old score's current switch to false
 					})
 					// insert new submission if not exists
 					.then(submissionid => {
