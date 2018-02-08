@@ -8,6 +8,7 @@ const connection = {
 	password: process.env.PG_PASSWORD,
 };
 const db = pgp(connection);
+const { validationResult } = require("express-validator/check");
 
 function getChallenges(req, res, next) {
 	db
@@ -91,28 +92,41 @@ function getSubmissions(req, res, next) {
 
 function submitResults(req, res, next) {
 	// Verify form
-	_validateForm(req.body, req.file);
-	// Score with docker
-	exec(
-		`docker run -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-		(err, stdout, stderr) => {
-			if (err) {
-				// node couldn't execute the command
-				console.log("Error", err);
-				return;
-			}
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(422).json({ errors: errors.mapped() });
+	}
+	const validform = validateFile(req.body, req.file);
 
-			// the *entire* stdout and stderr (buffered)
-			const results = JSON.parse(stdout);
-			_loadScore(req.body, results, req.file.path).then(() => {
-				res.status(200).json({
-					status: "success",
-					message: "hip hip hooray",
+	if (validform) {
+		// Score with docker
+		exec(
+			`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
+				.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
+			(err, stdout, stderr) => {
+				if (err) {
+					// node couldn't execute the command
+					console.log("Error", err);
+					return;
+				}
+
+				// the *entire* stdout and stderr (buffered)
+				const results = JSON.parse(stdout);
+				_loadScore(req.body, results, req.file.path).then(() => {
+					res.status(200).json({
+						status: "success",
+						message: "hip hip hooray",
+					});
 				});
-			});
-		}
-	);
+			}
+		);
+	} else {
+		// TODO make sure this kills the form clientside
+		res.status(400).json({
+			status: "error",
+			message: "validation error",
+		});
+	}
 	return true;
 }
 function _loadScore(form, data, filepath) {
@@ -177,11 +191,6 @@ function _loadScore(form, data, filepath) {
 			);
 		});
 	});
-}
-
-function _validateForm(form, file) {
-	//TODO flesh this out
-	return true;
 }
 
 module.exports = {

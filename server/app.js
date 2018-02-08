@@ -7,6 +7,9 @@ const app = express();
 const db = require("./database.js");
 const upload = multer({ dest: "uploads/" });
 
+const { check } = require("express-validator/check");
+const { sanitize } = require("express-validator/filter");
+
 // Setup logger
 app.use(
 	morgan(
@@ -22,7 +25,41 @@ app.get("/api/challenges", db.getChallenges);
 app.get("/api/datasets/:challegeid", db.getDatasets);
 app.get("/api/submissions/:challegeid", db.getSubmissions);
 app.get("/api/challenge/:challegeid", db.getOneChallenges);
-app.post("/api/submitresults", upload.single('results'), db.submitResults);
+app.post("/api/submitresults", [
+	// TODO Sanitize
+	upload.single("results"),
+	check("submission")
+		.exists()
+		.isLength({ min: 1 })
+		.withMessage("Submission name is required"),
+	check("repo")
+		.exists()
+		.isURL()
+		.custom(value => {
+			const re = /^.*github.com\/[-a-zA-Z0-9_]+\/[-a-zA-Z0-9_]+/;
+			return re.test(value);
+		})
+		.withMessage("Github Repo is required and must be a valid link to a github repository"),
+	check("publications")
+		.optional()
+		.custom(value => {
+			const publications = value.split(",");
+			const re = /^.*[-a-zA-Z0-9_]+\.[a-zA-Z]+/;
+			publications.forEach(publication => {
+				if (!re.test(value)) return false;
+			});
+			return true;
+		})
+		.withMessage("Publications must be links in list form"),
+	check("institution")
+		.optional()
+		.withMessage("There was a problem with the institution field"),
+	check("private")
+		.exists()
+		.isBoolean()
+		.withMessage("Private muse be set to true or false"),
+	db.submitResults,
+]);
 
 // Always return the main index.html, so react-router render the route in the client
 app.get("*", (req, res) => {
