@@ -1,7 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Tabs } from "../components/Tabs.jsx";
-import { About, SubmitModal, Datasets, FormErrorMessage } from "../components/ChallengePage.jsx";
+import {
+	About,
+	SubmitModal,
+	Datasets,
+	FormErrorMessage,
+	LoaderGif,
+} from "../components/ChallengePage.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
 import { config } from "../scoreboard.cfg";
 
@@ -10,6 +16,7 @@ class ChallengeTabsClass extends React.Component {
 		super(props);
 		this.state = {
 			active: "",
+			loading: false,
 		};
 	}
 
@@ -121,7 +128,7 @@ class SubmitChallengeClass extends React.Component {
 	}
 
 	submitForm(data) {
-		this.setState({ errors: false });
+		this.setState({ errors: false, loading: true });
 		// TODO move this to redux?
 		fetch("/api/submitresults", {
 			method: "POST",
@@ -135,6 +142,7 @@ class SubmitChallengeClass extends React.Component {
 			} else if (data.status === 200) {
 				this.setState({ modalOpen: true });
 			}
+			this.setState({ loading: false });
 		});
 	}
 
@@ -328,6 +336,7 @@ class SubmitChallengeClass extends React.Component {
 							<button type="submit" className="btn btn-info">
 								Submit
 							</button>
+							<LoaderGif display={this.state.loading} />
 							{error_message}
 						</div>
 					</div>

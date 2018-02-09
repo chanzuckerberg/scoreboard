@@ -58,3 +58,9 @@ export const Datasets = props => {
 export const FormErrorMessage = props => {
 	return <div className="col-sm-6 col-sm-offset-4 submit-error">{props.errormessage}</div>;
 };
+
+export const LoaderGif = props => {
+	let style = { height: "38px", paddingLeft: "10px" };
+	style.display = props.display ? "inline" : "none";
+	return <img style={style} alt="loading gif" src="/assets/img/Eclipse-1s-72px.gif" />;
+};
