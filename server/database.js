@@ -105,17 +105,27 @@ function submitResults(req, res, next) {
 			if (err) {
 				// node couldn't execute the command
 				console.log("Error", err);
-				return;
-			}
-			// the *entire* stdout and stderr (buffered)
-			const results = JSON.parse(stdout);
-			//TODO handle error
-			_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
-				res.status(200).json({
-					status: "success",
-					message: "hip hip hooray",
+				res.status(422).json({
+					errors: err,
 				});
-			});
+			} else {
+				// the *entire* stdout and stderr (buffered)
+				const results = JSON.parse(stdout);
+				console.log(results["error"]);
+				if (results["error"] !== "") {
+					res.status(422).json({
+						errors: { file: { msg: results["error"] } },
+					});
+				} else {
+					//TODO handle error
+					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
+						res.status(200).json({
+							status: "success",
+							message: "hip hip hooray",
+						});
+					});
+				}
+			}
 		}
 	);
 
