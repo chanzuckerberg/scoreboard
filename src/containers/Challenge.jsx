@@ -88,46 +88,58 @@ class SubmitChallengeClass extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		const is_valid = this.validateForm();
-		if (!is_valid.valid_form) this.setState({ errors: is_valid.validation_errors });
-		let data = new FormData(event.target);
-		if (this.props.userID) {
-			data.set("userid", this.props.userID);
-			data.set("challengeid", this.props.challengeId);
-			// clean up private checkbox in form
-			if (data.get("private") === "") data.set("private", true);
-			else data.set("private", false);
-		} else {
-			let current_errors = Object.assign({}, this.state.errors);
-			current_errors.login = "You must be logged in to submit an algorithm.";
-			this.setState({ errors: current_errors });
-			return;
-		}
-		// promise validate
-		this.readFile().then(
-			// on success submit
-			function(result) {
-				this.submitForm(data);
-			}.bind(this),
-			// on error set error state
-			function(err) {
+		if (is_valid.valid_form) {
+			let data = new FormData(event.target);
+			if (this.props.userID && this.props.userID !== -1) {
+				data.set("userid", this.props.userID);
+				data.set("challengeid", this.props.challengeId);
+				// clean up private checkbox in form
+				if (data.get("private") === "") data.set("private", true);
+				else data.set("private", false);
+			} else {
 				let current_errors = Object.assign({}, this.state.errors);
-				current_errors.file = err.error;
+				current_errors.login = "You must be logged in to submit an algorithm.";
 				this.setState({ errors: current_errors });
-			}.bind(this)
-		);
+				return;
+			}
+			// promise validate
+			this.readFile().then(
+				// on success submit
+				function(result) {
+					this.submitForm(data);
+				}.bind(this),
+				// on error set error state
+				function(err) {
+					let current_errors = Object.assign({}, this.state.errors);
+					current_errors.file = { msg: err.error };
+					this.setState({ errors: current_errors });
+				}.bind(this)
+			);
+		} else {
+			this.setState({ errors: is_valid.validation_errors });
+		}
 	}
 
 	submitForm(data) {
-		this.setState({ modalOpen: true, errors: false });
-		// TODO move this to redux
+		this.setState({ errors: false });
+		// TODO move this to redux?
 		fetch("/api/submitresults", {
 			method: "POST",
 			body: data,
+		}).then(data => {
+			if (data.status === 422) {
+				this.setState({ errors: {} });
+				data.json().then(json_data => {
+					this.setState({ errors: json_data["errors"] });
+				});
+			} else if (data.status === 200) {
+				this.setState({ modalOpen: true });
+			}
 		});
 	}
 
 	readFile() {
-		return new Promise(resolve => {
+		return new Promise((resolve, reject) => {
 			const results_file = this.results.files[0];
 			const reader = new FileReader();
 			reader.onload = function(e) {
@@ -153,17 +165,18 @@ class SubmitChallengeClass extends React.Component {
 		// Ensure name, gh repo, file
 		if (this.state.submission === "") {
 			valid_form = false;
-			validation_errors["submission"] = "Submission Name is a required field";
+			validation_errors["submission"] = { msg: "Submission Name is a required field" };
 		}
 		// Validate ghrepo is actual repo
 		if (this.state.repo === "" || this.state.repo.toLowerCase().indexOf("github.com") === -1) {
 			valid_form = false;
-			validation_errors["repo"] =
-				"Github Repo is required and must contain a valid link to a github repo.";
+			validation_errors["repo"] = {
+				msg: "Github Repo is required and must contain a valid link to a github repo.",
+			};
 		}
 		if (!this.results.files[0]) {
 			valid_form = false;
-			validation_errors["file"] = "Results file is required.";
+			validation_errors["file"] = { msg: "Results file is required." };
 		}
 		return { valid_form, validation_errors };
 	}
@@ -199,13 +212,13 @@ class SubmitChallengeClass extends React.Component {
 			}
 			if ("submission" in this.state.errors)
 				submission_error_message = (
-					<FormErrorMessage errormessage={this.state.errors.submission} />
+					<FormErrorMessage errormessage={this.state.errors.submission.msg} />
 				);
 			if ("repo" in this.state.errors) {
-				repo_error_message = <FormErrorMessage errormessage={this.state.errors.repo} />;
+				repo_error_message = <FormErrorMessage errormessage={this.state.errors.repo.msg} />;
 			}
 			if ("file" in this.state.errors) {
-				file_error_message = <FormErrorMessage errormessage={this.state.errors.file} />;
+				file_error_message = <FormErrorMessage errormessage={this.state.errors.file.msg} />;
 			}
 		}
 		return (

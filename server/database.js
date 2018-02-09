@@ -96,37 +96,29 @@ function submitResults(req, res, next) {
 	if (!errors.isEmpty()) {
 		return res.status(422).json({ errors: errors.mapped() });
 	}
-	const validform = validateFile(req.body, req.file);
 
-	if (validform) {
-		// Score with docker
-		exec(
-			`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-				.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-			(err, stdout, stderr) => {
-				if (err) {
-					// node couldn't execute the command
-					console.log("Error", err);
-					return;
-				}
-
-				// the *entire* stdout and stderr (buffered)
-				const results = JSON.parse(stdout);
-				_loadScore(req.body, results, req.file.path).then(() => {
-					res.status(200).json({
-						status: "success",
-						message: "hip hip hooray",
-					});
-				});
+	// Score with docker
+	exec(
+		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
+			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
+		(err, stdout, stderr) => {
+			if (err) {
+				// node couldn't execute the command
+				console.log("Error", err);
+				return;
 			}
-		);
-	} else {
-		// TODO make sure this kills the form clientside
-		res.status(400).json({
-			status: "error",
-			message: "validation error",
-		});
-	}
+			// the *entire* stdout and stderr (buffered)
+			const results = JSON.parse(stdout);
+			//TODO handle error
+			_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
+				res.status(200).json({
+					status: "success",
+					message: "hip hip hooray",
+				});
+			});
+		}
+	);
+
 	return true;
 }
 function _loadScore(form, data, filepath) {
