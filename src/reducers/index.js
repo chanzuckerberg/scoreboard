@@ -1,3 +1,6 @@
+import { combineReducers } from "redux";
+import { routerReducer } from "react-router-redux";
+
 import {
 	RECEIVE_CHALLENGES,
 	LOGIN,
@@ -9,7 +12,7 @@ import {
 	TOGGLE_ALOGRITHM_ACTIVATION,
 } from "../actions";
 
-export const challengeData = (state = { challenges: [] }, action) => {
+const challengeData = (state = { challenges: [] }, action) => {
 	if (action.type === RECEIVE_CHALLENGES) {
 		return {
 			...state,
@@ -20,7 +23,7 @@ export const challengeData = (state = { challenges: [] }, action) => {
 		return state;
 	}
 };
-export const selectedChallege = (state = { challenge: {} }, action) => {
+const selectedChallege = (state = { challenge: {} }, action) => {
 	if (action.type === RECEIVE_CHALLENGE) {
 		return {
 			...state,
@@ -32,7 +35,7 @@ export const selectedChallege = (state = { challenge: {} }, action) => {
 	}
 };
 
-export const user = (state = { name: "", isAdmin: false, userId: -1 }, action) => {
+const user = (state = { name: "", isAdmin: false, userId: -1 }, action) => {
 	if (action.type === LOGIN) {
 		return {
 			...state,
@@ -52,7 +55,7 @@ export const user = (state = { name: "", isAdmin: false, userId: -1 }, action) =
 	}
 };
 
-export const submissionData = (state = { submissions: [], sortBy: "Name", dataIdx: 0 }, action) => {
+const submissionData = (state = { submissions: [], sortBy: "Name", dataIdx: 0 }, action) => {
 	if (action.type === RECEIVE_SUBMISSIONS) {
 		let submissions = action.submissions.map(item => {
 			item.active = false;
@@ -83,7 +86,7 @@ export const submissionData = (state = { submissions: [], sortBy: "Name", dataId
 	}
 };
 
-export const datasetData = (state = { datasets: [] }, action) => {
+const datasetData = (state = { datasets: [] }, action) => {
 	if (action.type === RECEIVE_DATASETS) {
 		return {
 			...state,
@@ -95,4 +98,11 @@ export const datasetData = (state = { datasets: [] }, action) => {
 	}
 };
 
-// TODO, why can't I combine reducers here?
+export const rootReducer = combineReducers({
+	challengeData,
+	user,
+	submissionData,
+	selectedChallege,
+	datasetData,
+	router: routerReducer,
+});
