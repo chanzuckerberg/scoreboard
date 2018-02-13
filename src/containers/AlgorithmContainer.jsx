@@ -46,14 +46,14 @@ class AlgorithmsContainer extends React.Component {
 			});
 		} else if (sortAttr === "Name") {
 			sortedData.sort(function(x, y) {
-				if (x.name < y.name) return -1;
-				if (x.name > y.name) return 1;
+				if (x.name.toLowerCase() < y.name.toLowerCase()) return -1;
+				if (x.name.toLowerCase() > y.name.toLowerCase()) return 1;
 				return 0;
 			});
 		} else if (sortAttr === "Submitter") {
 			sortedData.sort(function(x, y) {
-				if (x.user_name < y.user_name) return -1;
-				if (x.user_name > y.user_name) return 1;
+				if (x.user_name.toLowerCase() < y.user_name.toLowerCase()) return -1;
+				if (x.user_name.toLowerCase() > y.user_name.toLowerCase()) return 1;
 				return 0;
 			});
 		} else {
@@ -73,9 +73,10 @@ class AlgorithmsContainer extends React.Component {
 			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
 		const algorithms = sortedData.map(item => {
 			if (
-				(item.is_accepted && !item.is_private) ||
-				this.props.isAdmin ||
-				(item.is_private && item.user_id === this.props.userId)
+				((item.is_accepted && !item.is_private) ||
+					this.props.isAdmin ||
+					(item.is_private && item.user_id === this.props.userId)) &&
+				"data" in item.score_data
 			) {
 				return (
 					<Algorithm
