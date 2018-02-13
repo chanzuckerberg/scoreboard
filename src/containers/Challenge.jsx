@@ -94,21 +94,20 @@ class SubmitChallengeClass extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
+		this.setState({ errors: false });
 		const is_valid = this.validateForm();
+		// Check for login
+		if (!(this.props.userID && this.props.userID !== -1)) {
+			is_valid.valid_form = false;
+			is_valid.validation_errors.login = "You must be logged in to submit an algorithm.";
+		}
 		if (is_valid.valid_form) {
 			let data = new FormData(event.target);
-			if (this.props.userID && this.props.userID !== -1) {
-				data.set("userid", this.props.userID);
-				data.set("challengeid", this.props.challengeId);
-				// clean up private checkbox in form
-				if (data.get("private") === "") data.set("private", true);
-				else data.set("private", false);
-			} else {
-				let current_errors = Object.assign({}, this.state.errors);
-				current_errors.login = "You must be logged in to submit an algorithm.";
-				this.setState({ errors: current_errors });
-				return;
-			}
+			data.set("userid", this.props.userID);
+			data.set("challengeid", this.props.challengeId);
+			// clean up private checkbox in form
+			if (data.get("private") === "") data.set("private", true);
+			else data.set("private", false);
 			// promise validate
 			this.readFile().then(
 				// on success submit
@@ -117,9 +116,7 @@ class SubmitChallengeClass extends React.Component {
 				}.bind(this),
 				// on error set error state
 				function(err) {
-					let current_errors = Object.assign({}, this.state.errors);
-					current_errors.file = { msg: err.error };
-					this.setState({ errors: current_errors });
+					this.setState({ errors: { msg: err.error } });
 				}.bind(this)
 			);
 		} else {

@@ -99,6 +99,7 @@ function submitResults(req, res, next) {
 
 	// Score with docker
 	exec(
+		// TODO scale with AWS Batch or ECS
 		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
 			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
 		(err, stdout, stderr) => {
@@ -128,7 +129,6 @@ function submitResults(req, res, next) {
 			}
 		}
 	);
-
 	return true;
 }
 function _loadScore(form, data, filepath) {
