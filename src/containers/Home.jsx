@@ -4,31 +4,31 @@ class SubmitChallenge extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			modalOpen: false
+			modalOpen: false,
 		};
 	}
 
 	submitForm() {
-		this.setState({modalOpen: true})
+		this.setState({ modalOpen: true });
 	}
 
 	closeModal() {
-		this.setState({modalOpen: false})
+		this.setState({ modalOpen: false });
 	}
 
+
 	render() {
-		const modalId = "submitModal"
+		const modalId = "submitModal";
 		return (
 			<div>
 				<div className="col-md-12 tab-content">
 					<p>
-						<span className="control-label">Instruction</span> Etiam a diam nec orci porta mattis sit amet in leo. Proin
-						placerat
-						velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida
-						sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum
-						malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio,
-						interdum
-						vestibulum dolor mattis non.
+						<span className="control-label">Instruction</span> Etiam a diam nec orci
+						porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris
+						a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien
+						sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh.
+						Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor.
+						Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.
 					</p>
 				</div>
 
@@ -38,7 +38,7 @@ class SubmitChallenge extends React.Component {
 							submission name *
 						</label>
 						<div className="col-sm-6">
-							<input id="submission" className="form-control"/>
+							<input id="submission" className="form-control" />
 						</div>
 					</div>
 					<div className="form-group">
@@ -46,7 +46,7 @@ class SubmitChallenge extends React.Component {
 							github repo *
 						</label>
 						<div className="col-sm-6">
-							<input id="repo" className="form-control"/>
+							<input id="repo" className="form-control" />
 						</div>
 					</div>
 					<div className="form-group">
@@ -54,7 +54,7 @@ class SubmitChallenge extends React.Component {
 							results file *
 						</label>
 						<div className="col-sm-6">
-							<input id="results" type="file" className="form-control"/>
+							<input id="results" type="file" className="form-control" />
 						</div>
 					</div>
 					<div className="form-group">
@@ -62,7 +62,7 @@ class SubmitChallenge extends React.Component {
 							link(s) to publications
 						</label>
 						<div className="col-sm-6">
-							<input id="publications" className="form-control"/>
+							<input id="publications" className="form-control" />
 						</div>
 					</div>
 					<div className="form-group">
@@ -70,7 +70,7 @@ class SubmitChallenge extends React.Component {
 							institution
 						</label>
 						<div className="col-sm-6">
-							<input id="institution" className="form-control"/>
+							<input id="institution" className="form-control" />
 						</div>
 					</div>
 					<div className="form-group">
@@ -78,19 +78,27 @@ class SubmitChallenge extends React.Component {
 							keep private
 						</label>
 						<div className="col-sm-6">
-							<input id="private" type="checkbox" value=""/>
+							<input id="private" type="checkbox" value="" />
 						</div>
 					</div>
 					<div className="form-group">
 						<div className="col-sm-offset-4 col-sm-6">
-							<button onClick={this.submitForm.bind(this)} type="button" className="btn btn-info">
+							<button
+								onClick={this.submitForm.bind(this)}
+								type="button"
+								className="btn btn-info"
+							>
 								Submit
 							</button>
 						</div>
 					</div>
 				</form>
-				<SubmitModal isOpen={this.state.modalOpen} close={this.closeModal.bind(this)} id={modalId}/>
+				<SubmitModal
+					isOpen={this.state.modalOpen}
+					close={this.closeModal.bind(this)}
+					id={modalId}
+				/>
 			</div>
 		);
 	}
-};
+}

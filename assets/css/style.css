@@ -232,6 +232,7 @@ a:hover {
 .submit-error {
 	font-size: 0.75em;
 	color: #c9302c;
+	padding-left: 0px !important;
 }
 
 /* FAQ */

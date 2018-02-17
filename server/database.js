@@ -92,9 +92,15 @@ function getSubmissions(req, res, next) {
 
 function submitResults(req, res, next) {
 	// Verify form
-	const errors = validationResult(req);
+	let errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		return res.status(422).json({ errors: errors.mapped() });
+		let errorsToReturn = { _error: "Submit validation failed." };
+		errors = errors.mapped();
+		Object.keys(errors).forEach(function(key) {
+			console.log(errors[key]);
+			errorsToReturn[key] = errors[key].msg;
+		});
+		return res.status(422).json(errorsToReturn);
 	}
 
 	// Score with docker
@@ -107,16 +113,15 @@ function submitResults(req, res, next) {
 				// node couldn't execute the command
 				console.log("Error", err);
 				res.status(422).json({
-					errors: err,
+					_error: err,
 				});
 			} else {
 				// the *entire* stdout and stderr (buffered)
 				const results = JSON.parse(stdout);
-				console.log(results["error"]);
 				if (results["error"] !== "") {
-					res.status(422).json({
-						errors: { file: { msg: results["error"] } },
-					});
+					res
+						.status(422)
+						.json({ file: results["error"], _error: "Submit validation failed." });
 				} else {
 					//TODO handle error
 					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {

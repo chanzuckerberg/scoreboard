@@ -56,7 +56,7 @@ export const Datasets = props => {
 };
 
 export const FormErrorMessage = props => {
-	return <div className="col-sm-6 col-sm-offset-4 submit-error">{props.errormessage}</div>;
+	return <div className="col-sm-12 submit-error">{props.errormessage}</div>;
 };
 
 export const LoaderGif = props => {
