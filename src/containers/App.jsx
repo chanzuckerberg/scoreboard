@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
-import { HomeTabs } from "./Home.jsx";
 import { About, Challenges, FAQ } from "../components/HomePage.jsx";
 import { fetchChallenges, login, logout, fetchOneChallenge } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";

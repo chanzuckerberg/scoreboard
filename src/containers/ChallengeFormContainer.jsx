@@ -2,9 +2,11 @@ import React from "react";
 import { ChallengeReduxForm } from "../components/ChallengeForm.jsx";
 import { connect } from "react-redux";
 import { SubmissionError } from "redux-form";
+import { fetchOneChallenge } from "../actions/index";
 
 class ChallengeFormClass extends React.Component {
 	submit(values) {
+		const { dispatch } = this.props;
 		// print the form values to the console
 		return new Promise((resolve, reject) => {
 			if (!(this.props.userID && this.props.userID !== -1)) {
@@ -31,6 +33,7 @@ class ChallengeFormClass extends React.Component {
 							});
 						} else if (data.status === 200) {
 							this.props.handleSuccess();
+							dispatch(fetchOneChallenge(this.props.challengeId));
 							resolve();
 						}
 					})
