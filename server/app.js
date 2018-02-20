@@ -8,6 +8,7 @@ const db = require("./database.js");
 const upload = multer({ dest: "uploads/" });
 
 const { check } = require("express-validator/check");
+const bodyParser = require("body-parser");
 const { sanitize } = require("express-validator/filter");
 
 // Setup logger
@@ -16,6 +17,9 @@ app.use(
 		':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'
 	)
 );
+// Parse json post requests
+app.use(bodyParser.json());
+const jsonParser = bodyParser.json();
 
 // Serve static assets
 app.use("/assets", express.static(path.resolve(__dirname, "..", "assets")));
@@ -25,6 +29,17 @@ app.get("/api/challenges", db.getChallenges);
 app.get("/api/datasets/:challegeid", db.getDatasets);
 app.get("/api/submissions/:challegeid", db.getSubmissions);
 app.get("/api/challenge/:challegeid", db.getOneChallenges);
+app.post("/api/approve", jsonParser, [
+	check("submissionid")
+		.exists()
+		.isInt()
+		.withMessage("Submission Id is required and must be numerical"),
+	check("approved")
+		.exists()
+		.isBoolean()
+		.withMessage("Approved must be boolean value."),
+	db.approveAlgorithm,
+]);
 app.post("/api/submitresults", [
 	// TODO Sanitize
 	upload.single("results"),

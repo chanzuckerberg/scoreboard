@@ -65,7 +65,6 @@ class ChallengeApp extends Component {
 
 	render() {
 		let challenge = "";
-		console.log(this.props);
 		if (this.props.selectedChallege) challenge = this.props.selectedChallege.name;
 		return (
 			<div>

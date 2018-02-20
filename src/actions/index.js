@@ -6,12 +6,14 @@ export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const SORT_ALGORTIHMS = "SORT_ALGORTIHMS";
 export const TOGGLE_ALOGRITHM_ACTIVATION = "TOGGLE_ALOGRITHM_ACTIVATION";
+export const ADMIN_APPROVE_ALOGRITHM = "ADMIN_APPROVE_ALOGRITHM";
 
 const base_url = "http://localhost:9000";
 const challenges_url = `${base_url}/api/challenges`;
 const challenge_url = `${base_url}/api/challenge`;
 const submissions_url = `${base_url}/api/submissions`;
 const dataset_url = `${base_url}/api/datasets`;
+const approve_url = `${base_url}/api/approve`;
 
 // Get all challenges for homepage
 
@@ -116,5 +118,28 @@ export const toggleAlgortirhmActivation = algorithmID => {
 	return {
 		type: TOGGLE_ALOGRITHM_ACTIVATION,
 		algorithmID: algorithmID,
+	};
+};
+
+export const approveOrRejectSubmission = (submissionid, approved, challengeid) => {
+	return dispatch => {
+		const approvedBool = approved === "true";
+		fetch(approve_url, {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+			},
+			body: JSON.stringify({ submissionid, approved: approvedBool }),
+		})
+			.then(response => {
+				console.log(response);
+				console.log(challengeid);
+				dispatch(fetchOneChallenge(challengeid));
+			})
+			.catch(err => {
+				// TODO have an actual error behavior here
+
+				console.log("Error", err);
+			});
 	};
 };
