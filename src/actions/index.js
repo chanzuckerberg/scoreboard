@@ -14,8 +14,9 @@ const base_url = "http://localhost:9000";
 const challenges_url = `${base_url}/api/challenges`;
 const challenge_url = `${base_url}/api/challenge`;
 const submissions_url = `${base_url}/api/submissions`;
-const approve_url = `${base_url}/api/approve`;
 const user_url = `${base_url}/api/user`;
+const dataset_url = `${base_url}/api/datasets`;
+const approve_url = `${base_url}/api/approve`;
 
 // Get all challenges for homepage
 

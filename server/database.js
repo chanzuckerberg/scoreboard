@@ -168,6 +168,7 @@ function submitResults(req, res, next) {
 		}
 	);
 	return res.status(200);
+<<<<<<< HEAD
 }
 
 function getUser(req, res, next) {
@@ -202,6 +203,8 @@ function getUser(req, res, next) {
 				});
 			}
 		});
+=======
+>>>>>>> Added approve/reject button
 }
 
 function _loadScore(form, data, filepath) {
