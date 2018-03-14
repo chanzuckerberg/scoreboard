@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { rootReducer } from "./reducers";
-import { Challenge, Home } from "./containers/App.jsx";
+import { Challenge, Home, Auth } from "./containers/App.jsx";
 
 import createHistory from "history/createBrowserHistory";
 import { Route } from "react-router";
