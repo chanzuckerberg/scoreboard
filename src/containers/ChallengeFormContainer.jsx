@@ -20,8 +20,6 @@ class ChallengeFormClass extends React.Component {
 				});
 				form.set("userid", this.props.userID);
 				form.set("challengeid", this.props.challengeId);
-				if (form.get("private") === "") form.set("private", true);
-				else form.set("private", false);
 				fetch("/api/submitresults", {
 					method: "POST",
 					body: form,

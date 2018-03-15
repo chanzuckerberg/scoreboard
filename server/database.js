@@ -90,6 +90,39 @@ function getSubmissions(req, res, next) {
 		});
 }
 
+function approveAlgorithm(req, res, next) {
+	let errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		res.status(422).json(errors);
+	}
+	const submissionId = parseInt(req.body.submissionid);
+	const approved = !!req.body.approved;
+	console.log("Approve", submissionId, approved);
+	if (approved) {
+		db
+			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
+			.then(data => {
+				console.log(`Updated submission set ${submissionId} to true`);
+				res.sendStatus(204);
+			})
+			.catch(err => {
+				console.log(`ERROR setting submission id ${submissionId} to true`, err);
+				res.status(400).json("Update failed for submission");
+			});
+	} else {
+		db
+			.one("delete from submissions where id=$1 RETURNING id", submissionId)
+			.then(data => {
+				console.log(`Deleted submission ${submissionId}`);
+				res.sendStatus(204);
+			})
+			.catch(err => {
+				console.log(`ERROR setting submission id ${submissionId} to true`, err);
+				res.status(400).json("Delete failed for submission");
+			});
+	}
+}
+
 function submitResults(req, res, next) {
 	// Verify form
 	let errors = validationResult(req);
@@ -134,7 +167,7 @@ function submitResults(req, res, next) {
 			}
 		}
 	);
-	return true;
+	return res.status(200);
 }
 
 function getUser(req, res, next) {
@@ -242,4 +275,5 @@ module.exports = {
 	getSubmissions,
 	getOneChallenges,
 	submitResults,
+	approveAlgorithm,
 };

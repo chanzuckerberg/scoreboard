@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { slugify } from "../utils/utils";
 import { Algorithm } from "../components/Algorithm.jsx";
 import { SortPane } from "../components/SortPane.jsx";
-import { sortAlgorithms, toggleAlgortirhmActivation } from "../actions";
+import { sortAlgorithms, toggleAlgortirhmActivation, approveOrRejectSubmission } from "../actions";
 import { config } from "../scoreboard.cfg";
+import { linkOnClick } from "../utils/utils";
 
 class AlgorithmsContainer extends React.Component {
 	constructor(props) {
@@ -26,6 +27,14 @@ class AlgorithmsContainer extends React.Component {
 		const sortAttr = e.target.getAttribute("data-sortby");
 		const dataIdx = e.target.getAttribute("data-idx");
 		dispatch(sortAlgorithms(sortAttr, dataIdx));
+	}
+
+	approveRejectOnClick(e) {
+		const { dispatch } = this.props;
+		const submissionid = e.target.getAttribute("data-submissionid");
+		const approve = e.target.getAttribute("data-approve");
+		dispatch(approveOrRejectSubmission(submissionid, approve, this.props.challengeId));
+		linkOnClick(e);
 	}
 
 	activateIndex(alID, e, data) {
@@ -84,6 +93,7 @@ class AlgorithmsContainer extends React.Component {
 						key={"submission_" + item.id}
 						data={item}
 						color={challengeColor}
+						approve={this.approveRejectOnClick.bind(this)}
 						activate={this.activateIndex.bind(this, item.id)}
 					/>
 				);
@@ -138,6 +148,7 @@ const mapStateToProps = function(state) {
 		sortSelection: submissionData.sortBy,
 		dataIdx: submissionData.dataIdx,
 		challengeName: selectedChallege.challenge.name,
+		challengeId: selectedChallege.challenge.id,
 	};
 };
 
