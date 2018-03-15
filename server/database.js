@@ -97,12 +97,10 @@ function approveAlgorithm(req, res, next) {
 	}
 	const submissionId = parseInt(req.body.submissionid);
 	const approved = !!req.body.approved;
-	console.log("Approve", submissionId, approved);
 	if (approved) {
 		db
 			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
 			.then(data => {
-				console.log(`Updated submission set ${submissionId} to true`);
 				res.sendStatus(204);
 			})
 			.catch(err => {
@@ -113,7 +111,6 @@ function approveAlgorithm(req, res, next) {
 		db
 			.one("delete from submissions where id=$1 RETURNING id", submissionId)
 			.then(data => {
-				console.log(`Deleted submission ${submissionId}`);
 				res.sendStatus(204);
 			})
 			.catch(err => {
@@ -168,7 +165,6 @@ function submitResults(req, res, next) {
 		}
 	);
 	return res.status(200);
-<<<<<<< HEAD
 }
 
 function getUser(req, res, next) {
@@ -203,8 +199,6 @@ function getUser(req, res, next) {
 				});
 			}
 		});
-=======
->>>>>>> Added approve/reject button
 }
 
 function _loadScore(form, data, filepath) {
