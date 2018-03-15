@@ -169,7 +169,6 @@ function getUser(req, res, next) {
 				});
 			}
 		});
-	console.log(query);
 }
 
 function _loadScore(form, data, filepath) {
