@@ -136,6 +136,41 @@ function submitResults(req, res, next) {
 	);
 	return true;
 }
+
+function getUser(req, res, next) {
+	const query = req.query;
+	db
+		.oneOrNone(
+			"select u.id, u.github_username, u.email, u.is_admin from users u where u.github_username =  $1 and u.email = $2",
+			[query.id, query.email]
+		)
+		.then(userId => {
+			if (!userId) {
+				db.tx(t => {
+					return t
+						.one(
+							"insert into users(github_username, name, email, is_admin) " +
+								"values ($1, $2, $3, false) RETURNING id, github_username, email, is_admin",
+							[query.id, query.name, query.email]
+						)
+						.then(data => {
+							res.status(200).json({
+								status: "success",
+								data: data,
+								message: `Added new user ${query.id}`,
+							});
+						});
+				});
+			} else {
+				res.status(200).json({
+					status: "success",
+					data: userId,
+					message: `Retrieved user ${query.id}`,
+				});
+			}
+		});
+}
+
 function _loadScore(form, data, filepath) {
 	// create or get submission
 	return new Promise(resolve => {
@@ -203,6 +238,7 @@ function _loadScore(form, data, filepath) {
 module.exports = {
 	getChallenges,
 	getDatasets,
+	getUser,
 	getSubmissions,
 	getOneChallenges,
 	submitResults,
