@@ -7,13 +7,15 @@ export const LOGOUT = "LOGOUT";
 export const SORT_ALGORTIHMS = "SORT_ALGORTIHMS";
 export const TOGGLE_ALOGRITHM_ACTIVATION = "TOGGLE_ALOGRITHM_ACTIVATION";
 export const ADMIN_APPROVE_ALOGRITHM = "ADMIN_APPROVE_ALOGRITHM";
+export const RECIEVE_USER = "RECIEVE_USER";
+export const NODE = "NODE";
 
 const base_url = "http://localhost:9000";
 const challenges_url = `${base_url}/api/challenges`;
 const challenge_url = `${base_url}/api/challenge`;
 const submissions_url = `${base_url}/api/submissions`;
-const dataset_url = `${base_url}/api/datasets`;
 const approve_url = `${base_url}/api/approve`;
+const user_url = `${base_url}/api/user`;
 
 // Get all challenges for homepage
 
@@ -33,16 +35,22 @@ export const fetchChallenges = () => {
 	};
 };
 
-// Login and logout for admin roles
-// TODO this is a temp hack, actually log in using github
-export const login = (name, role, userid) => {
-	return {
-		name,
-		role,
-		userid,
-		type: LOGIN,
+export const login = profile => {
+	// add user if none exists
+	return dispatch => {
+		return fetch(`${user_url}?id=${profile.id}&name=${profile.name}&email=${profile.email}`)
+			.then(response => response.json())
+			.then(json => {
+				dispatch(recieveUser(json));
+			});
 	};
 };
+
+const recieveUser = user => ({
+	type: RECIEVE_USER,
+	receivedAt: Date.now(),
+	user,
+});
 
 export const logout = () => ({
 	type: LOGOUT,
@@ -84,6 +92,11 @@ const receiveChallengeInfo = json => ({
 	type: RECEIVE_CHALLENGE,
 	challenge: json.data,
 	receivedAt: Date.now(),
+});
+
+export const node = _the_node => ({
+	type: NODE,
+	node: _the_node,
 });
 
 export const fetchChallengeInfo = challenge_id => {

@@ -26,6 +26,7 @@ app.use("/assets", express.static(path.resolve(__dirname, "..", "assets")));
 app.use("/dist", express.static(path.resolve(__dirname, "..", "dist")));
 
 app.get("/api/challenges", db.getChallenges);
+app.get("/api/user", db.getUser);
 app.get("/api/datasets/:challegeid", db.getDatasets);
 app.get("/api/submissions/:challegeid", db.getSubmissions);
 app.get("/api/challenge/:challegeid", db.getOneChallenges);

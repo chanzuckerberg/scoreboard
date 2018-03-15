@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
 import { FormErrorMessage, LoaderGif } from "./ChallengePage.jsx";
-const { DOM: { input } } = React;
 
 const validate = values => {
 	/*

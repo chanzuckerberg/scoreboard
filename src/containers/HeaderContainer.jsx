@@ -1,34 +1,52 @@
 import React from "react";
-import { LoginModal } from "../components/Header.jsx";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-export class Header extends React.Component {
+import { Link } from "react-router-dom";
+import SocialButton from "../components/SocialButton.jsx";
+import { login, logout, node } from "../actions/index";
+
+class HeaderContainer extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			modalOpen: false,
-		};
 	}
 
-	loginClick() {
-		this.setState({ modalOpen: true });
+	onLoginSuccess(user) {
+		const { dispatch } = this.props;
+		dispatch(login(user.profile));
 	}
 
-	closeModal() {
-		this.setState({ modalOpen: false });
+	saveForLogout(the_node) {
+		const { dispatch } = this.props;
+		dispatch(node(the_node));
 	}
 
-	login(e) {
-		this.props.login(e);
-		this.closeModal();
+	logout() {
+		const { dispatch } = this.props;
+		dispatch(logout());
 	}
 
 	render() {
-		// TODO This is really hacked, revise for full app
-		let login = "login >>";
+		let log_in_out = (
+			<SocialButton
+				autoCleanUri
+				provider="github"
+				gatekeeper="https://scoreboard-gatekeeper.herokuapp.com"
+				appId="2697b9e84805797798bd"
+				redirect={this.props.redirect}
+				onLoginSuccess={this.onLoginSuccess.bind(this)}
+				getInstance={this.saveForLogout.bind(this)}
+				scope="read:user"
+			>
+				login >>
+			</SocialButton>
+		);
 		if (this.props.username) {
 			const admin = this.props.isAdmin ? " (admin)" : "";
-			login = `${this.props.username} ${admin} logout >>`;
+			log_in_out = (
+				<span className="clickable" onClick={this.logout.bind(this)}>
+					{this.props.username} {admin} logout >>
+				</span>
+			);
 		}
 		return (
 			<div className="row">
@@ -39,7 +57,7 @@ export class Header extends React.Component {
 						</Link>
 					</div>
 					<div className="login" id="login-section">
-						<span className="clickable" onClick={this.loginClick.bind(this)}>{login}</span>
+						{log_in_out}
 					</div>
 					<div className="title">
 						<Link to="/">
@@ -48,12 +66,18 @@ export class Header extends React.Component {
 					</div>
 					<div className="subtitle">{this.props.subtitle}</div>
 				</header>
-				<LoginModal
-					isOpen={this.state.modalOpen}
-					login={this.login.bind(this)}
-					close={this.closeModal.bind(this)}
-				/>
 			</div>
 		);
 	}
 }
+
+const mapStateToProps = function(state) {
+	const { user } = state;
+	return {
+		userName: user.name,
+		isAdmin: user.isAdmin,
+		userId: user.userId,
+	};
+};
+
+export const Header = connect(mapStateToProps)(HeaderContainer);

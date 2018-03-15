@@ -31,6 +31,7 @@ class HomeApp extends Component {
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						subtitle={config.general.subtitle}
+						redirect={this.props.location.pathname}
 					/>
 					<div>
 						<div className="row">
@@ -55,6 +56,7 @@ class ChallengeApp extends Component {
 		const { dispatch } = this.props;
 		dispatch(fetchOneChallenge(this.props.match.params.id));
 	}
+
 	login(e) {
 		const { dispatch } = this.props;
 		const role = e.target.getAttribute("data-role");
@@ -75,6 +77,7 @@ class ChallengeApp extends Component {
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						subtitle={challenge}
+						redirect={this.props.location.pathname}
 					/>
 					<ChallengeTabs
 						isAdmin={this.props.isAdmin}
