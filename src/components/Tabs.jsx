@@ -1,16 +1,18 @@
 import React from "react";
 
 export const Tabs = props => {
+	const width = Math.floor(90 / props.tabs.length);
 	const tablinks = props.tabs.map((tabname, idx) => {
 		let tabclass = "tab clickable ";
 		if (tabname === props.activetab) tabclass += "tab-selected";
+
 		return (
 			<div
 				className={tabclass}
 				data-tabname={tabname}
 				onClick={props.onclick}
 				key={`${tabname}_data_tab`}
-				style={{ borderColor: props.color, color: props.color }}
+				style={{ borderColor: props.color, color: props.color, width: width + "%" }}
 			>
 				{tabname}
 			</div>

@@ -84,8 +84,10 @@ export const FAQ = () => (
 		</p>
 		<p className="question">How do I get in touch?</p>
 		<p className="answer">
-			The best way to get help is to join our slack channel. Ask questions and read through
-			discussion.
+			Join the conversation on our{" "}
+			<a className="discourse-link" href={config.general.forum}>
+				forum
+			</a>. Ask questions and read through discussion.
 		</p>
 	</div>
 );
