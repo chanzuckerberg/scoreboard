@@ -111,7 +111,6 @@ a:hover {
 	color: rgb(114, 154, 208);
 	font-size: 140%;
 	font-weight: 400;
-	width: 30%;
 	display: inline-block;
 	border: solid 3px rgb(114, 154, 208);
 	padding: 8px 0.5% 10px 6px;
@@ -489,4 +488,8 @@ a:hover {
 
 .btn:focus {
 	outline: none !important;
+}
+
+.discourse-link {
+	text-decoration: underline;
 }
