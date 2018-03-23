@@ -42,9 +42,7 @@ class ChallengeTabsClass extends React.Component {
 		if (this.state.active === "about") {
 			content = <About content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
-			content = (
-				<Datasets key="dataset" datasets={this.props.datasets} downloadsize={dlSize} />
-			);
+			content = <Datasets key="dataset" challenge={this.props.challengeName.toLowerCase()} />;
 		} else if (this.state.active === "submit") {
 			content = (
 				<ChallengeFormTab

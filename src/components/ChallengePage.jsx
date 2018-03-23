@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { Tree } from "../containers/Tree.jsx";
+import { config } from "../scoreboard.cfg.js";
 
 export const About = props => {
 	return (
@@ -29,9 +30,11 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	const descriptions = props.datasets.map(dataset => {
+	const datasets = config["challenges"][props.challenge].datasets;
+	const downloadSize = config["challenges"][props.challenge].datasetdownloadsize;
+	const descriptions = datasets.map(dataset => {
 		return (
-			<p key={`description_${dataset.id}`}>
+			<p key={`description_${dataset.name}`}>
 				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
 			</p>
 		);
@@ -39,8 +42,8 @@ export const Datasets = props => {
 	// Combine and flatten tree data
 	const treeData = [].concat.apply(
 		[],
-		props.datasets.map(dataset => {
-			return dataset.dataset_metadata;
+		datasets.map(dataset => {
+			return dataset.tree;
 		})
 	);
 	return (
@@ -50,7 +53,7 @@ export const Datasets = props => {
 			{descriptions}
 			<Tree tree={treeData} />
 			<br />
-			<Button bsStyle="success">Download ({props.downloadsize})</Button>
+			<Button bsStyle="success">Download ({downloadSize})</Button>
 		</div>
 	);
 };

@@ -55,22 +55,6 @@ function getOneChallenges(req, res, next) {
 		});
 }
 
-function getDatasets(req, res, next) {
-	const challengeID = parseInt(req.params.challegeid);
-	db
-		.any("select * from datasets where challenge_id = $1", challengeID)
-		.then(function(data) {
-			res.status(200).json({
-				status: "success",
-				data: data,
-				message: `Retrieved dataset for one challenge`,
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
-}
-
 function getSubmissions(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
 	db
