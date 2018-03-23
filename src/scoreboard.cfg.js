@@ -68,6 +68,14 @@ export const config = {
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
 			description: "This is detecting doublets",
 			image: "http://via.placeholder.com/100/AD3E97",
+			scores: [
+				"True Negative",
+				"False Negative",
+				"False Positive",
+				"True Positive",
+				"True Positive Rate",
+				"True Negative Rate",
+			],
 			datasetdownloadsize: "83 GB",
 			datasets: [
 				{

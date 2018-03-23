@@ -30,32 +30,36 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	const datasets = config["challenges"][props.challenge].datasets;
-	const downloadSize = config["challenges"][props.challenge].datasetdownloadsize;
-	const descriptions = datasets.map(dataset => {
-		return (
-			<p key={`description_${dataset.name}`}>
-				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
-			</p>
+	let content = <p>No datasets available</p>;
+	if ("datasets" in config["challenges"][props.challenge]) {
+		const datasets = config["challenges"][props.challenge].datasets;
+		const downloadSize = config["challenges"][props.challenge].datasetdownloadsize;
+		const descriptions = datasets.map(dataset => {
+			return (
+				<p key={`description_${dataset.name}`}>
+					<span className="dataset-name">{dataset.name}</span>: {dataset.description}
+				</p>
+			);
+		});
+		// Combine and flatten tree data
+		const treeData = [].concat.apply(
+			[],
+			datasets.map(dataset => {
+				return dataset.tree;
+			})
 		);
-	});
-	// Combine and flatten tree data
-	const treeData = [].concat.apply(
-		[],
-		datasets.map(dataset => {
-			return dataset.tree;
-		})
-	);
-	return (
-		<div className="col-md-12 tab-content">
-			<div>Available datasets:</div>
-			<br />
-			{descriptions}
-			<Tree tree={treeData} />
-			<br />
-			<Button bsStyle="success">Download ({downloadSize})</Button>
-		</div>
-	);
+		content = (
+			<div>
+				<div>Available datasets:</div>
+				<br />
+				{descriptions}
+				<Tree tree={treeData} />
+				<br />
+				<Button bsStyle="success">Download ({downloadSize})</Button>
+			</div>
+		);
+	}
+	return <div className="col-md-12 tab-content">{content}</div>;
 };
 
 export const FormErrorMessage = props => {

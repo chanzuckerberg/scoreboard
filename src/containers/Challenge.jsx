@@ -32,13 +32,14 @@ class ChallengeTabsClass extends React.Component {
 	render() {
 		let aboutContent = "";
 		let challengeColor = "rgb(110, 180, 255)";
+		let scoreCategories = [];
 		if (this.props.challengeName) {
-			aboutContent = config.challenges[this.props.challengeName.toLowerCase()].about;
-			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
+			const challengekey = this.props.challengeName.toLowerCase();
+			aboutContent = config.challenges[challengekey].about;
+			challengeColor = config.challenges[challengekey].color;
+			scoreCategories = config.challenges[challengekey].scores;
 		}
 		let content = "";
-		const dlSize = "83 GB";
-		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
 		if (this.state.active === "about") {
 			content = <About content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
