@@ -26,21 +26,9 @@ class Challenge(Base):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False)
-    description = Column(String)
     start_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    image_path = Column(String)
-    data_path = Column(String)
-    data_size = Column(String)
+    end_date = Column(DateTime)
     is_open = Column(Boolean, nullable=False)
-
-class Dataset(Base):
-    __tablename__ = 'datasets'
-    __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
-    description = Column(String)
-    dataset_metadata = Column(JSONB)
-    challenge_id = Column(Integer, ForeignKey("challenges.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
 
 class Submission(Base):
     __tablename__ = 'submissions'
@@ -84,48 +72,15 @@ for user in users:
     session.add(new_user)
 session.commit()
 challenges = [
-    {"name":"doublet detection", "description":"this challenge is doublet detection", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB", "is_open":True},
-    {"name":"cell identification", "description":"this challenge is cell identification", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
-    {"name":"batch effect correction", "description":"this challenge is batch effect correction", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
-    {"name":"experimental design", "description":"this challenge is experimental design", "image_path":"http://via.placeholder.com/100/00ccff", "data_path": "fake/path", "data_size":"83GB","is_open":True},
-    {"name":"cell type clustering", "description":"this challenge is cell type clustering", "image_path":"http://via.placeholder.com/100/00ccff","data_path": "fake/path", "data_size":"83GB", "is_open":True},
+    {"name":"doublet detection",  "is_open":True},
+    {"name":"cell identification", "is_open":True},
+    {"name":"batch effect correction", "is_open":True},
+    {"name":"experimental design", "is_open":True},
+    {"name":"cell type clustering",  "is_open":True},
 ]
 for challenge in challenges:
     new_challenge = Challenge(**challenge)
     session.add(new_challenge)
-session.commit()
-datasets = [
-    {"name":"dataset1", "description":"Bams and fastqs from Ye2", "dataset_metadata":[		 { "id": "doublet-datasets/dataset1", "parent": "#", "text": "dataset1", },
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_001.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001.bam (8G)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_test.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_test.bam (4G)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_test_labels_predict_me.txt", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_test_labels_predict_me.txt (183K)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_train.bam", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_train.bam (4G)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_001_train_labels.txt", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_001_train_labels.txt (271K)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_I1_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_I1_001.fastq.gz (637M)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_R1_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_R1_001.fastq.gz (2G)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_L001_R2_001.fastq.gz", "parent": "doublet-datasets/dataset1", "text": "Ye2_L001_R2_001.fastq.gz (8G)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_barcode_id.csv", "parent": "doublet-datasets/dataset1", "text": "Ye2_barcode_id.csv (8M)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_gene_id.csv", "parent": "doublet-datasets/dataset1", "text": "Ye2_gene_id.csv (409K)"},
-			 { "id": "doublet-datasets/dataset1/Ye2_sparse_molecule_counts.mtx", "parent": "doublet-datasets/dataset1", "text": "Ye2_sparse_molecule_counts.mtx (278M)"},],
-     "challenge_id": 1},
-    {"name":"dataset2", "description":"Bams and fastqs from Ye032917", "dataset_metadata":[{ "id": "doublet-datasets/dataset2", "parent": "#", "text": "dataset2", },
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001.bam (16G)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_test.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_test.bam (8G)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_train.bam", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_train.bam (8G)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_001_train_labels.txt", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_001_train_labels.txt (119K)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_I1_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_I1_001.fastq.gz (1G)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_R1_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_R1_001.fastq.gz (5G)"},
-			 { "id": "doublet-datasets/dataset2/Ye032917_S4_L003_R2_001.fastq.gz", "parent": "doublet-datasets/dataset2", "text": "Ye032917_S4_L003_R2_001.fastq.gz (17G)"},
-			 { "id": "doublet-datasets/dataset2/Ye3_barcode_id.csv", "parent": "doublet-datasets/dataset2", "text": "Ye3_barcode_id.csv (5M)"},
-			 { "id": "doublet-datasets/dataset2/Ye3_gene_id.csv", "parent": "doublet-datasets/dataset2", "text": "Ye3_gene_id.csv (405K)"},
-			 { "id": "doublet-datasets/dataset2/Ye3_sparse_molecule_counts.mtx", "parent": "doublet-datasets/dataset2", "text": "Ye3_sparse_molecule_counts.mtx (156M)"}],
-     "challenge_id": 1}
-
-]
-
-for dataset in datasets:
-    new_dataset = Dataset(**dataset)
-    session.add(new_dataset)
 session.commit()
 submissions = [
     {

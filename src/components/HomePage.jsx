@@ -12,17 +12,27 @@ export const About = () => (
 export const Challenges = props => {
 	const challenges = props.challenges.map(item => {
 		const lowername = item.name.toLowerCase();
-		const color = config.challenges[lowername].color;
+		let color = "#aaaaaa";
+		let datasets = 0;
+		let image = "";
+		let description = "";
+
+		if ("color" in config.challenges[lowername]) color = config.challenges[lowername].color;
+		if ("datasets" in config.challenges[lowername])
+			datasets = config.challenges[lowername].datasets.length;
+		if ("image" in config.challenges[lowername]) image = config.challenges[lowername].image;
+		if ("description" in config.challenges[lowername])
+			description = config.challenges[lowername].description;
 		return (
 			<Challenge
 				name={item.name}
 				color={color}
 				key={"Challenge_" + item.id}
 				challengeid={item.id}
-				datasetcount={item.datasets}
+				datasetcount={datasets}
 				submissions={item.submissions}
-				image={item.image_path}
-				description={item.description}
+				image={image}
+				description={description}
 			/>
 		);
 	});

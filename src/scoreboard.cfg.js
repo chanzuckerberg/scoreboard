@@ -66,6 +66,8 @@ export const config = {
 				"Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 			examplefile:
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
+			description: "This is detecting doublets",
+			image: "http://via.placeholder.com/100/AD3E97",
 			datasetdownloadsize: "83 GB",
 			datasets: [
 				{
@@ -199,6 +201,8 @@ export const config = {
 				"B: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 			examplefile:
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
+			description: "This is cell identification",
+			image: "http://via.placeholder.com/100/BAB942",
 		},
 		"batch effect correction": {
 			color: "#3C57C4",
@@ -206,6 +210,8 @@ export const config = {
 				"C: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 			examplefile:
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
+			description: "This is batch effect correction",
+			image: "http://via.placeholder.com/100/3C57C4",
 		},
 		"experimental design": {
 			color: "#C47C3C",
@@ -213,6 +219,8 @@ export const config = {
 				"D: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 			examplefile:
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
+			description: "This is designing experiments",
+			image: "http://via.placeholder.com/100/C47C3C",
 		},
 		"cell type clustering": {
 			color: "#39BA79",
@@ -220,6 +228,8 @@ export const config = {
 				"E: Etiam a diam nec orci porta mattis sit amet in leo. Proin placerat velit egestas, egestas mauris a, accumsan mauris. Vivamus consequat mollis lectus, vitae gravida sapien sodales quis. Nunc scelerisque dolor quis velit lacinia porttitor ac a nibh. Vestibulum malesuada tempor nibh in faucibus. Duis a lacinia tortor. Maecenas tempus porttitor odio, interdum vestibulum dolor mattis non.",
 			examplefile:
 				"https://s3.amazonaws.com/hca-hinxton-jamboree/doublets-test/counts/test_chr21.dge.summary.txt",
+			description: "This is clustering cell types",
+			image: "http://via.placeholder.com/100/39BA79",
 		},
 	},
 };
