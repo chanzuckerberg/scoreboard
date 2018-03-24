@@ -64,6 +64,7 @@ const readFile = results_file => {
 		reader.readAsText(results_file);
 	});
 };
+
 const FileInput = ({
 	input: { value: omitValue, onChange, onBlur, ...inputProps },
 	meta: { touched, error, warning },

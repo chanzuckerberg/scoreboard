@@ -28,6 +28,7 @@ class Challenge(Base):
     name = Column(String, nullable=False)
     start_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     end_date = Column(DateTime)
+    docker_container = Column(String, nullable=False)
     is_open = Column(Boolean, nullable=False)
 
 class Submission(Base):
@@ -72,11 +73,11 @@ for user in users:
     session.add(new_user)
 session.commit()
 challenges = [
-    {"name":"doublet detection",  "is_open":True},
-    {"name":"cell identification", "is_open":True},
-    {"name":"batch effect correction", "is_open":True},
-    {"name":"experimental design", "is_open":True},
-    {"name":"cell type clustering",  "is_open":True},
+    {"name":"doublet detection",  "docker_container": "chanzuckerberg/scoreboard", "is_open":True},
+    {"name":"cell identification", "docker_container": "chanzuckerberg/scoreboard", "is_open":True},
+    {"name":"batch effect correction", "docker_container": "chanzuckerberg/scoreboard", "is_open":True},
+    {"name":"experimental design", "docker_container": "chanzuckerberg/scoreboard", "is_open":True},
+    {"name":"cell type clustering", "docker_container": "chanzuckerberg/scoreboard", "is_open":True},
 ]
 for challenge in challenges:
     new_challenge = Challenge(**challenge)

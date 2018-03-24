@@ -19,7 +19,7 @@ export const SubmitModal = props => {
 			</Modal.Header>
 			<Modal.Body>
 				Thank you! Your submission is now in review. You will receive and e-mail when your
-				entry is availble to view on the bakeoff site.
+				entry is approved and available to view on the site.
 				<br />
 				<Button bsStyle="info" onClick={props.close}>
 					OK

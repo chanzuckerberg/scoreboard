@@ -117,36 +117,54 @@ function submitResults(req, res, next) {
 	}
 
 	// Score with docker
-	exec(
-		// TODO scale with AWS Batch or ECS
-		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-		(err, stdout, stderr) => {
-			if (err) {
-				// node couldn't execute the command
-				console.log("Error", err);
-				res.status(422).json({
-					_error: err,
-				});
-			} else {
-				// the *entire* stdout and stderr (buffered)
-				const results = JSON.parse(stdout);
-				if (results["error"] !== "") {
-					res
-						.status(422)
-						.json({ results: results["error"], _error: "Submit validation failed." });
-				} else {
-					//TODO handle error
-					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
-						res.status(200).json({
-							status: "success",
-							message: "hip hip hooray",
+	db
+		.one("select docker_container from challenges where id = $1", req.body.challengeid)
+		.then(data => {
+			exec(
+				// TODO scale with AWS Batch or ECS
+				`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
+					.path}:/app/resultsfile.txt ${data.docker_container}`,
+				(err, stdout, stderr) => {
+					if (err) {
+						// node couldn't execute the command
+						console.log("Error", err);
+						res.status(422).json({
+							_error: err,
 						});
-					});
+					} else {
+						// the *entire* stdout and stderr (buffered)
+						const results = JSON.parse(stdout);
+						if (results["error"] !== "") {
+							res.status(422).json({
+								results: results["error"],
+								_error: "Submit validation failed.",
+							});
+						} else {
+							//TODO handle error
+							_loadScore(req.body, { data: results["score"] }, req.file.path)
+								.then(() => {
+									res.status(200).json({
+										status: "success",
+										message: "hip hip hooray",
+									});
+								})
+								.catch(err => {
+									console.log(`ERROR loading score`, err);
+									res.status(400).json("Score load failed");
+								});
+						}
+					}
 				}
-			}
-		}
-	);
+			);
+		})
+		.catch(err => {
+			console.log(
+				`Error getting docker container for challenge id ${req.body.challengeid}`,
+				err
+			);
+			res.status(400).json("Submission failed, bad docker container");
+		});
+
 	return res.status(200);
 }
 
