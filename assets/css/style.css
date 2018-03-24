@@ -154,21 +154,23 @@ a:hover {
 /* Tabs Content */
 
 .btn {
-	background-color: rgb(114, 154, 208) !important;
-	border: solid 3px rgb(114, 154, 208) !important;
+	border-style: solid;
+	border-width: 3px !important;
 	border-radius: 2px !important;
 	transition: 0.1s;
+	color: #ffffff !important;
 }
 
 .btn:active {
 	transform: scale(1.05);
-	color: rgb(114, 154, 208) !important;
+	color: #000000 !important;
 	box-shadow: none !important;
+	border-width: 3px !important;
 	background-color: white !important;
 }
 
 .btn:hover {
-	color: rgb(114, 154, 208) !important;
+	color: #000000 !important;
 	background-color: white !important;
 }
 

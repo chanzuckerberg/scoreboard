@@ -164,7 +164,12 @@ const ChallengeForm = props => {
 			</div>
 			<div className="form-group">
 				<div className="col-sm-offset-4 col-sm-6">
-					<button type="submit" disabled={submitting} className="btn btn-info">
+					<button
+						style={{ borderColor: props.color, backgroundColor: props.color }}
+						type="submit"
+						disabled={submitting}
+						className="btn"
+					>
 						Submit
 					</button>
 					<LoaderGif display={submitting} />

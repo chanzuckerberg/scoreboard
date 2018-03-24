@@ -5,7 +5,6 @@ import { About, Datasets } from "../components/ChallengePage.jsx";
 import { ChallengeFormTab } from "../components/ChallengeFormTab.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
 import { config } from "../scoreboard.cfg";
-import { discourseify } from "../utils/utils";
 
 class ChallengeTabsClass extends React.Component {
 	constructor(props) {
@@ -35,13 +34,20 @@ class ChallengeTabsClass extends React.Component {
 		}
 		let content = "";
 		if (this.state.active === "about") {
-			content = <About content={aboutContent} key="about" />;
+			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
-			content = <Datasets key="dataset" challenge={this.props.challengeName.toLowerCase()} />;
+			content = (
+				<Datasets
+					key="dataset"
+					color={challengeColor}
+					challenge={this.props.challengeName.toLowerCase()}
+				/>
+			);
 		} else if (this.state.active === "submit") {
 			content = (
 				<ChallengeFormTab
 					key="submission"
+					color={challengeColor}
 					challengeName={this.props.challengeName.toLowerCase()}
 				/>
 			);

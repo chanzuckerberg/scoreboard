@@ -5,7 +5,7 @@ import { config } from "../scoreboard.cfg.js";
 
 export const About = props => {
 	return (
-		<div className="tab-content">
+		<div style={{ borderColor: props.color }} className="tab-content">
 			<p>{props.content}</p>
 		</div>
 	);
@@ -55,11 +55,17 @@ export const Datasets = props => {
 				{descriptions}
 				<Tree tree={treeData} />
 				<br />
-				<Button bsStyle="success">Download ({downloadSize})</Button>
+				<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
+					Download ({downloadSize})
+				</Button>
 			</div>
 		);
 	}
-	return <div className="col-md-12 tab-content">{content}</div>;
+	return (
+		<div style={{ borderColor: props.color }} className="col-md-12 tab-content">
+			{content}
+		</div>
+	);
 };
 
 export const FormErrorMessage = props => {
