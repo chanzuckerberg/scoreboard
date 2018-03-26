@@ -41,7 +41,7 @@ class ChallengeFormClass extends React.Component {
 	}
 
 	render() {
-		return <ChallengeReduxForm onSubmit={this.submit.bind(this)} />;
+		return <ChallengeReduxForm color={this.props.color} onSubmit={this.submit.bind(this)} />;
 	}
 }
 

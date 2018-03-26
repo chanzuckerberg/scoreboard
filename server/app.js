@@ -27,7 +27,6 @@ app.use("/dist", express.static(path.resolve(__dirname, "..", "dist")));
 
 app.get("/api/challenges", db.getChallenges);
 app.get("/api/user", db.getUser);
-app.get("/api/datasets/:challegeid", db.getDatasets);
 app.get("/api/submissions/:challegeid", db.getSubmissions);
 app.get("/api/challenge/:challegeid", db.getOneChallenges);
 app.post("/api/approve", jsonParser, [
@@ -71,7 +70,7 @@ app.post("/api/submitresults", [
 		.optional()
 		.withMessage("There was a problem with the institution field"),
 	check("private")
-		.exists()
+		.optional()
 		.isBoolean()
 		.withMessage("Private muse be set to true or false"),
 	db.submitResults,
