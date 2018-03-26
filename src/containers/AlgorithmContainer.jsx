@@ -5,7 +5,6 @@ import { Algorithm } from "../components/Algorithm.jsx";
 import { SortPane } from "../components/SortPane.jsx";
 import { sortAlgorithms, toggleAlgortirhmActivation, approveOrRejectSubmission } from "../actions";
 import { config } from "../scoreboard.cfg";
-import { linkOnClick } from "../utils/utils";
 
 class AlgorithmsContainer extends React.Component {
 	constructor(props) {
@@ -111,7 +110,6 @@ class AlgorithmsContainer extends React.Component {
 			this.props.categories && this.props.categories.length
 				? 100 / this.props.categories.length
 				: 0;
-		console.log("Width", category_width);
 		const dataCategories = this.props.categories.map(item => {
 			return (
 				<div

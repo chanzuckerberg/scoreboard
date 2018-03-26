@@ -35,9 +35,9 @@ class ChallengeTabsClass extends React.Component {
 		let scoreCategories = [];
 		if (this.props.challengeName) {
 			const challengekey = this.props.challengeName.toLowerCase();
-			aboutContent = config.challenges[challengekey].about;
-			challengeColor = config.challenges[challengekey].color;
-			scoreCategories = config.challenges[challengekey].scores;
+			aboutContent = config.challenges[challengekey].about || aboutContent;
+			challengeColor = config.challenges[challengekey].color || challengeColor;
+			scoreCategories = config.challenges[challengekey].scores || scoreCategories;
 		}
 		let content = "";
 		if (this.state.active === "about") {
