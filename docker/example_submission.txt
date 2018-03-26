@@ -1,0 +1,11 @@
+item,value,prob
+one,1,0.9
+two,2,0.9
+three,3,0.9
+four,4,0.9
+five,5,0.9
+six,5,0.9
+seven,7,0.9
+eight,8,0.9
+nine,9,0.9
+ten,1,0.9
