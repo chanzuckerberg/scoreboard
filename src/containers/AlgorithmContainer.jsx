@@ -107,11 +107,16 @@ class AlgorithmsContainer extends React.Component {
 				onSortSelect={this.onclick.bind(this)}
 			/>
 		);
+		const category_width =
+			this.props.categories && this.props.categories.length
+				? 100 / this.props.categories.length
+				: 0;
+		console.log("Width", category_width);
 		const dataCategories = this.props.categories.map(item => {
 			return (
 				<div
 					className="dataset-text"
-					style={{ width: "16.66%" }}
+					style={{ width: category_width + "%" }}
 					key={"algo_data_" + slugify(item)}
 				>
 					{item}
