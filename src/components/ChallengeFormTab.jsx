@@ -54,6 +54,7 @@ export class ChallengeFormTab extends React.Component {
 					isOpen={this.state.modalOpen}
 					close={this.closeModal.bind(this)}
 					id={modalId}
+					color={this.props.color}
 				/>
 			</div>
 		);

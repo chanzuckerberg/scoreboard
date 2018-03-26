@@ -21,7 +21,10 @@ export const SubmitModal = props => {
 				Thank you! Your submission is now in review. You will receive and e-mail when your
 				entry is approved and available to view on the site.
 				<br />
-				<Button bsStyle="info" onClick={props.close}>
+				<Button
+					style={{ borderColor: props.color, backgroundColor: props.color }}
+					onClick={props.close}
+				>
 					OK
 				</Button>
 			</Modal.Body>
