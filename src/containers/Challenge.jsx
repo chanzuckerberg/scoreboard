@@ -46,10 +46,7 @@ class ChallengeTabsClass extends React.Component {
 			content = <Datasets key="dataset" challenge={this.props.challengeName.toLowerCase()} />;
 		} else if (this.state.active === "submit") {
 			content = (
-				<ChallengeFormTab
-					key="submission"
-					challengeName={this.props.challengeName.toLowerCase()}
-				/>
+				<ChallengeFormTab key="submission" challengeName={this.props.challengeName.toLowerCase()} />
 			);
 		}
 		content = [

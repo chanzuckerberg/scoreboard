@@ -126,8 +126,8 @@ class AlgorithmsContainer extends React.Component {
 			<div>
 				<div className="overview">
 					<div className="overview-description">
-						Each panel shows results for a different algorithm. Click a panel to see
-						more info. Columns are scores, and rows are datasets.
+						Each panel shows results for a different algorithm. Click a panel to see more info.
+						Columns are scores, and rows are datasets.
 					</div>
 					<div className="overview-sort">{sortPane}</div>
 				</div>

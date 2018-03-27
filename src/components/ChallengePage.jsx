@@ -18,8 +18,8 @@ export const SubmitModal = props => {
 				<Modal.Title>Successful Submission</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				Thank you! Your submission is now in review. You will receive and e-mail when your
-				entry is approved and available to view on the site.
+				Thank you! Your submission is now in review. You will receive and e-mail when your entry is
+				approved and available to view on the site.
 				<br />
 				<Button bsStyle="info" onClick={props.close}>
 					OK
