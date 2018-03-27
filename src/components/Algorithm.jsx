@@ -38,10 +38,7 @@ export const Algorithm = props => {
 							style={{ width: score_width + "%" }}
 							className="single-score"
 						>
-							<span
-								className="score-span"
-								style={{ backgroundColor: bgColor, color: text }}
-							>
+							<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
 								{item2.toFixed(2)}
 							</span>
 						</div>
