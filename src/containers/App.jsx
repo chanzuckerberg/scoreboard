@@ -85,7 +85,6 @@ class ChallengeApp extends Component {
 						username={this.props.userName}
 						active="about"
 						submissions={this.props.submissions}
-						datasets={this.props.datasets}
 					/>
 				</div>
 				<Footer />
@@ -95,7 +94,7 @@ class ChallengeApp extends Component {
 }
 
 const mapStateToProps = function(state) {
-	const { user, challengeData, submissionData, datasetData, selectedChallege } = state;
+	const { user, challengeData, submissionData, selectedChallege } = state;
 	return {
 		challenges: challengeData.challenges,
 		selectedChallege: selectedChallege.challenge,
@@ -103,7 +102,6 @@ const mapStateToProps = function(state) {
 		isAdmin: user.isAdmin,
 		userId: user.userId,
 		submissions: submissionData.submissions,
-		datasets: datasetData.datasets,
 	};
 };
 

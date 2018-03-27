@@ -13,9 +13,8 @@ const { validationResult } = require("express-validator/check");
 function getChallenges(req, res, next) {
 	db
 		.any(
-			"select c.id, c.name, c.description, c.image_path, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
+			"select c.id, c.name, c.start_date, c.end_date, count(distinct(s.id)) as submissions " +
 				"from challenges c " +
-				"left join datasets d on (d.challenge_id = c.id) " +
 				"left join submissions s on (s.challenge_id = c.id) " +
 				"where c.is_open = True " +
 				"group by c.id " +
@@ -37,9 +36,7 @@ function getOneChallenges(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
 	db
 		.any(
-			"select c.id, c.name, c.description, c.image_path, c.start_date " +
-				"from challenges c " +
-				"where c.id = $1 ",
+			"select c.id, c.name, c.start_date, c.end_date " + "from challenges c " + "where c.id = $1 ",
 			challengeID
 		)
 		.then(function(data) {
@@ -48,22 +45,6 @@ function getOneChallenges(req, res, next) {
 				status: "success",
 				data: data[0],
 				message: "Retrieved one challenges",
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
-}
-
-function getDatasets(req, res, next) {
-	const challengeID = parseInt(req.params.challegeid);
-	db
-		.any("select * from datasets where challenge_id = $1", challengeID)
-		.then(function(data) {
-			res.status(200).json({
-				status: "success",
-				data: data,
-				message: `Retrieved dataset for one challenge`,
 			});
 		})
 		.catch(function(err) {
@@ -134,37 +115,51 @@ function submitResults(req, res, next) {
 	}
 
 	// Score with docker
-	exec(
-		// TODO scale with AWS Batch or ECS
-		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-		(err, stdout, stderr) => {
-			if (err) {
-				// node couldn't execute the command
-				console.log("Error", err);
-				res.status(422).json({
-					_error: err,
-				});
-			} else {
-				// the *entire* stdout and stderr (buffered)
-				const results = JSON.parse(stdout);
-				if (results["error"] !== "") {
-					res.status(422).json({
-						results: results["error"],
-						_error: "Submit validation failed.",
-					});
-				} else {
-					//TODO handle error
-					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
-						res.status(200).json({
-							status: "success",
-							message: "hip hip hooray",
+	db
+		.one("select docker_container from challenges where id = $1", req.body.challengeid)
+		.then(data => {
+			exec(
+				// TODO scale with AWS Batch or ECS
+				`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
+					.path}:/app/resultsfile.txt ${data.docker_container}`,
+				(err, stdout, stderr) => {
+					if (err) {
+						// node couldn't execute the command
+						console.log("Error", err);
+						res.status(422).json({
+							_error: err,
 						});
-					});
+					} else {
+						// the *entire* stdout and stderr (buffered)
+						const results = JSON.parse(stdout);
+						if (results["error"] !== "") {
+							res.status(422).json({
+								results: results["error"],
+								_error: "Submit validation failed.",
+							});
+						} else {
+							//TODO handle error
+							_loadScore(req.body, { data: results["score"] }, req.file.path)
+								.then(() => {
+									res.status(200).json({
+										status: "success",
+										message: "hip hip hooray",
+									});
+								})
+								.catch(err => {
+									console.log(`ERROR loading score`, err);
+									res.status(400).json("Score load failed");
+								});
+						}
+					}
 				}
-			}
-		}
-	);
+			);
+		})
+		.catch(err => {
+			console.log(`Error getting docker container for challenge id ${req.body.challengeid}`, err);
+			res.status(400).json("Submission failed, bad docker container");
+		});
+
 	return res.status(200);
 }
 
@@ -268,7 +263,6 @@ function _loadScore(form, data, filepath) {
 
 module.exports = {
 	getChallenges,
-	getDatasets,
 	getUser,
 	getSubmissions,
 	getOneChallenges,

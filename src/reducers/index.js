@@ -7,7 +7,6 @@ import {
 	RECIEVE_USER,
 	LOGOUT,
 	RECEIVE_SUBMISSIONS,
-	RECEIVE_DATASETS,
 	RECEIVE_CHALLENGE,
 	SORT_ALGORTIHMS,
 	NODE,
@@ -107,24 +106,11 @@ const submissionData = (state = { submissions: [], sortBy: "Name", dataIdx: 0 },
 	}
 };
 
-const datasetData = (state = { datasets: [] }, action) => {
-	if (action.type === RECEIVE_DATASETS) {
-		return {
-			...state,
-			isFetching: false,
-			datasets: action.datasets,
-		};
-	} else {
-		return state;
-	}
-};
-
 export const rootReducer = combineReducers({
 	challengeData,
 	user,
 	submissionData,
 	selectedChallege,
-	datasetData,
 	router: routerReducer,
 	form: formReducer,
 });

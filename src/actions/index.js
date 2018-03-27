@@ -1,7 +1,6 @@
 export const RECEIVE_CHALLENGES = "RECEIVE_CHALLENGES";
 export const RECEIVE_CHALLENGE = "RECEIVE_CHALLENGE";
 export const RECEIVE_SUBMISSIONS = "RECEIVE_SUBMISSIONS";
-export const RECEIVE_DATASETS = "RECEIVE_DATASETS";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const SORT_ALGORTIHMS = "SORT_ALGORTIHMS";
@@ -15,7 +14,6 @@ const challenges_url = `${base_url}/api/challenges`;
 const challenge_url = `${base_url}/api/challenge`;
 const submissions_url = `${base_url}/api/submissions`;
 const user_url = `${base_url}/api/user`;
-const dataset_url = `${base_url}/api/datasets`;
 const approve_url = `${base_url}/api/approve`;
 
 // Get all challenges for homepage
@@ -73,22 +71,6 @@ export const fetchSubmissions = challenge_id => {
 	};
 };
 
-const receiveDatasets = json => ({
-	type: RECEIVE_DATASETS,
-	datasets: json.data,
-	receivedAt: Date.now(),
-});
-
-export const fetchDatasets = challenge_id => {
-	return dispatch => {
-		return fetch(`${dataset_url}/${challenge_id}`)
-			.then(response => response.json())
-			.then(json => {
-				dispatch(receiveDatasets(json));
-			});
-	};
-};
-
 const receiveChallengeInfo = json => ({
 	type: RECEIVE_CHALLENGE,
 	challenge: json.data,
@@ -114,7 +96,6 @@ export const fetchOneChallenge = challenge_id => {
 	return dispatch => {
 		return Promise.all([
 			dispatch(fetchSubmissions(challenge_id)),
-			dispatch(fetchDatasets(challenge_id)),
 			dispatch(fetchChallengeInfo(challenge_id)),
 		]);
 	};

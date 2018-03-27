@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { Tree } from "../containers/Tree.jsx";
+import { config } from "../scoreboard.cfg.js";
 
 export const About = props => {
 	return (
@@ -18,7 +19,7 @@ export const SubmitModal = props => {
 			</Modal.Header>
 			<Modal.Body>
 				Thank you! Your submission is now in review. You will receive and e-mail when your entry is
-				availble to view on the bakeoff site.
+				approved and available to view on the site.
 				<br />
 				<Button bsStyle="info" onClick={props.close}>
 					OK
@@ -29,30 +30,36 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	const descriptions = props.datasets.map(dataset => {
-		return (
-			<p key={`description_${dataset.id}`}>
-				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
-			</p>
+	let content = <p>No datasets available</p>;
+	if ("datasets" in config["challenges"][props.challenge]) {
+		const datasets = config["challenges"][props.challenge].datasets;
+		const downloadSize = config["challenges"][props.challenge].datasetdownloadsize;
+		const descriptions = datasets.map(dataset => {
+			return (
+				<p key={`description_${dataset.name}`}>
+					<span className="dataset-name">{dataset.name}</span>: {dataset.description}
+				</p>
+			);
+		});
+		// Combine and flatten tree data
+		const treeData = [].concat.apply(
+			[],
+			datasets.map(dataset => {
+				return dataset.tree;
+			})
 		);
-	});
-	// Combine and flatten tree data
-	const treeData = [].concat.apply(
-		[],
-		props.datasets.map(dataset => {
-			return dataset.dataset_metadata;
-		})
-	);
-	return (
-		<div className="col-md-12 tab-content">
-			<div>Available datasets:</div>
-			<br />
-			{descriptions}
-			<Tree tree={treeData} />
-			<br />
-			<Button bsStyle="success">Download ({props.downloadsize})</Button>
-		</div>
-	);
+		content = (
+			<div>
+				<div>Available datasets:</div>
+				<br />
+				{descriptions}
+				<Tree tree={treeData} />
+				<br />
+				<Button bsStyle="success">Download ({downloadSize})</Button>
+			</div>
+		);
+	}
+	return <div className="col-md-12 tab-content">{content}</div>;
 };
 
 export const FormErrorMessage = props => {
