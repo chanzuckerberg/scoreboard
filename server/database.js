@@ -149,9 +149,10 @@ function submitResults(req, res, next) {
 				// the *entire* stdout and stderr (buffered)
 				const results = JSON.parse(stdout);
 				if (results["error"] !== "") {
-					res
-						.status(422)
-						.json({ file: results["error"], _error: "Submit validation failed." });
+					res.status(422).json({
+						results: results["error"],
+						_error: "Submit validation failed.",
+					});
 				} else {
 					//TODO handle error
 					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {

@@ -27,31 +27,30 @@ export const Algorithm = props => {
 	let detailedScores = "";
 	let detailedInfo = "";
 	if (props.active) {
-		detailedScores = props.data.score_data.additionalData.map((item, idx) => {
-			let eachDetailedScore = item.map((item2, idx2) => {
-				let bgColor = colorScale(algoColor, item2);
-				let text = textColor(bgColor);
-				return (
-					<div
-						key={"score_" + idx + "_" + idx2}
-						style={{ width: score_width + "%" }}
-						className="single-score"
-					>
-						<span
-							className="score-span"
-							style={{ backgroundColor: bgColor, color: text }}
+		if ("additionalData" in props.data.score_data) {
+			detailedScores = props.data.score_data.additionalData.map((item, idx) => {
+				let eachDetailedScore = item.map((item2, idx2) => {
+					let bgColor = colorScale(algoColor, item2);
+					let text = textColor(bgColor);
+					return (
+						<div
+							key={"score_" + idx + "_" + idx2}
+							style={{ width: score_width + "%" }}
+							className="single-score"
 						>
-							{item2.toFixed(2)}
-						</span>
+							<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
+								{item2.toFixed(2)}
+							</span>
+						</div>
+					);
+				});
+				return (
+					<div key={"detailed_score_" + idx} className="row">
+						{eachDetailedScore}
 					</div>
 				);
 			});
-			return (
-				<div key={"detailed_score_" + idx} className="row">
-					{eachDetailedScore}
-				</div>
-			);
-		});
+		}
 		let publications = "";
 		if (props.data.publication) {
 			const publications_split = props.data.publication.split(",");

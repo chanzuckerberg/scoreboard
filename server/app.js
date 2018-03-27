@@ -71,7 +71,7 @@ app.post("/api/submitresults", [
 		.optional()
 		.withMessage("There was a problem with the institution field"),
 	check("private")
-		.exists()
+		.optional()
 		.isBoolean()
 		.withMessage("Private muse be set to true or false"),
 	db.submitResults,

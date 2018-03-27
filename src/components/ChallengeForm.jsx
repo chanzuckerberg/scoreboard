@@ -152,13 +152,7 @@ const ChallengeForm = props => {
 					keep private
 				</label>
 				<div className="col-sm-6">
-					<Field
-						id="private"
-						name="private"
-						component={renderField}
-						type="checkbox"
-						value=""
-					/>
+					<Field id="private" name="private" component={renderField} type="checkbox" value="" />
 				</div>
 			</div>
 			<div className="form-group">
