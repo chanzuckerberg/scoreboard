@@ -4,7 +4,7 @@ import { Tree } from "../containers/Tree.jsx";
 
 export const About = props => {
 	return (
-		<div className="tab-content">
+		<div style={{ borderColor: props.color }} className="tab-content">
 			<p>{props.content}</p>
 		</div>
 	);
@@ -20,7 +20,10 @@ export const SubmitModal = props => {
 				Thank you! Your submission is now in review. You will receive and e-mail when your entry is
 				availble to view on the bakeoff site.
 				<br />
-				<Button bsStyle="info" onClick={props.close}>
+				<Button
+					style={{ borderColor: props.color, backgroundColor: props.color }}
+					onClick={props.close}
+				>
 					OK
 				</Button>
 			</Modal.Body>
@@ -29,6 +32,7 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
+	console.log(props);
 	const descriptions = props.datasets.map(dataset => {
 		return (
 			<p key={`description_${dataset.id}`}>
@@ -44,13 +48,15 @@ export const Datasets = props => {
 		})
 	);
 	return (
-		<div className="col-md-12 tab-content">
+		<div style={{ borderColor: props.color }} className="col-md-12 tab-content">
 			<div>Available datasets:</div>
 			<br />
 			{descriptions}
 			<Tree tree={treeData} />
 			<br />
-			<Button bsStyle="success">Download ({props.downloadsize})</Button>
+			<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
+				Download ({props.downloadsize})
+			</Button>
 		</div>
 	);
 };

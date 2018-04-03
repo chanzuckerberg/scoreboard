@@ -40,12 +40,24 @@ class ChallengeTabsClass extends React.Component {
 		const dlSize = "83 GB";
 		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
 		if (this.state.active === "about") {
-			content = <About content={aboutContent} key="about" />;
+			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
-			content = <Datasets key="dataset" datasets={this.props.datasets} downloadsize={dlSize} />;
+			content = (
+				<Datasets
+					key="dataset"
+					color={challengeColor}
+					challenge={this.props.challengeName.toLowerCase()}
+					datasets={this.props.datasets}
+					downloadsize={dlSize}
+				/>
+			);
 		} else if (this.state.active === "submit") {
 			content = (
-				<ChallengeFormTab key="submission" challengeName={this.props.challengeName.toLowerCase()} />
+				<ChallengeFormTab
+					key="submission"
+					color={challengeColor}
+					challengeName={this.props.challengeName.toLowerCase()}
+				/>
 			);
 		}
 		content = [
