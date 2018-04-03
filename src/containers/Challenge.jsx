@@ -5,7 +5,6 @@ import { About, Datasets } from "../components/ChallengePage.jsx";
 import { ChallengeFormTab } from "../components/ChallengeFormTab.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
 import { config } from "../scoreboard.cfg";
-import { discourseify } from "../utils/utils";
 
 class ChallengeTabsClass extends React.Component {
 	constructor(props) {
@@ -19,12 +18,6 @@ class ChallengeTabsClass extends React.Component {
 	clickLink(e, data) {
 		const activetab = e.target.getAttribute("data-tabname");
 		// toggle if the new tab is the same as the old, otherwise switch tabs
-		if (activetab === "forum") {
-			// Forum isn't actually a tab, just a link in disguise
-			const challenge = discourseify(this.props.challengeName.toLowerCase());
-			window.open(`${config.general.forum}/c/${challenge}`);
-			return;
-		}
 		if (activetab === this.state.active) this.setState({ active: "" });
 		else this.setState({ active: activetab });
 	}
@@ -61,7 +54,7 @@ class ChallengeTabsClass extends React.Component {
 
 		return (
 			<Tabs
-				tabs={["about", "datasets", "submit", "forum"]}
+				tabs={["about", "datasets", "submit"]}
 				onclick={this.clickLink.bind(this)}
 				activetab={this.state.active}
 				content={content}
