@@ -26,12 +26,12 @@ class ChallengeTabsClass extends React.Component {
 		let aboutContent = "";
 		let challengeColor = "rgb(110, 180, 255)";
 		if (this.props.challengeName) {
-			aboutContent = config.challenges[this.props.challengeName.toLowerCase()].about;
-			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
+			aboutContent = this.props.challenge.about;
+			challengeColor = this.props.challenge.color;
 		}
 		let content = "";
-		const dlSize = "83 GB";
-		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
+		const dlSize = this.props.challenge.data_size;
+		const scoreCategories = this.props.challenge.scores;
 		if (this.state.active === "about") {
 			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
@@ -79,6 +79,7 @@ class ChallengeTabsClass extends React.Component {
 const mapStateToProps = function(state) {
 	const { selectedChallege, user } = state;
 	return {
+		challenge: selectedChallege,
 		challengeName: selectedChallege.challenge.name,
 		challengeId: selectedChallege.challenge.id,
 		userID: user.userId,

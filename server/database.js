@@ -1,5 +1,7 @@
-const pgp = require("pg-promise")();
+const path = require("path");
 const { exec } = require("child_process");
+const { validationResult } = require("express-validator/check");
+const pgp = require("pg-promise")();
 const connection = {
 	host: "localhost",
 	port: 5432,
@@ -8,7 +10,6 @@ const connection = {
 	password: process.env.PG_PASSWORD,
 };
 const db = pgp(connection);
-const { validationResult } = require("express-validator/check");
 
 function getChallenges(req, res, next) {
 	db
@@ -36,12 +37,7 @@ function getChallenges(req, res, next) {
 function getOneChallenge(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
 	db
-		.any(
-			"select c.id, c.name, c.description, c.image_path, c.start_date " +
-				"from challenges c " +
-				"where c.id = $1 ",
-			challengeID
-		)
+		.any("select c.* " + "from challenges c " + "where c.id = $1 ", challengeID)
 		.then(function(data) {
 			// TODO what if fetch returns 0 items or > 1?
 			res.status(200).json({
@@ -134,37 +130,41 @@ function submitResults(req, res, next) {
 	}
 
 	// Score with docker
-	exec(
-		// TODO scale with AWS Batch or ECS
-		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-		(err, stdout, stderr) => {
-			if (err) {
-				// node couldn't execute the command
-				console.log("Error", err);
-				res.status(422).json({
-					_error: err,
-				});
-			} else {
-				// the *entire* stdout and stderr (buffered)
-				const results = JSON.parse(stdout);
-				if (results["error"] !== "") {
-					res.status(422).json({
-						results: results["error"],
-						_error: "Submit validation failed.",
-					});
-				} else {
-					//TODO handle error
-					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
-						res.status(200).json({
-							status: "success",
-							message: "hip hip hooray",
+	db
+		.one("select docker_container from challenges where id = $1", req.body.challengeid)
+		.then(data => {
+			const filesavepath = path.join(__dirname, req.file.path);
+			exec(
+				// TODO scale with AWS Batch or ECS
+				`docker run --rm -v ${filesavepath}:/app/resultsfile.txt ${data.docker_container}`,
+				(err, stdout, stderr) => {
+					if (err) {
+						// node couldn't execute the command
+						console.log("Error", err);
+						res.status(422).json({
+							_error: err,
 						});
-					});
+					} else {
+						// the *entire* stdout and stderr (buffered)
+						const results = JSON.parse(stdout);
+						if (results["error"] !== "") {
+							res.status(422).json({
+								results: results["error"],
+								_error: "Submit validation failed.",
+							});
+						} else {
+							//TODO handle error
+							_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
+								res.status(200).json({
+									status: "success",
+									message: "hip hip hooray",
+								});
+							});
+						}
+					}
 				}
-			}
-		}
-	);
+			);
+		});
 	return res.status(200);
 }
 

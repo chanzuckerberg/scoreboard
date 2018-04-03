@@ -57,14 +57,6 @@ class ChallengeApp extends Component {
 		dispatch(fetchOneChallenge(this.props.match.params.id));
 	}
 
-	login(e) {
-		const { dispatch } = this.props;
-		const role = e.target.getAttribute("data-role");
-		if (role === "admin") dispatch(login(role, true, 4));
-		else if (role === "user") dispatch(login(role, false, 1));
-		else dispatch(logout());
-	}
-
 	render() {
 		let challenge = "";
 		if (this.props.selectedChallege) challenge = this.props.selectedChallege.name;
@@ -73,7 +65,6 @@ class ChallengeApp extends Component {
 				<div className="container content">
 					<Header
 						title="scoreboard"
-						login={this.login.bind(this)}
 						isAdmin={this.props.isAdmin}
 						username={this.props.userName}
 						subtitle={challenge}
