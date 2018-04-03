@@ -34,7 +34,7 @@ export class ChallengeFormTab extends React.Component {
 			);
 		}
 		return (
-			<div className="col-md-12 tab-content">
+			<div className="col-md-12 tab-content" style={{ borderColor: this.props.color }}>
 				<div>
 					<p>
 						<span className="control-label">Instructions</span> Etiam a diam nec orci porta mattis
@@ -45,11 +45,15 @@ export class ChallengeFormTab extends React.Component {
 						dolor mattis non. {exampleFile}
 					</p>
 				</div>
-				<ChallengeFormContainer handleSuccess={this.openModal.bind(this)} />
+				<ChallengeFormContainer
+					color={this.props.color}
+					handleSuccess={this.openModal.bind(this)}
+				/>
 				<SubmitModal
 					isOpen={this.state.modalOpen}
 					close={this.closeModal.bind(this)}
 					id={modalId}
+					color={this.props.color}
 				/>
 			</div>
 		);
