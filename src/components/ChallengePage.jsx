@@ -32,7 +32,6 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	console.log(props);
 	const descriptions = props.datasets.map(dataset => {
 		return (
 			<p key={`description_${dataset.id}`}>
@@ -44,7 +43,7 @@ export const Datasets = props => {
 	const treeData = [].concat.apply(
 		[],
 		props.datasets.map(dataset => {
-			return dataset.dataset_metadata;
+			return dataset.tree;
 		})
 	);
 	return (

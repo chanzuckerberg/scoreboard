@@ -4,7 +4,6 @@ import { Tabs } from "../components/Tabs.jsx";
 import { About, Datasets } from "../components/ChallengePage.jsx";
 import { ChallengeFormTab } from "../components/ChallengeFormTab.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
-import { config } from "../scoreboard.cfg";
 
 class ChallengeTabsClass extends React.Component {
 	constructor(props) {
@@ -31,7 +30,7 @@ class ChallengeTabsClass extends React.Component {
 		}
 		let content = "";
 		const dlSize = this.props.challenge.data_size;
-		const scoreCategories = this.props.challenge.scores;
+		const scoreCategories = this.props.challenge.scores || [];
 		if (this.state.active === "about") {
 			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
@@ -45,13 +44,7 @@ class ChallengeTabsClass extends React.Component {
 				/>
 			);
 		} else if (this.state.active === "submit") {
-			content = (
-				<ChallengeFormTab
-					key="submission"
-					color={challengeColor}
-					challengeName={this.props.challengeName.toLowerCase()}
-				/>
-			);
+			content = <ChallengeFormTab key="submission" challenge={this.props.challenge} />;
 		}
 		content = [
 			content,
@@ -79,7 +72,7 @@ class ChallengeTabsClass extends React.Component {
 const mapStateToProps = function(state) {
 	const { selectedChallege, user } = state;
 	return {
-		challenge: selectedChallege,
+		challenge: selectedChallege.challenge,
 		challengeName: selectedChallege.challenge.name,
 		challengeId: selectedChallege.challenge.id,
 		userID: user.userId,

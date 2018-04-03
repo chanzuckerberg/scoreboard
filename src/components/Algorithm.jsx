@@ -2,6 +2,7 @@ import React from "react";
 import { linkOnClick } from "../utils/utils";
 import { Button } from "react-bootstrap";
 import { colorScale, textColor } from "../utils/color-utils";
+
 export const Algorithm = props => {
 	let score_count = 1;
 	let score_width = 100;
