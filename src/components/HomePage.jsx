@@ -21,7 +21,7 @@ export const Challenges = props => {
 				challengeid={item.id}
 				datasetcount={item.datasets}
 				submissions={item.submissions}
-				image={item.image_path}
+				image={item.image}
 				description={item.description}
 			/>
 		);

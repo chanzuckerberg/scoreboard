@@ -29,7 +29,7 @@ app.get("/api/challenges", db.getChallenges);
 app.get("/api/user", db.getUser);
 app.get("/api/datasets/:challegeid", db.getDatasets);
 app.get("/api/submissions/:challegeid", db.getSubmissions);
-app.get("/api/challenge/:challegeid", db.getOneChallenges);
+app.get("/api/challenge/:challegeid", db.getOneChallenge);
 app.post("/api/approve", jsonParser, [
 	check("submissionid")
 		.exists()
