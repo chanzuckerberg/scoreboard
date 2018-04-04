@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, Boolean, String, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 import datetime
 import os
 import json
@@ -21,7 +22,7 @@ class User(Base):
     name = Column(String)
     email = Column(String)
     is_admin = Column(Boolean, nullable=False)
-    create_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    create_date = Column(DateTime, nullable=False, server_default=func.now())
 
 class Challenge(Base):
     __tablename__ = 'challenges'
@@ -37,10 +38,10 @@ class Challenge(Base):
     about = Column(String)
     example_file = Column(String)
     scores = Column(JSONB)
-    start_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    start_date = Column(DateTime, nullable=False, server_default=func.now())
     end_date = Column(DateTime)
     is_open = Column(Boolean, nullable=False, default=True)
-    create_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    create_date = Column(DateTime, nullable=False, server_default=func.now())
 
 class Dataset(Base):
     __tablename__ = 'datasets'
@@ -50,7 +51,7 @@ class Dataset(Base):
     description = Column(String)
     tree = Column(JSONB)
     challenge_id = Column(Integer, ForeignKey("challenges.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
-    create_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    create_date = Column(DateTime, nullable=False, server_default=func.now())
 
 class Submission(Base):
     __tablename__ = 'submissions'
@@ -64,7 +65,7 @@ class Submission(Base):
     institution = Column(String)
     publication = Column(String)
     is_accepted = Column(Boolean, nullable=False)
-    create_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    create_date = Column(DateTime, nullable=False, server_default=func.now())
 
 class Result(Base):
     __tablename__ = 'results'
@@ -74,8 +75,8 @@ class Result(Base):
     results_path = Column(String, nullable=False)
     score_data = Column(JSONB)
     is_current = Column(Boolean, nullable=False)
-    submission_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    create_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    submission_date = Column(DateTime, nullable=False, server_default=func.now())
+    create_date = Column(DateTime, nullable=False, server_default=func.now())
 
 Base.metadata.create_all(engine)
 
