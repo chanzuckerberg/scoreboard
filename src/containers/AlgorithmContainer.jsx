@@ -90,7 +90,7 @@ class AlgorithmsContainer extends React.Component {
 						active={item.active}
 						key={"submission_" + item.id}
 						data={item}
-						color={challengeColor}
+						challenge={this.props.challenge}
 						approve={this.approveRejectOnClick.bind(this)}
 						activate={this.activateIndex.bind(this, item.id)}
 					/>
@@ -105,11 +105,15 @@ class AlgorithmsContainer extends React.Component {
 				onSortSelect={this.onclick.bind(this)}
 			/>
 		);
+		const category_width =
+			this.props.categories && this.props.categories.length
+				? 100 / this.props.categories.length
+				: 0;
 		const dataCategories = this.props.categories.map(item => {
 			return (
 				<div
 					className="dataset-text"
-					style={{ width: "16.66%" }}
+					style={{ width: category_width + "%" }}
 					key={"algo_data_" + slugify(item)}
 				>
 					{item}
@@ -147,7 +151,7 @@ const mapStateToProps = function(state) {
 		dataIdx: submissionData.dataIdx,
 		challengeName: selectedChallege.challenge.name,
 		challengeId: selectedChallege.challenge.id,
-		challenge: selectedChallege,
+		challenge: selectedChallege.challenge,
 	};
 };
 

@@ -158,7 +158,7 @@ const ChallengeForm = props => {
 			<div className="form-group">
 				<div className="col-sm-offset-4 col-sm-6">
 					<button
-						style={{ borderColor: props.color, backgroundColor: props.color }}
+						style={{ borderColor: props.challenge.color, backgroundColor: props.challenge.color }}
 						type="submit"
 						disabled={submitting}
 						className="btn"

@@ -15,6 +15,7 @@ function getChallenges(req, res, next) {
 	db
 		.any(
 			"select c.id, c.name, c.description, c.image, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
+			"select c.id, c.name, c.description, c.image, c.color, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
 				"from challenges c " +
 				"left join datasets d on (d.challenge_id = c.id) " +
 				"left join submissions s on (s.challenge_id = c.id) " +

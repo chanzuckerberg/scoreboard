@@ -11,7 +11,7 @@ export const Algorithm = props => {
 		if (score_count > 10) score_count = 10;
 		score_width = 100 / score_count;
 	}
-	const algoColor = props.color;
+	const algoColor = props.challenge.color;
 	let scores = props.data.score_data.data.map((item, idx) => {
 		let bgColor = colorScale(algoColor, item);
 		let text = textColor(bgColor);

@@ -11,17 +11,15 @@ export const About = () => (
 
 export const Challenges = props => {
 	const challenges = props.challenges.map(item => {
-		const lowername = item.name.toLowerCase();
-		const color = config.challenges[lowername].color;
 		return (
 			<Challenge
 				name={item.name}
-				color={color}
 				key={"Challenge_" + item.id}
 				challengeid={item.id}
 				datasetcount={item.datasets}
 				submissions={item.submissions}
 				image={item.image}
+				color={item.color}
 				description={item.description}
 			/>
 		);

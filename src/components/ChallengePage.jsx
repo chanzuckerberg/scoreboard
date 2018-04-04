@@ -21,7 +21,7 @@ export const SubmitModal = props => {
 				availble to view on the bakeoff site.
 				<br />
 				<Button
-					style={{ borderColor: props.color, backgroundColor: props.color }}
+					style={{ borderColor: props.challenge.color, backgroundColor: props.challenge.color }}
 					onClick={props.close}
 				>
 					OK

@@ -41,7 +41,9 @@ class ChallengeFormClass extends React.Component {
 	}
 
 	render() {
-		return <ChallengeReduxForm color={this.props.color} onSubmit={this.submit.bind(this)} />;
+		return (
+			<ChallengeReduxForm challenge={this.props.challenge} onSubmit={this.submit.bind(this)} />
+		);
 	}
 }
 
@@ -50,6 +52,7 @@ const mapStateToProps = function(state) {
 	return {
 		challengeName: selectedChallege.challenge.name,
 		challengeId: selectedChallege.challenge.id,
+		challenge: selectedChallege.challenge,
 		userID: user.userId,
 	};
 };
