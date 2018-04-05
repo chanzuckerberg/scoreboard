@@ -4,7 +4,6 @@ import { slugify } from "../utils/utils";
 import { Algorithm } from "../components/Algorithm.jsx";
 import { SortPane } from "../components/SortPane.jsx";
 import { sortAlgorithms, toggleAlgortirhmActivation, approveOrRejectSubmission } from "../actions";
-import { config } from "../scoreboard.cfg";
 import { linkOnClick } from "../utils/utils";
 
 class AlgorithmsContainer extends React.Component {
@@ -78,8 +77,7 @@ class AlgorithmsContainer extends React.Component {
 	render() {
 		let sortedData = this.sortData();
 		let challengeColor = "rgb(110, 180, 255)";
-		if (this.props.challengeName)
-			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
+		if (this.props.challengeName) challengeColor = this.props.challenge.color;
 		const algorithms = sortedData.map(item => {
 			if (
 				((item.is_accepted && !item.is_private) ||
@@ -92,7 +90,7 @@ class AlgorithmsContainer extends React.Component {
 						active={item.active}
 						key={"submission_" + item.id}
 						data={item}
-						color={challengeColor}
+						challenge={this.props.challenge}
 						approve={this.approveRejectOnClick.bind(this)}
 						activate={this.activateIndex.bind(this, item.id)}
 					/>
@@ -107,11 +105,15 @@ class AlgorithmsContainer extends React.Component {
 				onSortSelect={this.onclick.bind(this)}
 			/>
 		);
+		const category_width =
+			this.props.categories && this.props.categories.length
+				? 100 / this.props.categories.length
+				: 0;
 		const dataCategories = this.props.categories.map(item => {
 			return (
 				<div
 					className="dataset-text"
-					style={{ width: "16.66%" }}
+					style={{ width: category_width + "%" }}
 					key={"algo_data_" + slugify(item)}
 				>
 					{item}
@@ -149,6 +151,7 @@ const mapStateToProps = function(state) {
 		dataIdx: submissionData.dataIdx,
 		challengeName: selectedChallege.challenge.name,
 		challengeId: selectedChallege.challenge.id,
+		challenge: selectedChallege.challenge,
 	};
 };
 

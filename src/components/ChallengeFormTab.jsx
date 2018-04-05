@@ -1,7 +1,6 @@
 import React from "react";
 import { SubmitModal } from "./ChallengePage.jsx";
 import { ChallengeFormContainer } from "../containers/ChallengeFormContainer.jsx";
-import { config } from "../scoreboard.cfg";
 
 export class ChallengeFormTab extends React.Component {
 	constructor(props) {
@@ -22,19 +21,15 @@ export class ChallengeFormTab extends React.Component {
 	render() {
 		const modalId = "submitModal";
 		let exampleFile = "";
-		if (this.props.challengeName) {
+		if ("example_file" in this.props.challenge) {
 			exampleFile = (
-				<a
-					className="clickable underline"
-					download
-					href={config.challenges[this.props.challengeName].examplefile}
-				>
+				<a className="clickable underline" download href={this.props.challenge.example_file}>
 					Example Submission
 				</a>
 			);
 		}
 		return (
-			<div className="col-md-12 tab-content" style={{ borderColor: this.props.color }}>
+			<div className="col-md-12 tab-content" style={{ borderColor: this.props.challenge.color }}>
 				<div>
 					<p>
 						<span className="control-label">Instructions</span> Etiam a diam nec orci porta mattis
@@ -45,15 +40,12 @@ export class ChallengeFormTab extends React.Component {
 						dolor mattis non. {exampleFile}
 					</p>
 				</div>
-				<ChallengeFormContainer
-					color={this.props.color}
-					handleSuccess={this.openModal.bind(this)}
-				/>
+				<ChallengeFormContainer handleSuccess={this.openModal.bind(this)} />
 				<SubmitModal
 					isOpen={this.state.modalOpen}
 					close={this.closeModal.bind(this)}
 					id={modalId}
-					color={this.props.color}
+					challenge={this.props.challenge}
 				/>
 			</div>
 		);

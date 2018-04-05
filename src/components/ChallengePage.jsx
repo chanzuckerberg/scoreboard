@@ -21,7 +21,7 @@ export const SubmitModal = props => {
 				availble to view on the bakeoff site.
 				<br />
 				<Button
-					style={{ borderColor: props.color, backgroundColor: props.color }}
+					style={{ borderColor: props.challenge.color, backgroundColor: props.challenge.color }}
 					onClick={props.close}
 				>
 					OK
@@ -32,7 +32,6 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	console.log(props);
 	const descriptions = props.datasets.map(dataset => {
 		return (
 			<p key={`description_${dataset.id}`}>
@@ -44,7 +43,7 @@ export const Datasets = props => {
 	const treeData = [].concat.apply(
 		[],
 		props.datasets.map(dataset => {
-			return dataset.dataset_metadata;
+			return dataset.tree;
 		})
 	);
 	return (

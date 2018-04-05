@@ -1,5 +1,7 @@
-const pgp = require("pg-promise")();
+const path = require("path");
 const { exec } = require("child_process");
+const { validationResult } = require("express-validator/check");
+const pgp = require("pg-promise")();
 const connection = {
 	host: "localhost",
 	port: 5432,
@@ -8,12 +10,11 @@ const connection = {
 	password: process.env.PG_PASSWORD,
 };
 const db = pgp(connection);
-const { validationResult } = require("express-validator/check");
 
 function getChallenges(req, res, next) {
 	db
 		.any(
-			"select c.id, c.name, c.description, c.image_path, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
+			"select c.id, c.name, c.description, c.image, c.color, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
 				"from challenges c " +
 				"left join datasets d on (d.challenge_id = c.id) " +
 				"left join submissions s on (s.challenge_id = c.id) " +
@@ -33,15 +34,10 @@ function getChallenges(req, res, next) {
 		});
 }
 
-function getOneChallenges(req, res, next) {
+function getOneChallenge(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
 	db
-		.any(
-			"select c.id, c.name, c.description, c.image_path, c.start_date " +
-				"from challenges c " +
-				"where c.id = $1 ",
-			challengeID
-		)
+		.any("select c.* " + "from challenges c " + "where c.id = $1 ", challengeID)
 		.then(function(data) {
 			// TODO what if fetch returns 0 items or > 1?
 			res.status(200).json({
@@ -134,37 +130,45 @@ function submitResults(req, res, next) {
 	}
 
 	// Score with docker
-	exec(
-		// TODO scale with AWS Batch or ECS
-		`docker run --rm -v /Users/charlotteweaver/Documents/Git/scoreboard/${req.file
-			.path}:/app/resultsfile.txt chanzuckerberg/scoreboard`,
-		(err, stdout, stderr) => {
-			if (err) {
-				// node couldn't execute the command
-				console.log("Error", err);
-				res.status(422).json({
-					_error: err,
-				});
-			} else {
-				// the *entire* stdout and stderr (buffered)
-				const results = JSON.parse(stdout);
-				if (results["error"] !== "") {
-					res.status(422).json({
-						results: results["error"],
-						_error: "Submit validation failed.",
-					});
-				} else {
-					//TODO handle error
-					_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
-						res.status(200).json({
-							status: "success",
-							message: "hip hip hooray",
+	db
+		.one("select docker_container from challenges where id = $1", req.body.challengeid)
+		.then(data => {
+			const filesavepath = path.join(path.dirname(__dirname), req.file.path);
+			console.log(
+				"exec command",
+				`docker run --rm -v ${filesavepath}:/app/resultsfile.txt ${data.docker_container}`
+			);
+			exec(
+				// TODO scale with AWS Batch or ECS
+				`docker run --rm -v ${filesavepath}:/app/resultsfile.txt ${data.docker_container}`,
+				(err, stdout, stderr) => {
+					if (err) {
+						// node couldn't execute the command
+						console.log("Error", err);
+						res.status(422).json({
+							_error: err,
 						});
-					});
+					} else {
+						// the *entire* stdout and stderr (buffered)
+						const results = JSON.parse(stdout);
+						if (results["error"] !== "") {
+							res.status(422).json({
+								results: results["error"],
+								_error: "Submit validation failed.",
+							});
+						} else {
+							//TODO handle error
+							_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
+								res.status(200).json({
+									status: "success",
+									message: "hip hip hooray",
+								});
+							});
+						}
+					}
 				}
-			}
-		}
-	);
+			);
+		});
 	return res.status(200);
 }
 
@@ -172,8 +176,8 @@ function getUser(req, res, next) {
 	const query = req.query;
 	db
 		.oneOrNone(
-			"select u.id, u.github_username, u.email, u.is_admin from users u where u.github_username =  $1 and u.email = $2",
-			[query.id, query.email]
+			"select u.id, u.github_username, u.email, u.is_admin from users u where u.github_username=$1",
+			[query.id]
 		)
 		.then(userId => {
 			if (!userId) {
@@ -192,13 +196,33 @@ function getUser(req, res, next) {
 							});
 						});
 				});
+			} else if (!userId.email) {
+				db.tx(t => {
+					return t
+						.one(
+							"update users set name = $1, email=$2 where github_username=$3" +
+								"RETURNING id, github_username, email, is_admin",
+							[query.name, query.email, query.id]
+						)
+						.then(data => {
+							res.status(200).json({
+								status: "success",
+								data: data,
+								message: `Updated user ${query.id}`,
+							});
+						});
+				});
 			} else {
-				res.status(200).json({
+				return res.status(200).json({
 					status: "success",
 					data: userId,
 					message: `Retrieved user ${query.id}`,
 				});
 			}
+		})
+		.catch(err => {
+			console.log(`ERROR gettin user`, err);
+			res.status(400).json("Failed to add user");
 		});
 }
 
@@ -271,7 +295,7 @@ module.exports = {
 	getDatasets,
 	getUser,
 	getSubmissions,
-	getOneChallenges,
+	getOneChallenge,
 	submitResults,
 	approveAlgorithm,
 };

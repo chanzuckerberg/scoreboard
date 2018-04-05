@@ -1,9 +1,6 @@
 import React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 
-// sort_options []
-// sort_selection = "x"
-// on_sort_select
 export const SortPane = props => {
 	let sortCategories = props.sortOptions.map((item, idx) => {
 		let active = false;

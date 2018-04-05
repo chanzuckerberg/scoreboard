@@ -61,3 +61,5 @@ typings/
 
 dist/
 uploads/
+
+database/initialize.json
