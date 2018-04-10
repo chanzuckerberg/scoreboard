@@ -2,10 +2,11 @@ const path = require("path");
 const { exec } = require("child_process");
 const { validationResult } = require("express-validator/check");
 const pgp = require("pg-promise")();
+
 const connection = {
-	host: "localhost",
-	port: 5432,
-	database: "scoreboard",
+	host: process.env.PG_HOST || "localhost",
+	port: process.env.PG_PORT || 5432,
+	database: process.env.PG_DATABASE || "scoreboard",
 	user: process.env.PG_USERNAME,
 	password: process.env.PG_PASSWORD,
 };
