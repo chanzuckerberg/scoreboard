@@ -37,6 +37,7 @@ class Challenge(Base):
     color = Column(String)
     about = Column(String)
     example_file = Column(String)
+    submission_header = Column(JSONB)
     scores = Column(JSONB)
     start_date = Column(DateTime, nullable=False, server_default=func.now())
     end_date = Column(DateTime)

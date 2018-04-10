@@ -37,22 +37,22 @@ const adaptFileEventToValue = delegate => e => {
 	delegate(e.target.files[0]);
 };
 
-const asyncValidate = (values /*, dispatch */) => {
-	return readFile(values.results)
+const asyncValidate = (values, _, props) => {
+	return readFile(values.results, props.challenge.submission_header)
 		.then(valid => {})
 		.catch(error => {
 			throw { results: error.error };
 		});
 };
 
-const readFile = results_file => {
+const readFile = (results_file, submission_header) => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.onload = function(e) {
 			let contents = e.target.result;
-			const good_header = "\tcall\tp_doublet";
+			const good_header = submission_header.join("\t");
 			let header = contents.substr(0, contents.indexOf("\n"));
-			if (header !== "\tcall\tp_doublet") {
+			if (header !== good_header) {
 				reject({ error: `Bad header in file, should be ${good_header}` });
 			} else {
 				resolve({ valid: true, error: "" });
