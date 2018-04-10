@@ -158,8 +158,9 @@ function submitResults(req, res, next) {
 								_error: "Submit validation failed.",
 							});
 						} else {
-							//TODO handle error
-							_loadScore(req.body, { data: results["score"] }, req.file.path).then(() => {
+							let score = { data: results.score }
+							if ("additionalData" in results) score.additionalData = results.additionalData;		
+							_loadScore(req.body, score, req.file.path).then(() => {
 								res.status(200).json({
 									status: "success",
 									message: "hip hip hooray",
