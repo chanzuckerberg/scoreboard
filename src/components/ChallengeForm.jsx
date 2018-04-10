@@ -38,19 +38,23 @@ const adaptFileEventToValue = delegate => e => {
 };
 
 const asyncValidate = (values, _, props) => {
-	return readFile(values.results, props.challenge.submission_header)
+	return readFile(
+		values.results,
+		props.challenge.submission_header,
+		props.challenge.submission_separator
+	)
 		.then(valid => {})
 		.catch(error => {
 			throw { results: error.error };
 		});
 };
 
-const readFile = (results_file, submission_header) => {
+const readFile = (results_file, submission_header, separator) => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.onload = function(e) {
 			let contents = e.target.result;
-			const good_header = submission_header.join("\t");
+			const good_header = submission_header.join(separator);
 			let header = contents.substr(0, contents.indexOf("\n"));
 			if (header !== good_header) {
 				reject({ error: `Bad header in file, should be ${good_header}` });
