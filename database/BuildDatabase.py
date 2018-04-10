@@ -7,13 +7,22 @@ from sqlalchemy.sql import func
 import datetime
 import os
 import json
-pg_user = os.environ['PG_USERNAME']
-pg_pass = os.environ['PG_PASSWORD']
+
+database = {
+    'pg_user': os.environ['PG_USERNAME'],
+    'pg_pass': os.environ['PG_PASSWORD'],
+    'pg_host': os.environ.get('PG_HOST', 'localhost'),
+    'pg_port':  os.environ.get('PG_PORT', 5432),
+    'pg_database': os.environ.get('PG_DATABASE', 'scoreboard')
+}
+
 
 # Build database
 engine = create_engine(
-    "postgresql://{}:{}@localhost:5432/scoreboard".format(pg_user, pg_pass))
+    "postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_database}".format(**database))
+
 Base = declarative_base()
+
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = {'extend_existing': True}
@@ -102,7 +111,6 @@ for challenge in initialize_data["challenges"]:
         dataset["challenge_id"] = challenge_id
         new_dataset = Dataset(**dataset)
         session.add(new_dataset)
-
 
 for admin in initialize_data["admins"]:
     new_user = User(github_username=admin, is_admin=True)
