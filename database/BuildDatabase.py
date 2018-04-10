@@ -46,6 +46,7 @@ class Challenge(Base):
     color = Column(String)
     about = Column(String)
     example_file = Column(String)
+    submission_header = Column(JSONB)
     scores = Column(JSONB)
     start_date = Column(DateTime, nullable=False, server_default=func.now())
     end_date = Column(DateTime)
@@ -109,7 +110,6 @@ for challenge in initialize_data["challenges"]:
         dataset["challenge_id"] = challenge_id
         new_dataset = Dataset(**dataset)
         session.add(new_dataset)
-
 
 for admin in initialize_data["admins"]:
     new_user = User(github_username=admin, is_admin=True)
