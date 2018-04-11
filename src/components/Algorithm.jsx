@@ -1,5 +1,5 @@
 import React from "react";
-import { linkOnClick } from "../utils/utils";
+import { linkOnClick, formatScore } from "../utils/utils";
 import { Button } from "react-bootstrap";
 import { colorScale, textColor } from "../utils/color-utils";
 
@@ -11,7 +11,7 @@ export const Algorithm = props => {
 		if (score_count > 10) score_count = 10;
 		score_width = 100 / score_count;
 	}
-	const algoColor = props.challenge.color;
+	const algoColor = props.challenge.color || "#999999";
 	let scores = props.data.score_data.data.map((item, idx) => {
 		let bgColor = colorScale(algoColor, item);
 		let text = textColor(bgColor);
@@ -40,7 +40,7 @@ export const Algorithm = props => {
 							className="single-score"
 						>
 							<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
-								{item2.toFixed(2)}
+								{formatScore(item2)}
 							</span>
 						</div>
 					);

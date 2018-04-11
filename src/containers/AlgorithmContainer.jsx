@@ -76,8 +76,6 @@ class AlgorithmsContainer extends React.Component {
 
 	render() {
 		let sortedData = this.sortData();
-		let challengeColor = "rgb(110, 180, 255)";
-		if (this.props.challengeName) challengeColor = this.props.challenge.color;
 		const algorithms = sortedData.map(item => {
 			if (
 				((item.is_accepted && !item.is_private) ||
