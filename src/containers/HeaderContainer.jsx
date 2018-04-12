@@ -4,7 +4,14 @@ import { Link } from "react-router-dom";
 import SocialButton from "../components/SocialButton.jsx";
 import { login, logout, node } from "../actions/index";
 
-class HeaderContainer extends React.Component {
+@connect(state => {
+	return {
+		userName: state.user.name,
+		isAdmin: state.user.isAdmin,
+		userId: state.user.userId,
+	};
+})
+export class Header extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -69,14 +76,3 @@ class HeaderContainer extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { user } = state;
-	return {
-		userName: user.name,
-		isAdmin: user.isAdmin,
-		userId: user.userId,
-	};
-};
-
-export const Header = connect(mapStateToProps)(HeaderContainer);

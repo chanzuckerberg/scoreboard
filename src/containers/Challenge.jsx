@@ -5,7 +5,15 @@ import { About, Datasets } from "../components/ChallengePage.jsx";
 import { ChallengeFormTab } from "../components/ChallengeFormTab.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
 
-class ChallengeTabsClass extends React.Component {
+@connect(state => {
+	return {
+		challenge: state.selectedChallege.challenge,
+		challengeName: state.selectedChallege.challenge.name,
+		challengeId: state.selectedChallege.challenge.id,
+		userID: state.user.userId,
+	};
+})
+export class ChallengeTabs extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -68,15 +76,3 @@ class ChallengeTabsClass extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { selectedChallege, user } = state;
-	return {
-		challenge: selectedChallege.challenge,
-		challengeName: selectedChallege.challenge.name,
-		challengeId: selectedChallege.challenge.id,
-		userID: user.userId,
-	};
-};
-
-export const ChallengeTabs = connect(mapStateToProps)(ChallengeTabsClass);
