@@ -6,7 +6,17 @@ import { SortPane } from "../components/SortPane.jsx";
 import { sortAlgorithms, toggleAlgortirhmActivation, approveOrRejectSubmission } from "../actions";
 import { linkOnClick } from "../utils/utils";
 
-class AlgorithmsContainer extends React.Component {
+@connect(state => {
+	return {
+		submissions: state.submissionData.submissions,
+		sortSelection: state.submissionData.sortBy,
+		dataIdx: state.submissionData.dataIdx,
+		challengeName: state.selectedChallege.challenge.name,
+		challengeId: state.selectedChallege.challenge.id,
+		challenge: state.selectedChallege.challenge,
+	};
+})
+export class Algorithms extends React.Component {
 	constructor(props) {
 		super(props);
 		let activeIndicies = {};
@@ -140,17 +150,3 @@ class AlgorithmsContainer extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { submissionData, selectedChallege } = state;
-	return {
-		submissions: submissionData.submissions,
-		sortSelection: submissionData.sortBy,
-		dataIdx: submissionData.dataIdx,
-		challengeName: selectedChallege.challenge.name,
-		challengeId: selectedChallege.challenge.id,
-		challenge: selectedChallege.challenge,
-	};
-};
-
-export const Algorithms = connect(mapStateToProps)(AlgorithmsContainer);

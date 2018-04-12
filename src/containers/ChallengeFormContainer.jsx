@@ -4,7 +4,15 @@ import { connect } from "react-redux";
 import { SubmissionError } from "redux-form";
 import { fetchOneChallenge } from "../actions/index";
 
-class ChallengeFormClass extends React.Component {
+@connect(state => {
+	return {
+		challengeName: state.selectedChallege.challenge.name,
+		challengeId: state.selectedChallege.challenge.id,
+		challenge: state.selectedChallege.challenge,
+		userID: state.user.userId,
+	};
+})
+export class ChallengeFormContainer extends React.Component {
 	submit(values) {
 		const { dispatch } = this.props;
 		// print the form values to the console
@@ -46,15 +54,3 @@ class ChallengeFormClass extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { selectedChallege, user } = state;
-	return {
-		challengeName: selectedChallege.challenge.name,
-		challengeId: selectedChallege.challenge.id,
-		challenge: selectedChallege.challenge,
-		userID: user.userId,
-	};
-};
-
-export const ChallengeFormContainer = connect(mapStateToProps)(ChallengeFormClass);
