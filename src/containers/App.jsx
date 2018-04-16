@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header } from "./HeaderContainer.jsx";
 import { About, Challenges, FAQ } from "../components/HomePage.jsx";
-import { fetchChallenges, login, logout, fetchOneChallenge } from "../actions/index";
+import { initializeHomepage, fetchOneChallenge } from "../actions/index";
 import { Footer } from "../components/Footer.jsx";
 import { ChallengeTabs } from "./Challenge.jsx";
 import { config } from "../scoreboard.cfg.js";
@@ -16,15 +16,7 @@ import { config } from "../scoreboard.cfg.js";
 export class Home extends Component {
 	componentWillMount() {
 		const { dispatch } = this.props;
-		dispatch(fetchChallenges());
-	}
-
-	login(e) {
-		const { dispatch } = this.props;
-		const role = e.target.getAttribute("data-role");
-		if (role === "admin") dispatch(login(role, true, 4));
-		else if (role === "user") dispatch(login(role, false, 1));
-		else dispatch(logout());
+		dispatch(initializeHomepage());
 	}
 
 	render() {
@@ -33,7 +25,6 @@ export class Home extends Component {
 				<div className="container content">
 					<Header
 						title={config.general.title}
-						login={this.login.bind(this)}
 						isAdmin={this.props.user.isAdmin}
 						username={this.props.user.name}
 						subtitle={config.general.subtitle}
@@ -96,5 +87,15 @@ export class Challenge extends Component {
 				<Footer />
 			</div>
 		);
+	}
+}
+
+export class Login extends Component {
+	componentWillMount() {
+		const { dispatch } = this.props;
+		dispatch(fetchcurrentuser());
+	}
+	render() {
+		return <div />;
 	}
 }

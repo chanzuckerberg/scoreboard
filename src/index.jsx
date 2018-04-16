@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { rootReducer } from "./reducers";
-import { Challenge, Home, Auth } from "./containers/App.jsx";
+import { Challenge, Home, Login } from "./containers/App.jsx";
 
 import createHistory from "history/createBrowserHistory";
 import { Route } from "react-router";
@@ -24,6 +24,7 @@ render(
 		<ConnectedRouter history={history}>
 			<div>
 				<Route exact path="/" component={Home} />
+				<Route exact path="/login" component={Login} />
 				<Route exact path="/challenge/:id" component={Challenge} />
 			</div>
 		</ConnectedRouter>

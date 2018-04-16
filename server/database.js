@@ -4,11 +4,11 @@ const { validationResult } = require("express-validator/check");
 const pgp = require("pg-promise")();
 
 const connection = {
-	host: process.env.PG_HOST || "localhost",
-	port: process.env.PG_PORT || 5432,
-	database: process.env.PG_DATABASE || "scoreboard",
-	user: process.env.PG_USERNAME,
-	password: process.env.PG_PASSWORD,
+	host: process.env.SCOREBOARD_PG_HOST || "localhost",
+	port: process.env.SCOREBOARD_PG_PORT || 5432,
+	database: process.env.SCOREBOARD_PG_DATABASE || "scoreboard",
+	user: process.env.SCOREBOARD_PG_USERNAME,
+	password: process.env.SCOREBOARD_PG_PASSWORD,
 };
 const db = pgp(connection);
 
@@ -158,8 +158,8 @@ function submitResults(req, res, next) {
 								_error: "Submit validation failed.",
 							});
 						} else {
-							let score = { data: results.score }
-							if ("additionalData" in results) score.additionalData = results.additionalData;		
+							let score = { data: results.score };
+							if ("additionalData" in results) score.additionalData = results.additionalData;
 							_loadScore(req.body, score, req.file.path).then(() => {
 								res.status(200).json({
 									status: "success",
@@ -225,6 +225,47 @@ function getUser(req, res, next) {
 		.catch(err => {
 			console.log(`ERROR gettin user`, err);
 			res.status(400).json("Failed to add user");
+		});
+}
+
+function gitHubUser(username, email, displayName) {
+	return db
+		.oneOrNone(
+			"select u.id, u.github_username, u.email, u.is_admin from users u where u.github_username=$1",
+			[username]
+		)
+		.then(user => {
+			if (!user) {
+				db.tx(t => {
+					return t
+						.one(
+							"insert into users(github_username, name, email, is_admin) " +
+								"values ($1, $2, $3, false) RETURNING id, github_username, email, is_admin",
+							[username, displayName, email]
+						)
+						.then(data => {
+							return data;
+						});
+				});
+			} else if (!user.email) {
+				db.tx(t => {
+					return t
+						.one(
+							"update users set name = $1, email=$2 where github_username=$3" +
+								"RETURNING id, github_username, email, is_admin",
+							[displayName, email, username]
+						)
+						.then(data => {
+							return data;
+						});
+				});
+			} else {
+				return user;
+			}
+		})
+		.catch(err => {
+			console.log(`ERROR getting user`, err);
+			return null;
 		});
 }
 
@@ -300,4 +341,5 @@ module.exports = {
 	getOneChallenge,
 	submitResults,
 	approveAlgorithm,
+	gitHubUser,
 };
