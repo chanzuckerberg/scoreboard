@@ -9,14 +9,13 @@ export const ADMIN_APPROVE_ALOGRITHM = "ADMIN_APPROVE_ALOGRITHM";
 export const RECIEVE_USER = "RECIEVE_USER";
 export const NODE = "NODE";
 
-const base_url = "http://localhost:9000";
-const challenges_url = `${base_url}/api/challenges`;
-const challenge_url = `${base_url}/api/challenge`;
-const submissions_url = `${base_url}/api/submissions`;
-const ghuser_url = `${base_url}/api/ghuser`;
-const dataset_url = `${base_url}/api/datasets`;
-const approve_url = `${base_url}/api/approve`;
-const logout_url = `${base_url}/auth/logout`;
+const challenges_url = "/api/challenges";
+const challenge_url = "/api/challenge";
+const submissions_url = "/api/submissions";
+const ghuser_url = "/api/ghuser";
+const dataset_url = "/api/datasets";
+const approve_url = "/api/approve";
+const logout_url = "/auth/logout";
 
 // Get all challenges for homepage
 

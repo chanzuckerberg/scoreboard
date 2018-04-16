@@ -44,7 +44,7 @@ passport.use(
 		{
 			clientID: process.env.SCOREBOARD_GH_APPID,
 			clientSecret: process.env.SCOREBOARD_GH_SECRET,
-			callbackURL: "http://localhost:9000/auth/github/callback",
+			callbackURL: "/auth/github/callback",
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { displayName, username, emails } = profile;
