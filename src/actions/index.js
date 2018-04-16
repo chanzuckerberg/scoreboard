@@ -45,9 +45,17 @@ export const fetchChallenges = () => {
 export const fetchUser = () => {
 	return dispatch => {
 		return fetch(ghuser_url, { credentials: "same-origin" })
-			.then(response => response.json())
+			.then(response => {
+				if (response.status >= 400 && response.status < 600) {
+					throw new Error("No user");
+				}
+				return response.json();
+			})
 			.then(json => {
 				dispatch(recieveUser(json));
+			})
+			.catch(() => {
+				console.log("No user logged in");
 			});
 	};
 };

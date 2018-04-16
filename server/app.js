@@ -84,9 +84,10 @@ app.get(
 );
 app.get("/auth/logout", function(req, res) {
 	req.logout();
+	req.session.destroy();
 	return res.status(200).json({
 		status: "success",
-		message: `Logged out user`,
+		message: "Logged out user",
 	});
 });
 
