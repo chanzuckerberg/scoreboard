@@ -52,7 +52,19 @@ export class ChallengeTabs extends React.Component {
 				/>
 			);
 		} else if (this.state.active === "submit") {
-			content = <ChallengeFormTab key="submission" challenge={this.props.challenge} />;
+			console.log("Userid", this.props.userID);
+			if (this.props.userID && this.props.userID > -1) {
+				content = <ChallengeFormTab key="submission" challenge={this.props.challenge} />;
+			} else {
+				content = (
+					<div
+						className="col-md-12 tab-content"
+						style={{ borderColor: this.props.challenge.color }}
+					>
+						You must be logged in to submit an entry
+					</div>
+				);
+			}
 		}
 		content = [
 			content,
