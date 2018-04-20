@@ -17,7 +17,7 @@ const validate = values => {
 	}
 	if (!values.repo) {
 		errors.repo = "Github Repo is required";
-	} else if (values.repo.indexOf("github.com")) {
+	} else if (values.repo.indexOf("github.com") === -1) {
 		errors.repo = "Github Repo must contain a valid link to a github repo.";
 	}
 	if (!values.results) {
