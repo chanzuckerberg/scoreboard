@@ -5,7 +5,7 @@ import { Tree } from "./Tree.jsx";
 export const About = props => {
 	return (
 		<div style={{ borderColor: props.color }} className="tab-content">
-			<p>{props.content}</p>
+			<p dangerouslySetInnerHTML={{ __html: props.content }} />
 		</div>
 	);
 };
