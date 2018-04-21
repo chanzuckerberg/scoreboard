@@ -35,19 +35,19 @@ export const Datasets = props => {
 	let descriptions = "";
 	let treeData = "";
 	if (props.dataset) {
-		props.datasets.map(dataset => {
-		return (
-			<p key={`description_${dataset.id}`}>
-				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
-			</p>
-		);
-	});
+		descriptions = props.datasets.map(dataset => {
+			return (
+				<p key={`description_${dataset.id}`}>
+					<span className="dataset-name">{dataset.name}</span>: {dataset.description}
+				</p>
+			);
+		});
 		treeData = [].concat.apply(
-		[],
-		props.datasets.map(dataset => {
-			return dataset.tree;
-		})
-	);
+			[],
+			props.datasets.map(dataset => {
+				return dataset.tree;
+			})
+		);
 	}
 	// Combine and flatten tree data
 
@@ -59,9 +59,9 @@ export const Datasets = props => {
 			<Tree tree={treeData} />
 			<br />
 			<a href={props.data_path}>
-			<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
-				Download ({props.downloadsize})
-			</Button>
+				<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
+					Download ({props.downloadsize})
+				</Button>
 			</a>
 		</div>
 	);

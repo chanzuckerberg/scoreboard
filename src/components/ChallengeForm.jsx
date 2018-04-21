@@ -56,11 +56,12 @@ const readFile = (results_file, submission_header, separator) => {
 			let contents = e.target.result;
 			const good_header = submission_header.join(separator);
 			let header = contents.substr(0, contents.indexOf("\n"));
-			if (header !== good_header) {
-				reject({ error: `Bad header in file, should be ${good_header}` });
-			} else {
-				resolve({ valid: true, error: "" });
-			}
+			resolve({ valid: true, error: "" });
+			// 	if (header !== good_header) {
+			// 		reject({ error: `Bad header in file, should be ${good_header}` });
+			// 	} else {
+			// 		resolve({ valid: true, error: "" });
+			// 	}
 		};
 		reader.onerror = function(e) {
 			reject({ error: "Error reading file" });
