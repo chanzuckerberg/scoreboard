@@ -47,8 +47,10 @@ passport.use(
 			callbackURL: "/auth/github/callback",
 		},
 		function(accessToken, refreshToken, profile, cb) {
-			const { displayName, username, emails } = profile;
-			let email = emails[0].value;
+			console.log("PROFILE", profile);
+			const { displayName, username } = profile;
+			let email = "";
+			if ("emails" in profile && profile.emails.length) email = profile.emails[0].value;
 			db.gitHubUser(username, email, displayName).then(user => {
 				return cb(null, user);
 			});

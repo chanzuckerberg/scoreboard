@@ -246,9 +246,13 @@ function gitHubUser(username, email, displayName) {
 						)
 						.then(data => {
 							return data;
+						})
+						.catch(err => {
+							console.log(`ERROR getting user`, err);
+							return null;
 						});
 				});
-			} else if (!user.email) {
+			} else if (!user.email && email) {
 				db.tx(t => {
 					return t
 						.one(
@@ -258,6 +262,10 @@ function gitHubUser(username, email, displayName) {
 						)
 						.then(data => {
 							return data;
+						})
+						.catch(err => {
+							console.log(`ERROR getting user`, err);
+							return null;
 						});
 				});
 			} else {
