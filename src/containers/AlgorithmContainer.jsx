@@ -58,28 +58,38 @@ export class Algorithms extends React.Component {
 	sortData() {
 		const sortAttr = this.props.sortSelection;
 		let sortedData = this.props.data.slice();
-		if (sortAttr === "Date Submitted") {
-			sortedData.sort(function(x, y) {
-				return y.submission_date - x.submission_date;
-			});
-		} else if (sortAttr === "Name") {
-			sortedData.sort(function(x, y) {
-				if (x.name.toLowerCase() < y.name.toLowerCase()) return -1;
-				if (x.name.toLowerCase() > y.name.toLowerCase()) return 1;
-				return 0;
-			});
-		} else if (sortAttr === "Submitter") {
-			sortedData.sort(function(x, y) {
-				if (x.user_name.toLowerCase() < y.user_name.toLowerCase()) return -1;
-				if (x.user_name.toLowerCase() > y.user_name.toLowerCase()) return 1;
-				return 0;
-			});
-		} else {
-			// Where can I get sort index from?
-			const sortIdx = parseInt(this.props.dataIdx) - this.ALGO_SORT_OPTIONS.length;
-			sortedData.sort(function(x, y) {
-				return y.score_data.data[sortIdx] - x.score_data.data[sortIdx];
-			});
+		try {
+			if (sortAttr === "Date Submitted") {
+				sortedData.sort(function(x, y) {
+					if (!x.submission_date) return 1;
+					if (!y.submission_date) return -1;
+					return y.submission_date - x.submission_date;
+				});
+			} else if (sortAttr === "Name") {
+				sortedData.sort(function(x, y) {
+					if (!x.name) return 1;
+					if (!y.name) return -1;
+					if (x.name.toLowerCase() < y.name.toLowerCase()) return -1;
+					if (x.name.toLowerCase() > y.name.toLowerCase()) return 1;
+					return 0;
+				});
+			} else if (sortAttr === "Submitter") {
+				sortedData.sort(function(x, y) {
+					if (!x.user_name) return 1;
+					if (!y.user_name) return -1;
+					if (x.user_name.toLowerCase() < y.user_name.toLowerCase()) return -1;
+					if (x.user_name.toLowerCase() > y.user_name.toLowerCase()) return 1;
+					return 0;
+				});
+			} else {
+				// Where can I get sort index from?
+				const sortIdx = parseInt(this.props.dataIdx) - this.ALGO_SORT_OPTIONS.length;
+				sortedData.sort(function(x, y) {
+					return y.score_data.data[sortIdx] - x.score_data.data[sortIdx];
+				});
+			}
+		} catch (error) {
+			console.error("Sort failed", error);
 		}
 		return sortedData;
 	}
