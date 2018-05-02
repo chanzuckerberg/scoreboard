@@ -42,7 +42,6 @@ export class ChallengeTabs extends React.Component {
 		if (this.state.active === "about") {
 			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
-				console.log(this.props)
 			content = (
 				<Datasets
 					key="dataset"
@@ -60,6 +59,7 @@ export class ChallengeTabs extends React.Component {
 			} else {
 				content = (
 					<div
+						key="submission-login-message"
 						className="col-md-12 tab-content"
 						style={{ borderColor: this.props.challenge.color }}
 					>
