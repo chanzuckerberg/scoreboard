@@ -147,7 +147,8 @@ function submitResults(req, res, next) {
 						// node couldn't execute the command
 						console.log("Error", err);
 						res.status(422).json({
-							_error: err,
+							_error: "Scoring failed. Please contact an administrator",
+							results: "Docker failed to run",
 						});
 					} else {
 						// the *entire* stdout and stderr (buffered)
@@ -245,9 +246,13 @@ function gitHubUser(username, email, displayName) {
 						)
 						.then(data => {
 							return data;
+						})
+						.catch(err => {
+							console.log(`ERROR getting user`, err);
+							return null;
 						});
 				});
-			} else if (!user.email) {
+			} else if (!user.email && email) {
 				db.tx(t => {
 					return t
 						.one(
@@ -257,6 +262,10 @@ function gitHubUser(username, email, displayName) {
 						)
 						.then(data => {
 							return data;
+						})
+						.catch(err => {
+							console.log(`ERROR getting user`, err);
+							return null;
 						});
 				});
 			} else {
@@ -301,8 +310,20 @@ function _loadScore(form, data, filepath) {
 									return data.id;
 								});
 						} else {
-							// TODO or should I update it?
-							return submissionid.id;
+							// TODO or should I update it
+							const is_private = form.private === "true";
+							return t
+								.one(
+									"update submissions set  repository = $1, is_private = $2, institution = $3, publication = $4 where id = $5 RETURNING id",
+									[form.repo, is_private, form.institution, form.publications, submissionid.id]
+								)
+								.then(data => {
+									return data.id;
+								})
+								.catch(err => {
+									console.log(`ERROR `, err);
+									res.status(400).json("Oppse");
+								});
 						}
 					})
 					// insert new submission if not exists

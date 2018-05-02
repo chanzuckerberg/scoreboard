@@ -17,7 +17,7 @@ const validate = values => {
 	}
 	if (!values.repo) {
 		errors.repo = "Github Repo is required";
-	} else if (values.repo.indexOf("github.com")) {
+	} else if (values.repo.indexOf("github.com") === -1) {
 		errors.repo = "Github Repo must contain a valid link to a github repo.";
 	}
 	if (!values.results) {
@@ -56,11 +56,12 @@ const readFile = (results_file, submission_header, separator) => {
 			let contents = e.target.result;
 			const good_header = submission_header.join(separator);
 			let header = contents.substr(0, contents.indexOf("\n"));
-			if (header !== good_header) {
-				reject({ error: `Bad header in file, should be ${good_header}` });
-			} else {
-				resolve({ valid: true, error: "" });
-			}
+			resolve({ valid: true, error: "" });
+			// 	if (header !== good_header) {
+			// 		reject({ error: `Bad header in file, should be ${good_header}` });
+			// 	} else {
+			// 		resolve({ valid: true, error: "" });
+			// 	}
 		};
 		reader.onerror = function(e) {
 			reject({ error: "Error reading file" });

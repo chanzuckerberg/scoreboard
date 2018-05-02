@@ -5,7 +5,7 @@ import { Tree } from "./Tree.jsx";
 export const About = props => {
 	return (
 		<div style={{ borderColor: props.color }} className="tab-content">
-			<p>{props.content}</p>
+			<p dangerouslySetInnerHTML={{ __html: props.content }} />
 		</div>
 	);
 };
@@ -32,20 +32,25 @@ export const SubmitModal = props => {
 };
 
 export const Datasets = props => {
-	const descriptions = props.datasets.map(dataset => {
-		return (
-			<p key={`description_${dataset.id}`}>
-				<span className="dataset-name">{dataset.name}</span>: {dataset.description}
-			</p>
+	let descriptions = "";
+	let treeData = "";
+	if (props.dataset) {
+		descriptions = props.datasets.map(dataset => {
+			return (
+				<p key={`description_${dataset.id}`}>
+					<span className="dataset-name">{dataset.name}</span>: {dataset.description}
+				</p>
+			);
+		});
+		treeData = [].concat.apply(
+			[],
+			props.datasets.map(dataset => {
+				return dataset.tree;
+			})
 		);
-	});
+	}
 	// Combine and flatten tree data
-	const treeData = [].concat.apply(
-		[],
-		props.datasets.map(dataset => {
-			return dataset.tree;
-		})
-	);
+
 	return (
 		<div style={{ borderColor: props.color }} className="col-md-12 tab-content">
 			<div>Available datasets:</div>
@@ -53,9 +58,11 @@ export const Datasets = props => {
 			{descriptions}
 			<Tree tree={treeData} />
 			<br />
-			<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
-				Download ({props.downloadsize})
-			</Button>
+			<a href={props.data_path}>
+				<Button style={{ borderColor: props.color, backgroundColor: props.color }}>
+					Download ({props.downloadsize})
+				</Button>
+			</a>
 		</div>
 	);
 };
