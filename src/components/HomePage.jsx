@@ -24,7 +24,29 @@ export const Challenges = props => {
 			/>
 		);
 	});
-	return <div className="col-md-10 col-md-offset-1">{challenges}</div>;
+	let low_challenge_message = "";
+	const style = {
+		borderColor: "rgb(150,150,150)",
+		borderWidth: "3px",
+		borderStyle: "solid",
+	};
+	if (props.challenges.length <= 1) {
+		low_challenge_message = (
+			<div className="col-md-4 challenge">
+				<div className="challenge-box" style={style}>
+					<div className="challenge-info">
+						<div className="challenge-name">More challenges are on their way.</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+	return (
+		<div className="col-md-10 col-md-offset-1">
+			{challenges}
+			{low_challenge_message}
+		</div>
+	);
 };
 
 export const Challenge = props => {

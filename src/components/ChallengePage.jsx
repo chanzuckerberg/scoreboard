@@ -17,8 +17,7 @@ export const SubmitModal = props => {
 				<Modal.Title>Successful Submission</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				Thank you! Your submission is now in review. You will receive and e-mail when your entry is
-				availble to view on the bakeoff site.
+				Thank you! Your submission is now in review. Check back to see your submission when it is approved. 
 				<br />
 				<Button
 					style={{ borderColor: props.challenge.color, backgroundColor: props.challenge.color }}
