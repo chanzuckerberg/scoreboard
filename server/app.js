@@ -103,7 +103,7 @@ app.get("/api/ghuser", function(req, res) {
 			message: `Retrieved user ${req.user.id}`,
 		});
 	} else {
-		return res.status(400).json({
+		return res.status(200).json({
 			status: "fail",
 			message: `Failed to retrieve user, please login`,
 		});
