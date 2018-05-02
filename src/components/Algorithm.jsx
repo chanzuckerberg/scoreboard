@@ -18,7 +18,7 @@ export const Algorithm = props => {
 		return (
 			<div key={"score_" + idx} style={{ width: score_width + "%" }} className="single-score">
 				<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
-					{item.toFixed(2)}
+					{formatScore(item)}
 				</span>
 			</div>
 		);

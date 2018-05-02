@@ -14,11 +14,10 @@ export const linkOnClick = function(e) {
 	e.stopPropagation();
 };
 
-export const formatScore = function(score, sigfig) {
+export const formatScore = function(score, sigfig = 2) {
 	let formatted = "-";
 	try {
-		formatted = score.toFixed(sigfig)
-	}
-	catch (err) {}
-	return formatted
-}
+		formatted = score.toFixed(sigfig);
+	} catch (err) {}
+	return formatted;
+};
