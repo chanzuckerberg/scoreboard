@@ -13,3 +13,12 @@ export const unslugify = function(word) {
 export const linkOnClick = function(e) {
 	e.stopPropagation();
 };
+
+export const formatScore = function(score, sigfig) {
+	let formatted = "-";
+	try {
+		formatted = score.toFixed(sigfig)
+	}
+	catch (err) {}
+	return formatted
+}

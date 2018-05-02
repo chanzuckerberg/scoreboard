@@ -37,22 +37,26 @@ const adaptFileEventToValue = delegate => e => {
 	delegate(e.target.files[0]);
 };
 
-const asyncValidate = (values /*, dispatch */) => {
-	return readFile(values.results)
+const asyncValidate = (values, _, props) => {
+	return readFile(
+		values.results,
+		props.challenge.submission_header,
+		props.challenge.submission_separator
+	)
 		.then(valid => {})
 		.catch(error => {
 			throw { results: error.error };
 		});
 };
 
-const readFile = results_file => {
+const readFile = (results_file, submission_header, separator) => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.onload = function(e) {
 			let contents = e.target.result;
-			const good_header = "\tcall\tp_doublet";
+			const good_header = submission_header.join(separator);
 			let header = contents.substr(0, contents.indexOf("\n"));
-			if (header !== "\tcall\tp_doublet") {
+			if (header !== good_header) {
 				reject({ error: `Bad header in file, should be ${good_header}` });
 			} else {
 				resolve({ valid: true, error: "" });
@@ -152,18 +156,17 @@ const ChallengeForm = props => {
 					keep private
 				</label>
 				<div className="col-sm-6">
-					<Field
-						id="private"
-						name="private"
-						component={renderField}
-						type="checkbox"
-						value=""
-					/>
+					<Field id="private" name="private" component={renderField} type="checkbox" value="" />
 				</div>
 			</div>
 			<div className="form-group">
 				<div className="col-sm-offset-4 col-sm-6">
-					<button type="submit" disabled={submitting} className="btn btn-info">
+					<button
+						style={{ borderColor: props.challenge.color, backgroundColor: props.challenge.color }}
+						type="submit"
+						disabled={submitting}
+						className="btn"
+					>
 						Submit
 					</button>
 					<LoaderGif display={submitting} />

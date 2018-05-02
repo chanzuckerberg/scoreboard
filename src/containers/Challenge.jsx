@@ -4,10 +4,16 @@ import { Tabs } from "../components/Tabs.jsx";
 import { About, Datasets } from "../components/ChallengePage.jsx";
 import { ChallengeFormTab } from "../components/ChallengeFormTab.jsx";
 import { Algorithms } from "./AlgorithmContainer.jsx";
-import { config } from "../scoreboard.cfg";
-import { discourseify } from "../utils/utils";
 
-class ChallengeTabsClass extends React.Component {
+@connect(state => {
+	return {
+		challenge: state.selectedChallege.challenge,
+		challengeName: state.selectedChallege.challenge.name,
+		challengeId: state.selectedChallege.challenge.id,
+		userID: state.user.userId,
+	};
+})
+export class ChallengeTabs extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -19,12 +25,6 @@ class ChallengeTabsClass extends React.Component {
 	clickLink(e, data) {
 		const activetab = e.target.getAttribute("data-tabname");
 		// toggle if the new tab is the same as the old, otherwise switch tabs
-		if (activetab === "forum") {
-			// Forum isn't actually a tab, just a link in disguise
-			const challenge = discourseify(this.props.challengeName.toLowerCase());
-			window.open(`${config.general.forum}/c/${challenge}`);
-			return;
-		}
 		if (activetab === this.state.active) this.setState({ active: "" });
 		else this.setState({ active: activetab });
 	}
@@ -33,25 +33,38 @@ class ChallengeTabsClass extends React.Component {
 		let aboutContent = "";
 		let challengeColor = "rgb(110, 180, 255)";
 		if (this.props.challengeName) {
-			aboutContent = config.challenges[this.props.challengeName.toLowerCase()].about;
-			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
+			aboutContent = this.props.challenge.about;
+			challengeColor = this.props.challenge.color;
 		}
 		let content = "";
-		const dlSize = "83 GB";
-		const scoreCategories = ["Score 1", "Score 2", "Score 3", "Score 4", "Score 5", "Score 6"];
+		const dlSize = this.props.challenge.data_size;
+		const scoreCategories = this.props.challenge.scores || [];
 		if (this.state.active === "about") {
-			content = <About content={aboutContent} key="about" />;
+			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
 			content = (
-				<Datasets key="dataset" datasets={this.props.datasets} downloadsize={dlSize} />
-			);
-		} else if (this.state.active === "submit") {
-			content = (
-				<ChallengeFormTab
-					key="submission"
-					challengeName={this.props.challengeName.toLowerCase()}
+				<Datasets
+					key="dataset"
+					color={challengeColor}
+					challenge={this.props.challengeName.toLowerCase()}
+					datasets={this.props.datasets}
+					downloadsize={dlSize}
 				/>
 			);
+		} else if (this.state.active === "submit") {
+			console.log("Userid", this.props.userID);
+			if (this.props.userID && this.props.userID > -1) {
+				content = <ChallengeFormTab key="submission" challenge={this.props.challenge} />;
+			} else {
+				content = (
+					<div
+						className="col-md-12 tab-content"
+						style={{ borderColor: this.props.challenge.color }}
+					>
+						You must be logged in to submit an entry
+					</div>
+				);
+			}
 		}
 		content = [
 			content,
@@ -66,7 +79,7 @@ class ChallengeTabsClass extends React.Component {
 
 		return (
 			<Tabs
-				tabs={["about", "datasets", "submit", "forum"]}
+				tabs={["about", "datasets", "submit"]}
 				onclick={this.clickLink.bind(this)}
 				activetab={this.state.active}
 				content={content}
@@ -75,14 +88,3 @@ class ChallengeTabsClass extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { selectedChallege, user } = state;
-	return {
-		challengeName: selectedChallege.challenge.name,
-		challengeId: selectedChallege.challenge.id,
-		userID: user.userId,
-	};
-};
-
-export const ChallengeTabs = connect(mapStateToProps)(ChallengeTabsClass);

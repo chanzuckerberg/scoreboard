@@ -2,7 +2,6 @@ export const RECEIVE_CHALLENGES = "RECEIVE_CHALLENGES";
 export const RECEIVE_CHALLENGE = "RECEIVE_CHALLENGE";
 export const RECEIVE_SUBMISSIONS = "RECEIVE_SUBMISSIONS";
 export const RECEIVE_DATASETS = "RECEIVE_DATASETS";
-export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const SORT_ALGORTIHMS = "SORT_ALGORTIHMS";
 export const TOGGLE_ALOGRITHM_ACTIVATION = "TOGGLE_ALOGRITHM_ACTIVATION";
@@ -10,13 +9,13 @@ export const ADMIN_APPROVE_ALOGRITHM = "ADMIN_APPROVE_ALOGRITHM";
 export const RECIEVE_USER = "RECIEVE_USER";
 export const NODE = "NODE";
 
-const base_url = "http://localhost:9000";
-const challenges_url = `${base_url}/api/challenges`;
-const challenge_url = `${base_url}/api/challenge`;
-const submissions_url = `${base_url}/api/submissions`;
-const user_url = `${base_url}/api/user`;
-const dataset_url = `${base_url}/api/datasets`;
-const approve_url = `${base_url}/api/approve`;
+const challenges_url = "/api/challenges";
+const challenge_url = "/api/challenge";
+const submissions_url = "/api/submissions";
+const ghuser_url = "/api/ghuser";
+const dataset_url = "/api/datasets";
+const approve_url = "/api/approve";
+const logout_url = "/auth/logout";
 
 // Get all challenges for homepage
 
@@ -25,6 +24,12 @@ const receiveChallenges = json => ({
 	challenges: json.data,
 	receivedAt: Date.now(),
 });
+
+export const initializeHomepage = () => {
+	return dispatch => {
+		return Promise.all([dispatch(fetchUser()), dispatch(fetchChallenges())]);
+	};
+};
 
 export const fetchChallenges = () => {
 	return dispatch => {
@@ -36,13 +41,20 @@ export const fetchChallenges = () => {
 	};
 };
 
-export const login = profile => {
-	// add user if none exists
+export const fetchUser = () => {
 	return dispatch => {
-		return fetch(`${user_url}?id=${profile.id}&name=${profile.name}&email=${profile.email}`)
-			.then(response => response.json())
+		return fetch(ghuser_url, { credentials: "same-origin" })
+			.then(response => {
+				if (response.status >= 400 && response.status < 600) {
+					throw new Error("No user");
+				}
+				return response.json();
+			})
 			.then(json => {
 				dispatch(recieveUser(json));
+			})
+			.catch(() => {
+				console.log("No user logged in");
 			});
 	};
 };
@@ -53,7 +65,16 @@ const recieveUser = user => ({
 	user,
 });
 
-export const logout = () => ({
+export const logout = () => {
+	return dispatch => {
+		return fetch(logout_url)
+			.then(response => response.json())
+			.then(json => {
+				dispatch(serverLogout());
+			});
+	};
+};
+const serverLogout = () => ({
 	type: LOGOUT,
 });
 
@@ -116,6 +137,7 @@ export const fetchOneChallenge = challenge_id => {
 			dispatch(fetchSubmissions(challenge_id)),
 			dispatch(fetchDatasets(challenge_id)),
 			dispatch(fetchChallengeInfo(challenge_id)),
+			dispatch(fetchUser()),
 		]);
 	};
 };

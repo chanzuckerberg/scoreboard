@@ -4,10 +4,19 @@ import { slugify } from "../utils/utils";
 import { Algorithm } from "../components/Algorithm.jsx";
 import { SortPane } from "../components/SortPane.jsx";
 import { sortAlgorithms, toggleAlgortirhmActivation, approveOrRejectSubmission } from "../actions";
-import { config } from "../scoreboard.cfg";
 import { linkOnClick } from "../utils/utils";
 
-class AlgorithmsContainer extends React.Component {
+@connect(state => {
+	return {
+		submissions: state.submissionData.submissions,
+		sortSelection: state.submissionData.sortBy,
+		dataIdx: state.submissionData.dataIdx,
+		challengeName: state.selectedChallege.challenge.name,
+		challengeId: state.selectedChallege.challenge.id,
+		challenge: state.selectedChallege.challenge,
+	};
+})
+export class Algorithms extends React.Component {
 	constructor(props) {
 		super(props);
 		let activeIndicies = {};
@@ -77,9 +86,6 @@ class AlgorithmsContainer extends React.Component {
 
 	render() {
 		let sortedData = this.sortData();
-		let challengeColor = "rgb(110, 180, 255)";
-		if (this.props.challengeName)
-			challengeColor = config.challenges[this.props.challengeName.toLowerCase()].color;
 		const algorithms = sortedData.map(item => {
 			if (
 				((item.is_accepted && !item.is_private) ||
@@ -92,7 +98,7 @@ class AlgorithmsContainer extends React.Component {
 						active={item.active}
 						key={"submission_" + item.id}
 						data={item}
-						color={challengeColor}
+						challenge={this.props.challenge}
 						approve={this.approveRejectOnClick.bind(this)}
 						activate={this.activateIndex.bind(this, item.id)}
 					/>
@@ -107,11 +113,15 @@ class AlgorithmsContainer extends React.Component {
 				onSortSelect={this.onclick.bind(this)}
 			/>
 		);
+		const category_width =
+			this.props.categories && this.props.categories.length
+				? 100 / this.props.categories.length
+				: 0;
 		const dataCategories = this.props.categories.map(item => {
 			return (
 				<div
 					className="dataset-text"
-					style={{ width: "16.66%" }}
+					style={{ width: category_width + "%" }}
 					key={"algo_data_" + slugify(item)}
 				>
 					{item}
@@ -123,8 +133,8 @@ class AlgorithmsContainer extends React.Component {
 			<div>
 				<div className="overview">
 					<div className="overview-description">
-						Each panel shows results for a different algorithm. Click a panel to see
-						more info. Columns are scores, and rows are datasets.
+						Each panel shows results for a different algorithm. Click a panel to see more info.
+						Columns are scores, and rows are datasets.
 					</div>
 					<div className="overview-sort">{sortPane}</div>
 				</div>
@@ -140,16 +150,3 @@ class AlgorithmsContainer extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = function(state) {
-	const { submissionData, selectedChallege } = state;
-	return {
-		submissions: submissionData.submissions,
-		sortSelection: submissionData.sortBy,
-		dataIdx: submissionData.dataIdx,
-		challengeName: selectedChallege.challenge.name,
-		challengeId: selectedChallege.challenge.id,
-	};
-};
-
-export const Algorithms = connect(mapStateToProps)(AlgorithmsContainer);
