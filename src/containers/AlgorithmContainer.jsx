@@ -14,6 +14,7 @@ import { linkOnClick } from "../utils/utils";
 		challengeName: state.selectedChallege.challenge.name,
 		challengeId: state.selectedChallege.challenge.id,
 		challenge: state.selectedChallege.challenge,
+		userId: state.user.userId,
 	};
 })
 export class Algorithms extends React.Component {
