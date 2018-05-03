@@ -9,7 +9,7 @@ export const Algorithm = props => {
 	if (props.data.score_data.data.length > 0) {
 		score_count = props.data.score_data.data.length;
 		if (score_count > 10) score_count = 10;
-		score_width = 100 / score_count;
+		score_width = 100 / (score_count + 1);
 	}
 	const algoColor = props.challenge.color || "#999999";
 	let scores = props.data.score_data.data.map((item, idx) => {
@@ -23,13 +23,19 @@ export const Algorithm = props => {
 			</div>
 		);
 	});
+
+	scores.unshift(
+		<div key={"score_label"} style={{ width: score_width + "%" }} className="single-score">
+			<span className="score-span score-category">Combined scores</span>
+		</div>
+	);
 	let activeClass = props.active ? "algorithm-selected" : "";
 	let privateClass = props.data.is_private ? " algorithm-private" : "";
 	let detailedScores = "";
 	let detailedInfo = "";
 	if (props.active) {
 		if ("additionalData" in props.data.score_data) {
-			detailedScores = props.data.score_data.additionalData.map((item, idx) => {
+			const detailedScoresInner = props.data.score_data.additionalData.map((item, idx) => {
 				let eachDetailedScore = item.map((item2, idx2) => {
 					let bgColor = colorScale(algoColor, item2);
 					let text = textColor(bgColor);
@@ -45,12 +51,26 @@ export const Algorithm = props => {
 						</div>
 					);
 				});
+				eachDetailedScore.unshift(
+					<div
+						key={"score_" + idx + "_label"}
+						style={{ width: score_width + "%" }}
+						className="single-score"
+					>
+						<span className="score-span score-category">{props.challenge.subscores[idx]}</span>
+					</div>
+				);
 				return (
-					<div key={"detailed_score_" + idx} className="row">
+					<div key={"detailed_score_" + idx} className="row" style={{ marginBottom: "10px" }}>
 						{eachDetailedScore}
 					</div>
 				);
 			});
+			detailedScores = (
+				<div className="detailed-scores" style={{ marginTop: "20px" }}>
+					{detailedScoresInner}
+				</div>
+			);
 		}
 		let publications = "";
 		if (props.data.publication) {
@@ -125,7 +145,7 @@ export const Algorithm = props => {
 					</div>
 					<div className="col-sm-9 scores">
 						<div className="row">{scores}</div>
-						<div className="detailed-scores">{detailedScores}</div>
+						{detailedScores}
 					</div>
 					{approveButton}
 				</div>

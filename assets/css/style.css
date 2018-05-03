@@ -351,13 +351,21 @@ a:hover {
 	padding-right: 1%;
 }
 
+.score-category {
+	font-weight: 500 !important;
+	background-color: #eeeeee;
+	color: rgb(81, 82, 84);
+	text-align: left !important;
+	/*text-transform: uppercase;*/
+}
+
 .scores {
 	padding-right: 3% !important;
 }
 
 .score-span {
 	font-weight: 400;
-	padding: 10px;
+	padding: 8px;
 	display: inline-block;
 	text-align: center;
 	width: 100%;
@@ -383,6 +391,7 @@ a:hover {
 .dataset-text {
 	text-transform: uppercase;
 	font-style: italic;
+	font-weight: 500;
 	font-size: 85%;
 	margin-top: 3px;
 	margin-bottom: 3px;
