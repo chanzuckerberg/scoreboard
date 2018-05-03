@@ -47,7 +47,6 @@ passport.use(
 			callbackURL: "/auth/github/callback",
 		},
 		function(accessToken, refreshToken, profile, cb) {
-			console.log("PROFILE", profile);
 			const { displayName, username } = profile;
 			let email = "";
 			if ("emails" in profile && profile.emails.length) email = profile.emails[0].value;
