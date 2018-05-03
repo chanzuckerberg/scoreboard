@@ -72,7 +72,7 @@ function getSubmissions(req, res, next) {
 	const challengeID = parseInt(req.params.challegeid);
 	db
 		.any(
-			"select u.name as user_name, s.*, r.results_path, r.score_data, r.submission_date from submissions s join users u on u.id = s.user_id join results r on s.id = r.submission_id where s.challenge_id = $1 and r.is_current = True",
+			"select coalesce(u.name, u.github_username) as user_name, u.github_username, s.*, r.results_path, r.score_data, r.submission_date from submissions s join users u on u.id = s.user_id join results r on s.id = r.submission_id where s.challenge_id = $1 and r.is_current = True",
 			challengeID
 		)
 		.then(function(data) {
