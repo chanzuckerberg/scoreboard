@@ -126,9 +126,9 @@ export class Algorithms extends React.Component {
 		);
 		const category_width =
 			this.props.categories && this.props.categories.length
-				? 100 / this.props.categories.length
+				? 100 / (this.props.categories.length + 1)
 				: 0;
-		const dataCategories = this.props.categories.map(item => {
+		let dataCategories = this.props.categories.map(item => {
 			return (
 				<div
 					className="dataset-text"
@@ -139,6 +139,11 @@ export class Algorithms extends React.Component {
 				</div>
 			);
 		});
+		dataCategories.unshift(
+			<div className="dataset-text" style={{ width: category_width + "%" }} key={"algo_data_label"}>
+				Type
+			</div>
+		);
 
 		return (
 			<div>

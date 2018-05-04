@@ -49,6 +49,7 @@ class Challenge(Base):
     submission_header = Column(JSONB)
     submission_separator = Column(String, default=",")
     scores = Column(JSONB)
+    subscores = Column(JSONB)
     start_date = Column(DateTime, nullable=False, server_default=func.now())
     end_date = Column(DateTime)
     is_open = Column(Boolean, nullable=False, default=True)
