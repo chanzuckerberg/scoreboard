@@ -88,6 +88,13 @@ function getSubmissions(req, res, next) {
 }
 
 function approveAlgorithm(req, res, next) {
+	// Error if no user logged in or user not an admin
+	if (!"user" in req) {
+		return res.status(400).json("Must be logged in");
+	}
+	if ("user" in req && !req.user.is_admin) {
+		return res.status(400).json("User does not have permission to approve or reject algorithm");
+	}
 	let errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json(errors);
