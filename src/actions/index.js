@@ -51,6 +51,9 @@ export const fetchUser = () => {
 				return response.json();
 			})
 			.then(json => {
+				if (!"data" in json) {
+					throw new Error("No user");
+				}
 				dispatch(recieveUser(json));
 			})
 			.catch(() => {
