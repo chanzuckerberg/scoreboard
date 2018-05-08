@@ -99,7 +99,7 @@ export const Algorithm = props => {
 	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
 	const approveButton = props.data.is_accepted ? (
 		""
-	) : (
+	) : props.isAdmin ? (
 		<div className="admin-approve-container">
 			<Button
 				onClick={props.approve}
@@ -123,7 +123,14 @@ export const Algorithm = props => {
 				Reject
 			</Button>
 		</div>
+	) : (
+		<div className="admin-approve-container">
+			<div style={{ opacity: "100%" }}>
+				Under<br />Review
+			</div>
+		</div>
 	);
+
 	return (
 		<div>
 			<div
