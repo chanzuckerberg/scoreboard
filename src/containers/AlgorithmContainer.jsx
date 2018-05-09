@@ -101,12 +101,13 @@ export class Algorithms extends React.Component {
 			if (
 				((item.is_accepted && !item.is_private) ||
 					this.props.isAdmin ||
-					(item.is_private && item.user_id === this.props.userId)) &&
+					item.user_id === this.props.userId) &&
 				"data" in item.score_data
 			) {
 				return (
 					<Algorithm
 						active={item.active}
+						isAdmin={this.props.isAdmin}
 						key={"submission_" + item.id}
 						data={item}
 						challenge={this.props.challenge}

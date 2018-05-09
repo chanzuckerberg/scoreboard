@@ -97,33 +97,43 @@ export const Algorithm = props => {
 		];
 	}
 	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
-	const approveButton = props.data.is_accepted ? (
-		""
-	) : (
-		<div className="admin-approve-container">
-			<Button
-				onClick={props.approve}
-				className="admin-approve admin-approve-button"
-				bsSize="xsmall"
-				bsStyle="success"
-				data-submissionid={props.data.id}
-				data-approve={true}
-			>
-				Approve
-			</Button>
-			<br />
-			<Button
-				onClick={props.approve}
-				className="admin-approve admin-reject-button"
-				bsSize="xsmall"
-				bsStyle="danger"
-				data-submissionid={props.data.id}
-				data-approve={false}
-			>
-				Reject
-			</Button>
-		</div>
-	);
+	let reviewSection = "";
+	if (!props.data.is_accepted) {
+		if (props.isAdmin) {
+			reviewSection = (
+				<div className="admin-approve-container">
+					<Button
+						onClick={props.approve}
+						className="admin-approve admin-approve-button"
+						bsSize="xsmall"
+						bsStyle="success"
+						data-submissionid={props.data.id}
+						data-approve={true}
+					>
+						Approve
+					</Button>
+					<br />
+					<Button
+						onClick={props.approve}
+						className="admin-approve admin-reject-button"
+						bsSize="xsmall"
+						bsStyle="danger"
+						data-submissionid={props.data.id}
+						data-approve={false}
+					>
+						Reject
+					</Button>
+				</div>
+			);
+		} else {
+			reviewSection = (
+				<div className="admin-approve-container">
+					Under<br />Review
+				</div>
+			);
+		}
+	}
+
 	return (
 		<div>
 			<div
@@ -147,7 +157,7 @@ export const Algorithm = props => {
 						<div className="row">{scores}</div>
 						{detailedScores}
 					</div>
-					{approveButton}
+					{reviewSection}
 				</div>
 			</div>
 		</div>

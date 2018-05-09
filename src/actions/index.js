@@ -169,6 +169,7 @@ export const approveOrRejectSubmission = (submissionid, approved, challengeid) =
 				"content-type": "application/json",
 			},
 			body: JSON.stringify({ submissionid, approved: approvedBool }),
+			credentials: "include",
 		})
 			.then(response => {
 				console.log(response);
