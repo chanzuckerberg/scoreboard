@@ -18,7 +18,7 @@ function getChallenges(req, res, next) {
 			"select c.id, c.name, c.description, c.image, c.color, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
 				"from challenges c " +
 				"left join datasets d on (d.challenge_id = c.id) " +
-				"left join submissions s on (s.challenge_id = c.id) " +
+				"left join submissions s on (s.challenge_id = c.id and s.is_accepted = True and s.is_private = False)" +
 				"where c.is_open = True " +
 				"group by c.id " +
 				"order by c.id"
