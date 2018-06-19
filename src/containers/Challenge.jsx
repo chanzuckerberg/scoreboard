@@ -11,6 +11,7 @@ import { Algorithms } from "./AlgorithmContainer.jsx";
 		challengeName: state.selectedChallege.challenge.name,
 		challengeId: state.selectedChallege.challenge.id,
 		userID: state.user.userId,
+		datasets: state.datasetData.datasets,
 	};
 })
 export class ChallengeTabs extends React.Component {
@@ -42,19 +43,17 @@ export class ChallengeTabs extends React.Component {
 		if (this.state.active === "about") {
 			content = <About color={challengeColor} content={aboutContent} key="about" />;
 		} else if (this.state.active === "datasets") {
-				console.log(this.props)
 			content = (
 				<Datasets
 					key="dataset"
 					color={challengeColor}
 					challenge={this.props.challengeName.toLowerCase()}
-					datasets={this.props.challenge.datasets}
+					datasets={this.props.datasets}
 					data_path={this.props.challenge.data_path}
 					downloadsize={dlSize}
 				/>
 			);
 		} else if (this.state.active === "submit") {
-			console.log("Userid", this.props.userID);
 			if (this.props.userID && this.props.userID > -1) {
 				content = <ChallengeFormTab key="submission" challenge={this.props.challenge} />;
 			} else {
