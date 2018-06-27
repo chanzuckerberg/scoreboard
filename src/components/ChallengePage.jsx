@@ -33,7 +33,7 @@ export const SubmitModal = props => {
 export const Datasets = props => {
 	let descriptions = "";
 	let treeData = "";
-	if (props.dataset) {
+	if (props.datasets) {
 		descriptions = props.datasets.map(dataset => {
 			return (
 				<p key={`description_${dataset.id}`}>
