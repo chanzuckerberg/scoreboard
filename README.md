@@ -14,3 +14,5 @@ To run it locally, clone this repo then type
     node server
     # go to http://127.0.0.1:9000/
     
+
+For questions and support: cweaver@chanzuckerberg.com
