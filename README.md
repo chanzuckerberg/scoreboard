@@ -4,7 +4,9 @@
 
 Scoreboard is a web application to view and submit ML algorithms solutions to challenges. 
 
-To run
+See an example deployment here: http://hpa.scoreboard.czi.technology/challenge/1
+
+To run it locally, clone this repo then type
 
     npm install
     
