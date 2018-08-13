@@ -9,11 +9,11 @@ import os
 import json
 
 database = {
-    'pg_user': os.environ['PG_USERNAME'],
-    'pg_pass': os.environ['PG_PASSWORD'],
-    'pg_host': os.environ.get('PG_HOST', 'localhost'),
-    'pg_port':  os.environ.get('PG_PORT', 5432),
-    'pg_database': os.environ.get('PG_DATABASE', 'scoreboard')
+    'pg_user': os.environ['SCOREBOARD_PG_USERNAME'],
+    'pg_pass': os.environ['SCOREBOARD_PG_PASSWORD'],
+    'pg_host': os.environ.get('SCOREBOARD_PG_HOST', 'localhost'),
+    'pg_port':  os.environ.get('SCOREBOARD_PG_PORT', 5432),
+    'pg_database': os.environ.get('SCOREBOARD_PG_DATABASE', 'scoreboard')
 }
 
 
