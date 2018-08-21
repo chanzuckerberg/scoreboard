@@ -15,6 +15,7 @@ const { check } = require("express-validator/check");
 const bodyParser = require("body-parser");
 const { sanitize } = require("express-validator/filter");
 
+
 const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 
@@ -32,6 +33,11 @@ const jsonParser = bodyParser.json();
 
 app.use(expressSession({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
 app.use(cookieParser());
+
+//setup email templates
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 
 //Setup Passport
 // Initialize Passport and restore authentication state, if any, from the

@@ -2,6 +2,7 @@ const path = require("path");
 const { exec } = require("child_process");
 const { validationResult } = require("express-validator/check");
 const pgp = require("pg-promise")();
+const emailer = require("./emails.js");
 
 const connection = {
 	host: process.env.SCOREBOARD_PG_HOST || "localhost",
@@ -179,6 +180,7 @@ function submitResults(req, res, next) {
 				}
 			);
 		});
+	emailer.sendEmail();
 	return res.status(200);
 }
 

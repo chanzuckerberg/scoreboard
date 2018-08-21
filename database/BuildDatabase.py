@@ -12,7 +12,7 @@ database = {
     'pg_user': os.environ['SCOREBOARD_PG_USERNAME'],
     'pg_pass': os.environ['SCOREBOARD_PG_PASSWORD'],
     'pg_host': os.environ.get('SCOREBOARD_PG_HOST', 'localhost'),
-    'pg_port':  os.environ.get('SCOREBOARD_PG_PORT', 5432),
+    'pg_port':  os.environ.get('SCOREBOARD_PG_PORT', 5433),
     'pg_database': os.environ.get('SCOREBOARD_PG_DATABASE', 'scoreboard')
 }
 
@@ -20,6 +20,8 @@ database = {
 # Build database
 engine = create_engine(
     "postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_database}".format(**database))
+
+print(engine)
 
 Base = declarative_base()
 
@@ -108,6 +110,7 @@ for challenge in initialize_data["challenges"]:
     session.flush()
     session.refresh(new_challenge)
     challenge_id = new_challenge.id
+    print(challenge_id)
     for dataset in datasets:
         dataset["challenge_id"] = challenge_id
         new_dataset = Dataset(**dataset)
