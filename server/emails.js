@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendSubmissionEmail = transporter.templateSender(
-    new EmailTemplate( __dirname +'/email_templates/testMailTemplate'), {
+    new EmailTemplate( './email_templates/testMailTemplate'), {
         from: 'testingscoreboard@gmail.com',
     });
 
