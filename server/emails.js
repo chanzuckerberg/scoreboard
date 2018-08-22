@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendSubmissionEmail = transporter.templateSender(
-    new EmailTemplate('/Users/shannonaxelrod/dev/scoreboard/server/email_templates/testMailTemplate'), {
+    new EmailTemplate( __dirname +'/email_templates/testMailTemplate'), {
         from: 'testingscoreboard@gmail.com',
     });
 
@@ -30,23 +30,6 @@ function sendEmail (email, username, name, tokenUrl) {
     });
 };
 
-// const mailOptions = {
-//     from: 'testingscoreboard@gmail.com',
-//     to: 'shannon.axelrod@chanzuckerberg.com',
-//     subject: 'Scoreboard Submission Received',
-//     text: "Thank you! Your submission is now in review. We will send you another email  when it is approved."
-// };
-//
-// function sendEmail(email, template) {
-//     const hi = "test";
-//     transporter.sendMail(mailOptions, function(error, info){
-//         if (error) {
-//             console.log(error);
-//         } else {
-//             console.log('Email sent: ' + info.response);
-//         }
-//     });
-// }
 
 module.exports = {
     sendEmail
