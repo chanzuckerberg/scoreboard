@@ -1,42 +1,40 @@
 const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates-v2').EmailTemplate;
 
+const scoreboardAdminEmail = process.env.SCOREBOARD_ADMIN_EMAIL;
+const scoreboardAdminEmailProvider = process.env.SCOREBOARD_ADMIN_EMAIL_PROVIDER;
+const scoreboardAdminPass = process.env.SCOREBOARD_ADMIN_PASS;
+
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: scoreboardAdminEmailProvider,
     auth: {
-        user: 'testingscoreboard@gmail.com',
-        pass: '#123456abc'
+        user: scoreboardAdminEmail,
+        pass: scoreboardAdminPass
     }
 });
 
-const sendSubmissionEmail = transporter.templateSender(
+const submissionEmail = transporter.templateSender(
     new EmailTemplate( './email_templates/submissionEmail'), {
-        from: 'testingscoreboard@gmail.com',
+        from: scoreboardAdminEmail,
     });
 
 const sendApprovedEmail = transporter.templateSender(
     new EmailTemplate( './email_templates/approvedEmail'), {
-        from: 'testingscoreboard@gmail.com',
+        from: scoreboardAdminEmail,
     });
 
 const submissionToReviewEmail = transporter.templateSender(
     new EmailTemplate( './email_templates/submissionToReviewEmail'), {
-        from: 'testingscoreboard@gmail.com',
+        from: scoreboardAdminEmail,
     });
 
-const EmailType = {
-    SUBMISSION: sendSubmissionEmail,
-    APPROVED: sendApprovedEmail,
-    NEEDS_REVIEW: submissionToReviewEmail};
 
-
-function sendEmail(emailTransporter, userID) {
-    emailTransporter({
-        to: "shannon.axelrod@chanzuckerberg.com", //email variable would go here
-        subject: 'Submission Received'
+function sendSubmissionToReviewEmail() {
+    submissionToReviewEmail({
+        to: scoreboardAdminEmail,
+        subject: 'New Submission Needs Review'
     }, {
-        userName: "WHADUP TESTING",
-        teamName: "Chan Zuckerberg"
+        linkToReview: "?",
     }, function (err, info) {
         if (err) {
             console.log(err)
@@ -44,10 +42,26 @@ function sendEmail(emailTransporter, userID) {
             console.log('Link sent\n' + JSON.stringify(info));
         }
     });
-};
+}
 
+function sendSubmissionEmails(user) {
+    // const user = req.user;
+    submissionEmail({
+        to: user.email,
+        subject: 'Submission Received'
+    }, {
+        userName: user.github_username,
+        teamName: "Chan Zuckerberg"
+    }, function (err, info) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log('Link sent\n' + JSON.stringify(info));
+            sendSubmissionToReviewEmail()
+        }
+    });
+}
 
 module.exports = {
-    EmailType,
-    sendEmail
+    sendSubmissionEmails
 };
