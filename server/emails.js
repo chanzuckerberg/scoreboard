@@ -18,7 +18,7 @@ const submissionEmail = transporter.templateSender(
         from: scoreboardAdminEmail,
     });
 
-const sendApprovedEmail = transporter.templateSender(
+const approvedEmail = transporter.templateSender(
     new EmailTemplate( './email_templates/approvedEmail'), {
         from: scoreboardAdminEmail,
     });
@@ -27,6 +27,21 @@ const submissionToReviewEmail = transporter.templateSender(
     new EmailTemplate( './email_templates/submissionToReviewEmail'), {
         from: scoreboardAdminEmail,
     });
+
+function sendApprovedEmail() {
+    approvedEmail({
+        to: "??",
+        subject: 'Your Submission has been approved'
+    }, {
+        linkToSubmission: "?",
+    }, function (err, info) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log('Link sent\n' + JSON.stringify(info));
+        }
+    });
+}
 
 
 function sendSubmissionToReviewEmail() {
@@ -63,5 +78,6 @@ function sendSubmissionEmails(user) {
 }
 
 module.exports = {
-    sendSubmissionEmails
+    sendSubmissionEmails,
+    sendApprovedEmail
 };

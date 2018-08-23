@@ -123,6 +123,7 @@ function approveAlgorithm(req, res, next) {
 				res.status(400).json("Delete failed for submission");
 			});
 	}
+    // emailer.sendApprovedEmail();
 }
 
 function submitResults(req, res, next) {

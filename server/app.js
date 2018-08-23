@@ -54,7 +54,7 @@ passport.use(
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { displayName, username } = profile;
-			let email = "shannon.axelrod@chanzuckerberg.com";
+			let email = "";
 			if ("emails" in profile && profile.emails.length) email = profile.emails[0].value;
 			db.gitHubUser(username, email, displayName).then(user => {
 				return cb(null, user);
