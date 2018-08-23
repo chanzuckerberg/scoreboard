@@ -21,8 +21,6 @@ database = {
 engine = create_engine(
     "postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_database}".format(**database))
 
-print(engine)
-
 Base = declarative_base()
 
 class User(Base):
@@ -110,7 +108,6 @@ for challenge in initialize_data["challenges"]:
     session.flush()
     session.refresh(new_challenge)
     challenge_id = new_challenge.id
-    print(challenge_id)
     for dataset in datasets:
         dataset["challenge_id"] = challenge_id
         new_dataset = Dataset(**dataset)
