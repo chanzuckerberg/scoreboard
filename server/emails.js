@@ -10,27 +10,44 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendSubmissionEmail = transporter.templateSender(
-    new EmailTemplate( './email_templates/testMailTemplate'), {
+    new EmailTemplate( './email_templates/submissionEmail'), {
         from: 'testingscoreboard@gmail.com',
     });
 
-function sendEmail (email, username, name, tokenUrl) {
-    // transporter.template
-    sendSubmissionEmail({
+const sendApprovedEmail = transporter.templateSender(
+    new EmailTemplate( './email_templates/approvedEmail'), {
+        from: 'testingscoreboard@gmail.com',
+    });
+
+const submissionToReviewEmail = transporter.templateSender(
+    new EmailTemplate( './email_templates/submissionToReviewEmail'), {
+        from: 'testingscoreboard@gmail.com',
+    });
+
+const EmailType = {
+    SUBMISSION: sendSubmissionEmail,
+    APPROVED: sendApprovedEmail,
+    NEEDS_REVIEW: submissionToReviewEmail};
+
+
+function sendEmail(emailTransporter, userID) {
+    emailTransporter({
         to: "shannon.axelrod@chanzuckerberg.com", //email variable would go here
         subject: 'Submission Received'
     }, {
         userName: "WHADUP TESTING",
+        teamName: "Chan Zuckerberg"
     }, function (err, info) {
         if (err) {
             console.log(err)
         } else {
-            console.log('Link sent\n'+ JSON.stringify(info));
+            console.log('Link sent\n' + JSON.stringify(info));
         }
     });
 };
 
 
 module.exports = {
+    EmailType,
     sendEmail
 };

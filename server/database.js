@@ -112,6 +112,7 @@ function approveAlgorithm(req, res, next) {
 				console.log(`ERROR setting submission id ${submissionId} to true`, err);
 				res.status(400).json("Update failed for submission");
 			});
+        emailer.sendEmail(emailer.EmailType.APPROVED, req.body.userid);
 	} else {
 		db
 			.one("delete from submissions where id=$1 RETURNING id", submissionId)
@@ -180,9 +181,10 @@ function submitResults(req, res, next) {
 				}
 			);
 		});
-	emailer.sendEmail();
+	emailer.sendEmail(emailer.EmailType.SUBMISSION, req.body.userid);
 	return res.status(200);
 }
+
 
 function getUser(req, res, next) {
 	const query = req.query;
@@ -371,5 +373,5 @@ module.exports = {
 	getOneChallenge,
 	submitResults,
 	approveAlgorithm,
-	gitHubUser,
+	gitHubUser
 };
