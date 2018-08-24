@@ -1,32 +1,41 @@
 const nodemailer = require("nodemailer");
 const EmailTemplate = require('email-templates-v2').EmailTemplate;
+const db = require("./db.js");
 
-const scoreboardAdminEmail = process.env.SCOREBOARD_ADMIN_EMAIL;
-const scoreboardAdminEmailProvider = process.env.SCOREBOARD_ADMIN_EMAIL_PROVIDER;
-const scoreboardAdminPass = process.env.SCOREBOARD_ADMIN_PASS;
 
-const transporter = nodemailer.createTransport({
-    service: scoreboardAdminEmailProvider,
-    auth: {
-        user: scoreboardAdminEmail,
-        pass: scoreboardAdminPass
-    }
+var emailSettings;
+var transporter;
+var submissionEmail;
+var approvedEmail;
+var submissionToReviewEmail;
+
+
+db.getAdminEmailSettings().then(data => {
+    emailSettings = data;
+    transporter = nodemailer.createTransport({
+        service: emailSettings["email_provider"],
+        auth: {
+            user: emailSettings["email_address"],
+            pass: emailSettings["email_pass"]
+        }
+    });
+
+    submissionEmail = transporter.templateSender(
+        new EmailTemplate( './email_templates/submissionEmail'), {
+            from: emailSettings["email_address"],
+        });
+
+    approvedEmail = transporter.templateSender(
+        new EmailTemplate( './email_templates/approvedEmail'), {
+            from: emailSettings["email_address"],
+        });
+
+    submissionToReviewEmail = transporter.templateSender(
+        new EmailTemplate( './email_templates/submissionToReviewEmail'), {
+            from: emailSettings["email_address"],
+        });
 });
 
-const submissionEmail = transporter.templateSender(
-    new EmailTemplate( './email_templates/submissionEmail'), {
-        from: scoreboardAdminEmail,
-    });
-
-const approvedEmail = transporter.templateSender(
-    new EmailTemplate( './email_templates/approvedEmail'), {
-        from: scoreboardAdminEmail,
-    });
-
-const submissionToReviewEmail = transporter.templateSender(
-    new EmailTemplate( './email_templates/submissionToReviewEmail'), {
-        from: scoreboardAdminEmail,
-    });
 
 function sendApprovedEmail(submitterEmail) {
     approvedEmail({
@@ -46,7 +55,7 @@ function sendApprovedEmail(submitterEmail) {
 
 function sendSubmissionToReviewEmail() {
     submissionToReviewEmail({
-        to: scoreboardAdminEmail,
+        to: emailSettings["email_address"],
         subject: 'New Submission Needs Review'
     }, {
         linkToReview: "?",
