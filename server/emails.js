@@ -28,9 +28,9 @@ const submissionToReviewEmail = transporter.templateSender(
         from: scoreboardAdminEmail,
     });
 
-function sendApprovedEmail() {
+function sendApprovedEmail(submitterEmail) {
     approvedEmail({
-        to: "??",
+        to: submitterEmail,
         subject: 'Your Submission has been approved'
     }, {
         linkToSubmission: "?",

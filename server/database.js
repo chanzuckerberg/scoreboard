@@ -106,7 +106,14 @@ function approveAlgorithm(req, res, next) {
 		db
 			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
 			.then(data => {
-				res.sendStatus(204);
+				db.one("select u.email from users u inner join submissions s on s.user_id=u.id WHERE s.id=$1", submissionId)
+					.then(submitterEmail => {
+						emailer.sendApprovedEmail(submitterEmail)
+                        res.sendStatus(204);
+					})
+					.catch(err => {
+						console.log(err)
+					})
 			})
 			.catch(err => {
 				console.log(`ERROR setting submission id ${submissionId} to true`, err);
@@ -123,11 +130,11 @@ function approveAlgorithm(req, res, next) {
 				res.status(400).json("Delete failed for submission");
 			});
 	}
-    // emailer.sendApprovedEmail();
 }
 
 function submitResults(req, res, next) {
-	// Verify form
+	// Verify
+
 	let errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		let errorsToReturn = { _error: "Submit validation failed." };
