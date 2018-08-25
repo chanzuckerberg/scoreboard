@@ -18,6 +18,16 @@ const { sanitize } = require("express-validator/filter");
 const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 
+//Controllers
+const Logout = require('./controllers/Logout');
+const Submit = require('./controllers/Submit');
+const Approve = require('./controllers/Approve');
+const Challenges = require('./controllers/Challenges');
+const User = require('./controllers/User');
+const Datasets = require('./controllers/Datasets');
+const Submissions = require('./controllers/Submissions');
+const Challenge = require('./controllers/Challenge');
+
 // Setup logger
 app.use(
 	morgan(
@@ -83,80 +93,55 @@ app.get(
 		res.redirect("/");
 	}
 );
-app.get("/auth/logout", function(req, res) {
-	req.logout();
-	req.session.destroy();
-	return res.status(200).json({
-		status: "success",
-		message: "Logged out user",
-	});
+
+app.get("/api/ghuser", function(req, res) {
+    if ("user" in req) {
+        return res.status(200).json({
+            status: "success",
+            data: req.user,
+            message: `Retrieved user ${req.user.id}`,
+        });
+    } else {
+        return res.status(200).json({
+            status: "fail",
+            message: `Failed to retrieve user, please login`,
+        });
+    }
 });
 
-app.get("/api/challenges", db.getChallenges);
-app.get("/api/user", db.getUser);
-app.get("/api/ghuser", function(req, res) {
-	if ("user" in req) {
-		return res.status(200).json({
-			status: "success",
-			data: req.user,
-			message: `Retrieved user ${req.user.id}`,
-		});
-	} else {
-		return res.status(200).json({
-			status: "fail",
-			message: `Failed to retrieve user, please login`,
-		});
-	}
+
+app.get("/auth/logout", function(req, res) {
+	Logout.run(req, res);
 });
-app.get("/api/datasets/:challegeid", db.getDatasets);
-app.get("/api/submissions/:challegeid", db.getSubmissions);
-app.get("/api/challenge/:challegeid", db.getOneChallenge);
-app.post("/api/approve", jsonParser, [
-	check("submissionid")
-		.exists()
-		.isInt()
-		.withMessage("Submission Id is required and must be numerical"),
-	check("approved")
-		.exists()
-		.isBoolean()
-		.withMessage("Approved must be boolean value."),
-	db.approveAlgorithm,
-]);
-app.post("/api/submitresults", [
-	// TODO Sanitize
-	upload.single("results"),
-	check("submission")
-		.exists()
-		.isLength({ min: 1 })
-		.withMessage("Submission name is required"),
-	check("repo")
-		.exists()
-		.isURL()
-		.custom(value => {
-			const re = /^.*github.com\/[-a-zA-Z0-9_]+\/[-a-zA-Z0-9_]+/;
-			return re.test(value);
-		})
-		.withMessage("Github Repo is required and must be a valid link to a github repository"),
-	check("publications")
-		.optional()
-		.custom(value => {
-			const publications = value.split(",");
-			const re = /^.*[-a-zA-Z0-9_]+\.[a-zA-Z]+/;
-			publications.forEach(publication => {
-				if (!re.test(value)) return false;
-			});
-			return true;
-		})
-		.withMessage("Publications must be links in list form"),
-	check("institution")
-		.optional()
-		.withMessage("There was a problem with the institution field"),
-	check("private")
-		.optional()
-		.isBoolean()
-		.withMessage("Private muse be set to true or false"),
-	db.submitResults,
-]);
+
+app.get("/api/challenges", function(req, res) {
+    Challenges.run(req, res);
+});
+
+app.get("/api/user", function(req, res) {
+    User.run(req, res);
+});
+
+app.get("/api/datasets/:challegeid", function(req, res) {
+    Datasets.run(req, res);
+});
+
+app.get("/api/submissions/:challegeid", function(req, res) {
+    Submissions.run(req, res);
+});
+
+app.get("/api/challenge/:challegeid", function(req, res) {
+    Challenge.run(req, res);
+});
+
+app.post("/api/approve", jsonParser, Approve.approveValidators, function(req, res, next) {
+	Approve.run(req, res, next);
+});
+
+app.post("/api/submitresults",Submit.submissionValidators, function(req, res, next) {
+	Submit.run(req, res, next);
+});
+
 
 // Always return the main index.html, so react-router render the route in the client
 app.get("*", (req, res) => {
