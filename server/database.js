@@ -12,117 +12,49 @@ const connection = {
 };
 const db = pgp(connection);
 
-function getChallenges(req, res, next) {
-	db
-		.any(
-			"select c.id, c.name, c.description, c.image, c.color, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
-				"from challenges c " +
-				"left join datasets d on (d.challenge_id = c.id) " +
-				"left join submissions s on (s.challenge_id = c.id and s.is_accepted = True and s.is_private = False)" +
-				"where c.is_open = True " +
-				"group by c.id " +
-				"order by c.id"
-		)
-		.then(function(data) {
-			res.status(200).json({
-				status: "success",
-				data: data,
-				message: "Retrieved ALL challenges",
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
+
+function getChallenges() {
+   return db.any(
+            "select c.id, c.name, c.description, c.image, c.color, c.start_date, count(distinct(d.id)) as datasets, count(distinct(s.id)) as submissions " +
+            "from challenges c " +
+            "left join datasets d on (d.challenge_id = c.id) " +
+            "left join submissions s on (s.challenge_id = c.id and s.is_accepted = True and s.is_private = False)" +
+            "where c.is_open = True " +
+            "group by c.id " +
+            "order by c.id"
+        )
 }
 
-function getOneChallenge(req, res, next) {
-	const challengeID = parseInt(req.params.challegeid);
-	db
-		.any("select c.* " + "from challenges c " + "where c.id = $1 ", challengeID)
-		.then(function(data) {
-			// TODO what if fetch returns 0 items or > 1?
-			res.status(200).json({
-				status: "success",
-				data: data[0],
-				message: "Retrieved one challenges",
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
+
+function getOneChallenge(challengeID) {
+    return db.any("select c.* " + "from challenges c " + "where c.id = $1 ", challengeID)
 }
 
-function getDatasets(req, res, next) {
-	const challengeID = parseInt(req.params.challegeid);
-	db
-		.any("select * from datasets where challenge_id = $1", challengeID)
-		.then(function(data) {
-			res.status(200).json({
-				status: "success",
-				data: data,
-				message: `Retrieved dataset for one challenge`,
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
+
+function getDatasets(challengeID) {
+   return db.any("select * from datasets where challenge_id = $1", challengeID)
+
 }
 
-function getSubmissions(req, res, next) {
-	const challengeID = parseInt(req.params.challegeid);
-	db
-		.any(
-			"select coalesce(u.name, u.github_username) as user_name, u.github_username, s.*, r.results_path, r.score_data, r.submission_date from submissions s join users u on u.id = s.user_id join results r on s.id = r.submission_id where s.challenge_id = $1 and r.is_current = True",
-			challengeID
-		)
-		.then(function(data) {
-			res.status(200).json({
-				status: "success",
-				data: data,
-				message: "Retrieved submissions for one challenge",
-			});
-		})
-		.catch(function(err) {
-			return next(err);
-		});
+function getSubmissions(challengeID) {
+   return db.any(
+            "select coalesce(u.name, u.github_username) as user_name, u.github_username, s.*, r.results_path, r.score_data, r.submission_date from submissions s join users u on u.id = s.user_id join results r on s.id = r.submission_id where s.challenge_id = $1 and r.is_current = True",
+            challengeID
+        )
 }
 
-function approveAlgorithm(req, res, next) {
-	// Error if no user logged in or user not an admin
-	if (!"user" in req) {
-		return res.status(401).json("Must be logged in");
-	}
-	if (!req.user.is_admin) {
-		return res.status(401).json("User does not have permission to approve or reject algorithm");
-	}
-	let errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		res.status(422).json(errors);
-	}
-	const submissionId = parseInt(req.body.submissionid);
-	const approved = !!req.body.approved;
-	if (approved) {
-		db
-			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
-			.then(data => {
-				res.sendStatus(204);
-			})
-			.catch(err => {
-				console.log(`ERROR setting submission id ${submissionId} to true`, err);
-				res.status(400).json("Update failed for submission");
-			});
-	} else {
-		db
-			.one("delete from submissions where id=$1 RETURNING id", submissionId)
-			.then(data => {
-				res.sendStatus(204);
-			})
-			.catch(err => {
-				console.log(`ERROR setting submission id ${submissionId} to true`, err);
-				res.status(400).json("Delete failed for submission");
-			});
-	}
+function approveAlgorithm(submissionId) {
+	return db.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
 }
+
+
+function deleteSubmission(submissionID) {
+	return db.one("delete from submissions where id=$1 RETURNING id", submissionID)
+}
+
+// function submitResults(challengeID) {
+//     return db.one("select docker_container from challenges where id = $1", challengeID)
+// }
 
 function submitResults(req, res, next) {
 	// Verify form
@@ -370,4 +302,5 @@ module.exports = {
 	submitResults,
 	approveAlgorithm,
 	gitHubUser,
+    deleteSubmission
 };
