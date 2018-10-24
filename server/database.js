@@ -2,6 +2,7 @@ const path = require("path");
 const { exec } = require("child_process");
 const { validationResult } = require("express-validator/check");
 const pgp = require("pg-promise")();
+const emailer = require("./emails.js");
 
 const connection = {
 	host: process.env.SCOREBOARD_PG_HOST || "localhost",
@@ -105,7 +106,14 @@ function approveAlgorithm(req, res, next) {
 		db
 			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
 			.then(data => {
-				res.sendStatus(204);
+				db.one("select u.* from users u inner join submissions s on s.user_id=u.id WHERE s.id=$1", submissionId)
+					.then(submitterEmail => {
+						emailer.sendApprovedEmail(submitterEmail)
+                        res.sendStatus(204);
+					})
+					.catch(err => {
+						console.log(err)
+					})
 			})
 			.catch(err => {
 				console.log(`ERROR setting submission id ${submissionId} to true`, err);
@@ -125,7 +133,8 @@ function approveAlgorithm(req, res, next) {
 }
 
 function submitResults(req, res, next) {
-	// Verify form
+	// Verify
+
 	let errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		let errorsToReturn = { _error: "Submit validation failed." };
@@ -179,8 +188,10 @@ function submitResults(req, res, next) {
 				}
 			);
 		});
+    emailer.sendSubmissionEmails(req.user);
 	return res.status(200);
 }
+
 
 function getUser(req, res, next) {
 	const query = req.query;
@@ -284,6 +295,8 @@ function gitHubUser(username, email, displayName) {
 			return null;
 		});
 }
+
+
 
 function _loadScore(form, data, filepath) {
 	// create or get submission

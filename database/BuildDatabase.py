@@ -33,6 +33,7 @@ class User(Base):
     is_admin = Column(Boolean, nullable=False)
     create_date = Column(DateTime, nullable=False, server_default=func.now())
 
+
 class Challenge(Base):
     __tablename__ = 'challenges'
     __table_args__ = {'extend_existing': True}
@@ -90,6 +91,14 @@ class Result(Base):
     submission_date = Column(DateTime, nullable=False, server_default=func.now())
     create_date = Column(DateTime, nullable=False, server_default=func.now())
 
+class AdminEmailSettings(Base):
+    __tablename__ = 'email_settings'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True, nullable=False)
+    email_provider = Column(String, nullable=False)
+    email_address = Column(String, nullable=False)
+    email_pass = Column(String, nullable=False)
+
 Base.metadata.create_all(engine)
 
 
@@ -116,6 +125,13 @@ for challenge in initialize_data["challenges"]:
 for admin in initialize_data["admins"]:
     new_user = User(github_username=admin, is_admin=True)
     session.add(new_user)
+
+email_settings = initialize_data["email_settings"]
+settings = AdminEmailSettings(email_provider=email_settings["email_provider"],
+                              email_address= email_settings["admin_email"],
+                              email_pass=email_settings["admin_pass"])
+session.add(settings)
+
 session.commit()
 
 
