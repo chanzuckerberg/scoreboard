@@ -106,7 +106,7 @@ function approveAlgorithm(req, res, next) {
 		db
 			.one("update submissions set is_accepted=true where id=$1 RETURNING id", submissionId)
 			.then(data => {
-				db.one("select u.email from users u inner join submissions s on s.user_id=u.id WHERE s.id=$1", submissionId)
+				db.one("select u.* from users u inner join submissions s on s.user_id=u.id WHERE s.id=$1", submissionId)
 					.then(submitterEmail => {
 						emailer.sendApprovedEmail(submitterEmail)
                         res.sendStatus(204);

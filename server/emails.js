@@ -37,12 +37,13 @@ db.getAdminEmailSettings().then(data => {
 });
 
 
-function sendApprovedEmail(submitterEmail) {
+function sendApprovedEmail(user) {
+    console.log(user)
     approvedEmail({
-        to: submitterEmail,
+        to: user.email,
         subject: 'Your Submission has been approved'
     }, {
-        linkToSubmission: "?",
+        userName: user.github_username,
     }, function (err, info) {
         if (err) {
             console.log(err)
