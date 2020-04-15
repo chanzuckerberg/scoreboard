@@ -3,163 +3,196 @@ import { linkOnClick, formatScore } from "../utils/utils";
 import { Button } from "react-bootstrap";
 import { colorScale, textColor } from "../utils/color-utils";
 
-export const Algorithm = props => {
-	let score_count = 1;
-	let score_width = 100;
-	if (props.data.score_data.data.length > 0) {
-		score_count = props.data.score_data.data.length;
-		if (score_count > 10) score_count = 10;
-		score_width = 100 / (score_count + 1);
-	}
-	const algoColor = props.challenge.color || "#999999";
-	let scores = props.data.score_data.data.map((item, idx) => {
-		let bgColor = colorScale(algoColor, item);
-		let text = textColor(bgColor);
-		return (
-			<div key={"score_" + idx} style={{ width: score_width + "%" }} className="single-score">
-				<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
-					{formatScore(item)}
-				</span>
-			</div>
-		);
-	});
+export const Algorithm = (props) => {
+  let score_count = 1;
+  let score_width = 100;
+  if (props.data.score_data.data.length > 0) {
+    score_count = props.data.score_data.data.length;
+    if (score_count > 10) score_count = 10;
+    score_width = 100 / (score_count + 1);
+  }
+  const algoColor = props.challenge.color || "#999999";
+  let scores = props.data.score_data.data.map((item, idx) => {
+    let bgColor = colorScale(algoColor, item);
+    let text = textColor(bgColor);
+    return (
+      <div
+        key={"score_" + idx}
+        style={{ width: score_width + "%" }}
+        className="single-score"
+      >
+        <span
+          className="score-span"
+          style={{ backgroundColor: bgColor, color: text }}
+        >
+          {formatScore(item)}
+        </span>
+      </div>
+    );
+  });
 
-	scores.unshift(
-		<div key={"score_label"} style={{ width: score_width + "%" }} className="single-score">
-			<span className="score-span score-category">Combined scores</span>
-		</div>
-	);
-	let activeClass = props.active ? "algorithm-selected" : "";
-	let privateClass = props.data.is_private ? " algorithm-private" : "";
-	let detailedScores = "";
-	let detailedInfo = "";
-	if (props.active) {
-		if ("additionalData" in props.data.score_data) {
-			const detailedScoresInner = props.data.score_data.additionalData.map((item, idx) => {
-				let eachDetailedScore = item.map((item2, idx2) => {
-					let bgColor = colorScale(algoColor, item2);
-					let text = textColor(bgColor);
-					return (
-						<div
-							key={"score_" + idx + "_" + idx2}
-							style={{ width: score_width + "%" }}
-							className="single-score"
-						>
-							<span className="score-span" style={{ backgroundColor: bgColor, color: text }}>
-								{formatScore(item2)}
-							</span>
-						</div>
-					);
-				});
-				eachDetailedScore.unshift(
-					<div
-						key={"score_" + idx + "_label"}
-						style={{ width: score_width + "%" }}
-						className="single-score"
-					>
-						<span className="score-span score-category">{props.challenge.subscores[idx]}</span>
-					</div>
-				);
-				return (
-					<div key={"detailed_score_" + idx} className="row" style={{ marginBottom: "10px" }}>
-						{eachDetailedScore}
-					</div>
-				);
-			});
-			detailedScores = (
-				<div className="detailed-scores" style={{ marginTop: "20px" }}>
-					{detailedScoresInner}
-				</div>
-			);
-		}
-		let publications = "";
-		if (props.data.publication) {
-			const publications_split = props.data.publication.split(",");
-			publications = publications_split.map((item, idx) => {
-				return (
-					<a onClick={linkOnClick} target="_blank" href={item} key={"publication_" + idx}>
-						{" "}
-						({idx + 1})
-					</a>
-				);
-			});
-			publications = (
-				<div className="algo-detail" key={`publication_${props.data.name}`}>
-					Publications: {publications}
-				</div>
-			);
-		}
-		detailedInfo = [
-			<div className="algo-detail" key={`submit_date_${props.data.name}`}>
-				{props.data.submission_date.slice(0, 10)}
-			</div>,
-			publications,
-		];
-	}
-	const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
-	let reviewSection = "";
-	if (!props.data.is_accepted) {
-		if (props.isAdmin) {
-			reviewSection = (
-				<div className="admin-approve-container">
-					<Button
-						onClick={props.approve}
-						className="admin-approve admin-approve-button"
-						bsSize="xsmall"
-						bsStyle="success"
-						data-submissionid={props.data.id}
-						data-approve={true}
-					>
-						Approve
-					</Button>
-					<br />
-					<Button
-						onClick={props.approve}
-						className="admin-approve admin-reject-button"
-						bsSize="xsmall"
-						bsStyle="danger"
-						data-submissionid={props.data.id}
-						data-approve={false}
-					>
-						Reject
-					</Button>
-				</div>
-			);
-		} else {
-			reviewSection = (
-				<div className="admin-approve-container">
-					Under<br />Review
-				</div>
-			);
-		}
-	}
+  scores.unshift(
+    <div
+      key={"score_label"}
+      style={{ width: score_width + "%" }}
+      className="single-score"
+    >
+      <span className="score-span score-category">Combined scores</span>
+    </div>
+  );
+  let activeClass = props.active ? "algorithm-selected" : "";
+  let privateClass = props.data.is_private ? " algorithm-private" : "";
+  let detailedScores = "";
+  let detailedInfo = "";
+  if (props.active) {
+    if ("additionalData" in props.data.score_data) {
+      const detailedScoresInner = props.data.score_data.additionalData.map(
+        (item, idx) => {
+          let eachDetailedScore = item.map((item2, idx2) => {
+            let bgColor = colorScale(algoColor, item2);
+            let text = textColor(bgColor);
+            return (
+              <div
+                key={"score_" + idx + "_" + idx2}
+                style={{ width: score_width + "%" }}
+                className="single-score"
+              >
+                <span
+                  className="score-span"
+                  style={{ backgroundColor: bgColor, color: text }}
+                >
+                  {formatScore(item2)}
+                </span>
+              </div>
+            );
+          });
+          eachDetailedScore.unshift(
+            <div
+              key={"score_" + idx + "_label"}
+              style={{ width: score_width + "%" }}
+              className="single-score"
+            >
+              <span className="score-span score-category">
+                {props.challenge.subscores[idx]}
+              </span>
+            </div>
+          );
+          return (
+            <div
+              key={"detailed_score_" + idx}
+              className="row"
+              style={{ marginBottom: "10px" }}
+            >
+              {eachDetailedScore}
+            </div>
+          );
+        }
+      );
+      detailedScores = (
+        <div className="detailed-scores" style={{ marginTop: "20px" }}>
+          {detailedScoresInner}
+        </div>
+      );
+    }
+    let publications = "";
+    if (props.data.publication) {
+      const publications_split = props.data.publication.split(",");
+      publications = publications_split.map((item, idx) => {
+        return (
+          <a
+            onClick={linkOnClick}
+            target="_blank"
+            href={item}
+            key={"publication_" + idx}
+          >
+            {" "}
+            ({idx + 1})
+          </a>
+        );
+      });
+      publications = (
+        <div className="algo-detail" key={`publication_${props.data.name}`}>
+          Publications: {publications}
+        </div>
+      );
+    }
+    detailedInfo = [
+      <div className="algo-detail" key={`submit_date_${props.data.name}`}>
+        {props.data.submission_date.slice(0, 10)}
+      </div>,
+      publications,
+    ];
+  }
+  const unapprovedClass = props.data.is_accepted ? "" : " unapproved";
+  let reviewSection = "";
+  if (!props.data.is_accepted) {
+    if (props.isAdmin) {
+      reviewSection = (
+        <div className="admin-approve-container">
+          <Button
+            onClick={props.approve}
+            className="admin-approve admin-approve-button"
+            bsSize="xsmall"
+            bsStyle="success"
+            data-submissionid={props.data.id}
+            data-approve={true}
+          >
+            Approve
+          </Button>
+          <br />
+          <Button
+            onClick={props.approve}
+            className="admin-approve admin-reject-button"
+            bsSize="xsmall"
+            bsStyle="danger"
+            data-submissionid={props.data.id}
+            data-approve={false}
+          >
+            Reject
+          </Button>
+        </div>
+      );
+    } else {
+      reviewSection = (
+        <div className="admin-approve-container">
+          Under
+          <br />
+          Review
+        </div>
+      );
+    }
+  }
 
-	return (
-		<div>
-			<div
-				data-idx={props.index}
-				className={"algorithm " + activeClass + unapprovedClass + privateClass}
-				onClick={props.activate}
-			>
-				<div className="row">
-					<div className="col-sm-3 algorithm-detail">
-						<div className="algo-name">
-							<a onClick={linkOnClick} target="_blank" href={props.data.repository}>
-								{" "}
-								<i className="algo-link glyphicon glyphicon-link" />
-							</a>
-							{props.data.name}
-						</div>
-						<div className="gh-name algo-detail">by {props.data.user_name}</div>
-						{detailedInfo}
-					</div>
-					<div className="col-sm-9 scores">
-						<div className="row">{scores}</div>
-						{detailedScores}
-					</div>
-					{reviewSection}
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div>
+      <div
+        data-idx={props.index}
+        className={"algorithm " + activeClass + unapprovedClass + privateClass}
+        onClick={props.activate}
+      >
+        <div className="row">
+          <div className="col-sm-3 algorithm-detail">
+            <div className="algo-name">
+              <a
+                onClick={linkOnClick}
+                target="_blank"
+                href={props.data.repository}
+              >
+                {" "}
+                <i className="algo-link glyphicon glyphicon-link" />
+              </a>
+              {props.data.name}
+            </div>
+            <div className="gh-name algo-detail">by {props.data.user_name}</div>
+            {detailedInfo}
+          </div>
+          <div className="col-sm-9 scores">
+            <div className="row">{scores}</div>
+            {detailedScores}
+          </div>
+          {reviewSection}
+        </div>
+      </div>
+    </div>
+  );
 };
