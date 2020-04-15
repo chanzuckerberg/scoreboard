@@ -12,7 +12,9 @@ To run it locally, clone this repo then type
     
     npm run build # builds javascript bundle
     node server
-    # go to http://127.0.0.1:9000/
+    # go to http://127.0.0.1:9001/
     
+
+You may also need to setup a local postgres db called scoreboard, for instructions checkout this [link](https://www.codementor.io/@engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb)
 
 For questions and support: cweaver@chanzuckerberg.com

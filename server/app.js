@@ -48,7 +48,7 @@ app.use(passport.session());
 passport.use(
 	new GitHubStrategy(
 		{
-			clientID: process.env.SCOREBOARD_GH_APPID,
+			clientID: process.env.SCOREBOARD_GH_APPID || "REMOVE_ME",
 			clientSecret: process.env.SCOREBOARD_GH_SECRET,
 			callbackURL: "/auth/github/callback",
 		},
