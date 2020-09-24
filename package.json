@@ -31,7 +31,7 @@
     "passport": "^0.4.0",
     "passport-github": "^1.1.0",
     "pg-promise": "^7.0.3",
-    "react": "^16.2.0",
+    "react": "^16.5.0",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.13.1",
     "react-redux": "^5.0.6",
