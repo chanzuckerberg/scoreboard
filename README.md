@@ -1,6 +1,10 @@
 # Scoreboard
 
-## This is a work in progress
+## Update 2022: Archived
+
+The effort of this repo has been superseded by a community effort to benchmark the hardest challenges in Single Cell Analysis called [Open Problems](https://openproblems.bio/). The Github can be found [here](https://github.com/openproblems-bio/openproblems).
+
+## ~~This is a work in progress~~
 
 Scoreboard is a web application to view and submit ML algorithms solutions to challenges.
 
